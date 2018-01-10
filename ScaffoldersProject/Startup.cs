@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ScaffoldersProject.Data;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Services;
+using ScaffoldersProject.Models.services;
 
 namespace ScaffoldersProject
 {
@@ -26,14 +27,23 @@ namespace ScaffoldersProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Identity database for user authentication.
+            //Connection string in appsettings.json.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            //Main database for the project.
+            //Connection string in appsettings.json.
+            services.AddDbContext<MainDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MainConnection")));
+
+            //Authentication
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // Add application services.
+            services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
