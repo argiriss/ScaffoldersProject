@@ -9,7 +9,7 @@ namespace ScaffoldersProject.Models
     public class Products
     {
         //DbSet in MainDbContext in Data folder
-
+        [Key]
         public int ProductId { get; set; }
         [Required(ErrorMessage = "Please enter a product name")]
         public string Name { get; set; }

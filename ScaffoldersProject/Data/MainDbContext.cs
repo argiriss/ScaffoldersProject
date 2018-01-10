@@ -11,7 +11,7 @@ namespace ScaffoldersProject.Data
     {
         //Database for all the other uses ,Products,orders etc.....
         public DbSet<Products> Products { get; set; }
-        public DbSet<ClientOrders> ClientOrder { get; set; }
+        //public DbSet<ClientOrders> ClientOrder { get; set; }
         //We can add other models ............
 
         //constructor 
