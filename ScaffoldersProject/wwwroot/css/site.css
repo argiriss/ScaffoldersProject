@@ -26,6 +26,25 @@
     margin: 15px;
 }
 
+.full-screen {
+    position: relative;
+    height: 95vh;
+}
+
+.navbar-inverse {
+    height: 5vh;
+}
+
+#scroll {
+    position: absolute;
+    margin-left: 0;
+    margin-right: 0;
+    left: 50%;
+    right: 50%;
+    bottom: 5%;
+    cursor:pointer;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
