@@ -1,28 +1,39 @@
-﻿<!-- model Product-->
+﻿@model SameCategoryViewModel
 
 @{
     ViewData["Title"] = "ViewProduct";
 }
 
 <body>
-    <!--IMAGE-->
-    <!--DETAILS-->
-    <!--DESCPRIPTION-->
-
-    <form> <!--action to cart-->>
-        <div class="form-group">
-            <!--
-            <label asp-for="Quantity"></label>
-            <div><span asp-validation-for="Quantity" class="text-danger"></span></div>
-            <input asp-for="Category" class="form-control" />
-                -->
+    <section>
+        <!--IMAGE-->>
+    </section>
+    <section class="card m-1 p-1">
+        <header class="bg-faded p-1">
+            <h3>
+                @Model.Product.Name
+                <span class="badge badge-primary" style="float:right">
+                    <small>@Model.Product.Price.ToString("c")</small>
+                </span>
+            </h3>
+        </header>
+        <div class="card-text p-1">
+            <p>@Model.Product.Description</p>
         </div>
-        
-        <div class="text-center">
-            <button class="btn btn-primary" type="submit">Add To Cart</button>
-        </div>
 
 
-</form>
+        <form asp-action="AddtoCart" method="post">
+            <div class="form-group">
+                <label asp-for="Product.Description"></label>
+                <div><span asp-validation-for="Product.Description" class="text-danger"></span></div>
+                <textarea asp-for="Product.Description" class="form-control"></textarea>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">Add To Cart</button>
+            </div>
+
+        </form>
+    </section>
 </body>
 
