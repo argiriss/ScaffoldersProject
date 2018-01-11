@@ -23,7 +23,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult AddToCart(int productId)
         {
-
+            return View();
         }
 
     }
