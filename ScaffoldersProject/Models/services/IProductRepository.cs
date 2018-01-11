@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Models.services
 {
-    interface IProductRepository
+    public interface IProductRepository
     {
         //We use this interface so as to add products either manual either from database either 
         //from another server.
