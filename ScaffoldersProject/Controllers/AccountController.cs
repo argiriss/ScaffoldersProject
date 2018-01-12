@@ -68,20 +68,20 @@ namespace ScaffoldersProject.Controllers
                 //We use the SignInManager class to perform  two authentication steps.
                 //The SignOutAsync method cancels any existing session that the user has, 
                 //and the PasswordSignInAsync method performs the authentication.The arguments 
-                //for the PasswordSignInAsync method are the user email, the password that the 
+                //for the PasswordSignInAsync method are the user username, the password that the 
                 //user has provided, a bool argument that controls whether the authentication
                 //cookie is persistent and whether the account should be 
                 //locked out if the password is correct which we disabled).
                 await _signInManager.SignOutAsync();
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                // Resolve the user via their email
+                //We getting the ApplicationUser object that represents the user, 
+                //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
+                //class.
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    // Resolve the user via their email
-                    //We getting the ApplicationUser object that represents the user, 
-                    //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
-                    //class.
-                    ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
                     // Get the roles for the user
                     var role = await _userManager.GetRolesAsync(user);
                     if (role[0] == "Admin")
@@ -249,7 +249,7 @@ namespace ScaffoldersProject.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -260,12 +260,21 @@ namespace ScaffoldersProject.Controllers
                     //    var res = await RoleManager.CreateAsync(users);
                     //    if (res.Succeeded)
                     //    {
-                    await _userManager.AddToRoleAsync(user, "Client");
+
+                    //assign role to user according to dropdown selection in register page
+                    string role = model.Role;
+                    if (role == "Client")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Client");
+                    }
+                    else if (role == "Member")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Member");
+                    }
+
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    //    }
-                    //}
-
+            
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
