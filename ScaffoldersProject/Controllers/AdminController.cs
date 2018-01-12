@@ -25,6 +25,49 @@ namespace ScaffoldersProject.Controllers
             return View(_repository.Products);
         }
 
+        public IActionResult NewProducts()
+        {
+            return View(_repository.Products);
+        }
+
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SaveProducts(IEnumerable<Products> productList)
+        {
+            foreach (var item in productList)
+            {
+                if (item.AdminApproved)
+                {
+                    _repository.UpdateProduct(item);
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public ViewResult Edit(int productId)
+        {
+            return View(_repository.Products.FirstOrDefault(i => i.ProductId == productId));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Products product)
+        {
+            if (ModelState.IsValid)
+            {
+                _repository.UpdateProduct(product);
+                TempData["Message"] = $"{product.Name} has been updated.";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(product);
+            }
+        }
+
         public ViewResult Create()
         {
             return View(new Products());

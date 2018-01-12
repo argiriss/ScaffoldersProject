@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Products>
+@{
+    ViewData["Title"] = "New Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form method="post" action="SaveProducts">
+    <table class="table table-responsive table-striped table-bordered">
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Product Price
+            </th>
+            <th>
+                Product Quantity
+            </th>
+            <th>
+                Product Category
+            </th>
+            <th>
+                Product Description
+            </th>
+            <th>
+                Approve Product
+            </th>
+        </tr>
+        @foreach (var prod in Model)
+        {
+
+            if (!prod.AdminApproved)
+            {
+                <tr>
+                    <td>@prod.ProductId</td>
+                    <td>@prod.Name</td>
+                    <td>@prod.Price</td>
+                    <td>@prod.Quantity</td>
+                    <td>@prod.Category</td>
+                    <td>@prod.Description</td>
+                    <td>
+                        <label><input type="checkbox" name="productList" value="@prod.AdminApproved"></label>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center"><h2>No new products!</h2></td>
+                </tr>
+            }
+        }
+    </table>
+    <button class="btn btn-primary" type="submit">Save</button>
+</form>
+

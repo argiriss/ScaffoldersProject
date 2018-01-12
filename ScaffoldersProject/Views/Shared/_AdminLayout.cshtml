@@ -32,9 +32,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Admin" asp-action="Index">Products</a></li>
+                    <li><a asp-area="" asp-controller="Admin" asp-action="Index">View Products</a></li>
+                    <li><a asp-area="" asp-controller="Admin" asp-action="NewProducts">Verify new products</a></li>
                     <li><a asp-area="" asp-controller="Admin" asp-action="Users">Manage Users</a></li>
-                    <li><a asp-area="" asp-controller="Admin" asp-action="Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
