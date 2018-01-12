@@ -25,24 +25,6 @@ namespace ScaffoldersProject.Controllers
             return View(_repository.Products);
         }
 
-        public ViewResult Create()
-        {
-            return View(new Products());
-        }
-
-        [HttpPost]
-        public IActionResult Create(Products product)
-        {
-            if (ModelState.IsValid)
-            {
-                _repository.SaveProduct(product);
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return View(product);
-            }
-
-        }
+      
     }
 }

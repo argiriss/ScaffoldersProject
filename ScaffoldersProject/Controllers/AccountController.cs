@@ -231,7 +231,7 @@ namespace ScaffoldersProject.Controllers
         public IActionResult Lockout()
         {
             return View();
-        }
+        } 
 
         [HttpGet]
         [AllowAnonymous]
