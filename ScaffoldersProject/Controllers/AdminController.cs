@@ -9,7 +9,8 @@ using ScaffoldersProject.Models.services;
 
 namespace ScaffoldersProject.Controllers
 {
-    [Authorize]
+
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         private IProductRepository _repository;
