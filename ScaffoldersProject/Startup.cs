@@ -49,7 +49,8 @@ namespace ScaffoldersProject
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the
+        //HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -74,6 +75,8 @@ namespace ScaffoldersProject
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            //sets the user roles.We can add more from Initializer static class 
+            //in data folder
             await Initializer.Initial(app);
         }
     }

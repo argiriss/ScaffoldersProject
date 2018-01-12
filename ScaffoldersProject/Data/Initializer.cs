@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Data
 {
+    //Creating Roles and add them to database
     public static class Initializer
     {
         public static async Task Initial(IApplicationBuilder app)

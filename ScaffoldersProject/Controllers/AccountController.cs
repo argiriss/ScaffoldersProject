@@ -24,9 +24,9 @@ namespace ScaffoldersProject.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-
-        private RoleManager<IdentityRole> RoleManager;//Dependency Injection
-
+        private RoleManager<IdentityRole> RoleManager;
+        
+        //Constructor Dependency Injection
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -64,11 +64,38 @@ namespace ScaffoldersProject.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
+                //We use the SignInManager class to perform  two authentication steps.
+                //The SignOutAsync method cancels any existing session that the user has, 
+                //and the PasswordSignInAsync method performs the authentication.The arguments 
+                //for the PasswordSignInAsync method are the user email, the password that the 
+                //user has provided, a bool argument that controls whether the authentication
+                //cookie is persistent and whether the account should be 
+                //locked out if the password is correct which we disabled).
+                await _signInManager.SignOutAsync();
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    // Resolve the user via their email
+                    //We getting the ApplicationUser object that represents the user, 
+                    //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
+                    //class.
+                    ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                    // Get the roles for the user
+                    var role = await _userManager.GetRolesAsync(user);
+                    if (role[0] == "Admin")
+                    {
+                        return Redirect("/Admin/index");
+                    }
+                    else if (role[0] == "Client")
+                    {
+                        return Redirect("/Client/ViewProduct");
+                    }
+                    else
+                    {
+                        return Redirect("/Member/index");
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -85,7 +112,6 @@ namespace ScaffoldersProject.Controllers
                     return View(model);
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -234,23 +260,20 @@ namespace ScaffoldersProject.Controllers
                     //    var res = await RoleManager.CreateAsync(users);
                     //    if (res.Succeeded)
                     //    {
-                            await _userManager.AddToRoleAsync(user, "Client");
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "Client");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
                     //    }
                     //}
-
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
