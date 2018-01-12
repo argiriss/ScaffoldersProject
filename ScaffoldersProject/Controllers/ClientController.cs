@@ -11,6 +11,7 @@ namespace ScaffoldersProject.Controllers
     public class ClientController : Controller
     {
         private IProductRepository _repository;
+        private Cart cart;
 
         public ClientController(IProductRepository repository)
         {
@@ -19,7 +20,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_repository.Products);
         }
 
         //Θα καλειται οταν ο client κλικαρει σε ενα προιον και θα του το εμφανιζει μονο του με τα details
@@ -31,8 +32,13 @@ namespace ScaffoldersProject.Controllers
             return View(r);
         }
 
-        public IActionResult AddToCart(int productId)
+        public IActionResult AddToCart(Products prod , int q)
         {
+            Products product = _repository.Products.SingleOrDefault(x => x == prod);
+            if (product != null)
+            {
+                cart.AddProduct(product, q);
+            }
             return View();
         }
 

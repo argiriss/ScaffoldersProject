@@ -28,27 +28,27 @@
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                         <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
                     </a>
-                        <div class="caption">
-                            <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                                <h4 class="group inner list-group-item-heading">
-                                    @prod.Name
-                                </h4>
-                            </a>
-                                <p class="group inner list-group-item-text">
-                                    @prod.Description
+                    <div class="caption">
+                        <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
+                            <h4 class="group inner list-group-item-heading">
+                                @prod.Name
+                            </h4>
+                        </a>
+                        <p class="group inner list-group-item-text">
+                            @prod.Description
+                        </p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead">
+                                    @prod.Price.ToString("c")
                                 </p>
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-6">
-                                        <p class="lead">
-                                            @prod.Price.ToString("c")
-                                        </p>
-                                    </div>
-                                    <div class="col-xs-12 col-md-6">
-                                        <a class="btn btn-success" href="#">Add to cart</a>
-                                    </div>
-                                </div>
-</div>
-</div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="#">Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         }
     </div>

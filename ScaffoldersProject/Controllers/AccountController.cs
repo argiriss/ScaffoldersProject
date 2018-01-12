@@ -90,7 +90,7 @@ namespace ScaffoldersProject.Controllers
                     }
                     else if (role[0] == "Client")
                     {
-                        return Redirect("/Client/ViewProduct");
+                        return Redirect("/Client/index");
                     }
                     else
                     {
