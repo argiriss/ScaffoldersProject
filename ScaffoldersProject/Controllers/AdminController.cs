@@ -9,7 +9,6 @@ using ScaffoldersProject.Models.services;
 
 namespace ScaffoldersProject.Controllers
 {
-
     [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
@@ -24,7 +23,6 @@ namespace ScaffoldersProject.Controllers
         {
             return View(_repository.Products);
         }
-
 
         public IActionResult NewProducts()
         {
@@ -41,10 +39,10 @@ namespace ScaffoldersProject.Controllers
         {
             foreach (var item in productList)
             {
-                if (item.AdminApproved)
-                {
-                    _repository.UpdateProduct(item);
-                }
+                //if (item.AdminApproved)
+                //{
+                //    _repository.UpdateProduct(item);
+                //}
             }
             return RedirectToAction(nameof(Index));
         }
@@ -86,7 +84,6 @@ namespace ScaffoldersProject.Controllers
             {
                 return View(product);
             }
-
         }
     }
 }
