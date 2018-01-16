@@ -14,19 +14,19 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Items)
+        @*@foreach (var item in Model.Items)
         {
             <tr>
                 <td>@item.Product.Name</td>
                 <td class="text-center">x @item.Quantity</td>
                 <td class="text-right">@(item.Product.Price * item.Quantity)</td>
             </tr>
-        }
+        }*@
     </tbody>
     <tfoot>
         <tr>
             <td colspan="2" class="text-right">Total:</td>
-            <td class="text-right">@Model.CalculateTotalCost().ToString("c")</td>
+            <!-- <td class="text-right">Razor symbol Model.CalculateTotalCost().ToString("c")</td>-->
         </tr>
     </tfoot>
 </table>

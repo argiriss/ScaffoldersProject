@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -25,12 +26,14 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("Data", "From session");
             return View(_repository.Products);
         }
 
         //Θα καλειται οταν ο client κλικαρει σε ενα προιον και θα του το εμφανιζει μονο του με τα details
         public IActionResult ViewProduct(int productId)
         {
+            ViewBag.Data = HttpContext.Session.GetString("Data");
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
             List<Products> SimilarProducts = _repository.Products.Where(i => i.Category == product.Category).ToList();
             SameCategoryViewModel r = new SameCategoryViewModel(product , SimilarProducts);

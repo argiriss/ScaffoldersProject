@@ -12,6 +12,7 @@ using ScaffoldersProject.Data;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Services;
 using ScaffoldersProject.Models.services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ScaffoldersProject
 {
@@ -76,6 +77,14 @@ namespace ScaffoldersProject
             app.UseStaticFiles();
             
             app.UseSession();
+
+            //When setting up a reverse proxy server, the authentication middleware needs 
+            //UseForwardedHeaders to run first. This ordering ensures that the authentication 
+            //middleware can consume the affected values and generate correct redirect URIs.
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseAuthentication();
 

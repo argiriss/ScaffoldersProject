@@ -3,17 +3,13 @@
 @{
     ViewData["Title"] = "ViewProduct";
 }
-<head>
- 
-
-</head>
-
 
 <body>
     <div class="container-fluid">
         <div class="row" style="margin-top:20px;">
             <div class="col-md-4">
                 <header class="bg-faded p-1">
+                    <p>@ViewBag.Data</p>
                     <h3>
                         @Model.Product.Name
                     </h3>

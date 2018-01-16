@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-ScaffoldersProject-5339F75D-6860-40AF-B514-9419867E7F0A</UserSecretsId>
+	<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
 
