@@ -10,14 +10,21 @@ namespace ScaffoldersProject.Models.services
     {
         private MainDbContext db;
 
+        public IQueryable<Products> Products
+        {
+            get
+            {
+                return db.Products;
+            }
+        }
+        //writing the above with expression body
+        //public IQueryable<Products> Products => db.Products;
+
         //Depedency injection implemented on constructor.Instatiate db object
         public EfProductRepository(MainDbContext db)
         {
             this.db = db;
         }
-
-        public IQueryable<Products> Products => db.Products;
-       
 
         public Products DeleteProduct(int productId)
         {

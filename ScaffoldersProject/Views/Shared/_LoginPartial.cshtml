@@ -1,6 +1,7 @@
 @using Microsoft.AspNetCore.Identity
 @using ScaffoldersProject.Models
 
+<!--Depedency injection of service into view-->
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -12,27 +13,22 @@
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a class="btn btn-sm btn-secondary" asp-route="Cart">
-                        Cart<span class="navbar-text">(0)</span>
+                        Cart <span>(0)</span>
                     </a>
-                    
-                    @*<a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>*@
                 </li>
                 <li>
                     <a class="btn btn-sm btn-secondary" asp-route="Wish">
-                        Wish<span class="navbar-text">(0)</span>
+                        Wish <span>(0)</span>
                     </a>
-                    
-                    @*<a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>*@
                 </li>
                 <li>
-                    <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">@UserManager.GetUserName(User)!</a>
+                    <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                 </li>
                 <li>
                     <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
                 </li>
             </ul>
         </form>
-
     }
     else
     {
