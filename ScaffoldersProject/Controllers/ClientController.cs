@@ -12,22 +12,16 @@ namespace ScaffoldersProject.Controllers
         private IProductRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
         private Cart cart;
-       
-        public ClientController(IProductRepository repository , UserManager<ApplicationUser> userManager)
+
+        //Constructor depedency injection 
+        public ClientController(IProductRepository repository, UserManager<ApplicationUser> userManager)
         {
+            _repository = repository;
+            _userManager = userManager;
 
         }
-
-            //Dionisis..............................................................
-        //Constructor depedency injection 
-        //public ClientController(IProductRepository repository)
-        //{
-        //    _repository = repository;
-        //    _userManager = userManager;
-            
-        //}
         //End of Dionisis
-       
+
 
         public IActionResult Index()
         {
