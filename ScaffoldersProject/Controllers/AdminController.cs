@@ -37,15 +37,16 @@ namespace ScaffoldersProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveProducts(IEnumerable<Products> productList)
+        public IActionResult SaveProducts( IEnumerable<SaveProductsViewModel> productList)
         {
-            foreach (var item in productList)
-            {
-                if (item.AdminApproved)
-                {
-                    _repository.UpdateProduct(item);
-                }
-            }
+
+            //foreach (var item in productList)
+            //{
+            //    if (item.AdminApproved)
+            //    {
+            //        _repository.UpdateProduct(item);
+            //    }
+            //}
             return RedirectToAction(nameof(Index));
         }
 
