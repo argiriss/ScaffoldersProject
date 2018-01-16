@@ -13,6 +13,7 @@ namespace ScaffoldersProject.Controllers
         private IProductRepository _repository;
         private Cart cart;
 
+        //Constructor depedency injection 
         public ClientController(IProductRepository repository)
         {
             _repository = repository;

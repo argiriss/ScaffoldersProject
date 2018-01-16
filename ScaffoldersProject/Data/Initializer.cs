@@ -32,9 +32,6 @@ namespace ScaffoldersProject.Data
                 var users = new IdentityRole("Client");
                 await roleManager.CreateAsync(users);
             }
-
-
-
         }
     }
 }

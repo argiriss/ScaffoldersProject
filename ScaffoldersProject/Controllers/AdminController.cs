@@ -21,6 +21,8 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
+            //_repository.Products returns db.Products which is Products table from database
+            //Includes all the products
             return View(_repository.Products);
         }
 
