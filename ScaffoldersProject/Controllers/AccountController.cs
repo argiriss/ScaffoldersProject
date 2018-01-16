@@ -25,7 +25,8 @@ namespace ScaffoldersProject.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private RoleManager<IdentityRole> RoleManager;
-        
+
+
         //Constructor Dependency Injection
         public AccountController(
             UserManager<ApplicationUser> userManager,

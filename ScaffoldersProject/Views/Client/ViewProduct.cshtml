@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "ViewProduct";
 }
+<head>
+ 
+
+</head>
+
 
 <body>
     <div class="container-fluid">
@@ -23,39 +28,41 @@
                         <td><h3>Name</h3></td>
                         <td><h3>@Model.Product.Name</h3></td>
                     </tr>
-                        <td><h3>Category</h3></td>
-                        <td><h3>@Model.Product.Category</h3></td>
+                    <tr>
+                        <td><h3>Name</h3></td>
+                        <td><h3>@Model.Product.Name</h3></td>
                     <tr>
                     <tr>
                         <td><h3>Price</h3></td>
                         <td><h3>@Model.Product.Price</h3></td>
 
                     </tr>
-                </table>   
-                    
+                </table>
+
                 <br><br>
-                <form asp-action="AddtoCart" method="post">
+                <form asp-controller="Cart" asp-action="AddtoCart" method="post">
                     <input type="hidden" name="ProductId" value=@Model.Product.ProductId>
                     <span style="font-size:23px">Quantity</span>
-                    
+
                              <select name="Quantity" style="margin-left:80px;">
                                 @for (int i = 1; i < 5; i++)
                                 {
                                     <option value="@i">@i</option>
                                 }
                             </select>
-                    
+
                             <br><br>
                             <div >
-                                <button class="btn btn-primary" type="submit">Add To Cart</button>
+                                <button  class="btn btn-primary" type="submit">Add To Cart</button>
                                 <button class="btn btn-primary" type="submit">Add To Wish List</button>
+                               
                             </div>
                  </form>
             </div>
 
             <div class="col-md-4"></div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-6">
                 <h3>Description</h3>
@@ -63,7 +70,7 @@
             </div>
             <div class="col-md-6"></div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-2">
                 <section class="card m-1 p-1">
@@ -113,7 +120,7 @@
 
         </div>
     </div>
-   
+
 
     @*<div>
         @foreach (var item in Model.SimilarProducts)
@@ -133,7 +140,7 @@
                 </div>
             </section>
         }
-        
+
     </div>*@
 
 

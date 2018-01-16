@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace ScaffoldersProject.Controllers
 {
     public class ClientController : Controller
     {
-        private IProductRepository _repository;
+        private IProductRepository _repository;  
         private Cart cart;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClientController(IProductRepository repository)
+        public ClientController(IProductRepository repository , UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
+            _userManager = userManager;
+            
         }
+
+       
 
         public IActionResult Index()
         {
@@ -32,14 +36,24 @@ namespace ScaffoldersProject.Controllers
             return View(r);
         }
 
-        public IActionResult AddToCart(Products prod , int q)
+        //ΚΑΛΕΙΤΑΙ ΟΤΑΝ Ο CLIENT ΠΑΤΑΕΙ TO KOYΜΠΙ ADDTOCART
+        public RedirectToRouteResult AddToCart(int ProductId, int q)
         {
-            Products product = _repository.Products.SingleOrDefault(x => x == prod);
+            Products product = _repository.Products.SingleOrDefault(x => x.ProductId == ProductId);
+            string cid = _userManager.GetUserId(HttpContext.User);
+            CartItem c = null;
+
             if (product != null)
             {
-                cart.AddProduct(product, q);
+                c = new CartItem(product, q)
+                {
+                    ClientId = cid
+                };
             }
-            return View();
+           
+            return RedirectToRoute("cart");
+
+
         }
 
     }
