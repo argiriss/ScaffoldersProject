@@ -37,7 +37,7 @@ namespace ScaffoldersProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveProducts(IEnumerable<Products> productList)
+        public IActionResult SaveProducts( IEnumerable<SaveProductsViewModel> productList)
         {
             foreach (var item in productList)
             {
@@ -46,6 +46,7 @@ namespace ScaffoldersProject.Controllers
                 //    _repository.UpdateProduct(item);
                 //}
             }
+
             return RedirectToAction(nameof(Index));
         }
 

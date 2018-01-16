@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Products>
+﻿@model IEnumerable<SaveProductsViewModel>
 @{
     ViewData["Title"] = "New Products";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -22,11 +22,11 @@
             {
                 <tr>
                     <td>@prod.ProductId</td>
-                    <td>@prod.Name</td>
-                    <td>@prod.Price</td>
-                    <td>@prod.Quantity</td>
-                    <td>@prod.Category</td>
-                    <td>@prod.Description</td>
+                    <td>@prod.Products.Name</td>
+                    <td>@prod.Products.Price</td>
+                    <td>@prod.Products.Quantity</td>
+                    <td>@prod.Products.Category</td>
+                    <td>@prod.Products.Description</td>
                     <td>
                         <label><input type="hidden" name="[@i].ProductId" value="@prod.ProductId"></label>
                         <label><input type="checkbox" name="[@i].AdminApproved" value="true" checked></label>
