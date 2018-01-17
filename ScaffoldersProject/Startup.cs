@@ -14,6 +14,7 @@ using ScaffoldersProject.Services;
 using ScaffoldersProject.Models.services;
 using Microsoft.AspNetCore.HttpOverrides;
 
+
 namespace ScaffoldersProject
 {
     public class Startup
@@ -47,6 +48,12 @@ namespace ScaffoldersProject
             // Add application services.
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
+
+            //SignalR can be used to add any sort of "real-time" web functionality 
+            //to our ASP.NET application. 
+            //Install from pm manager
+            //PM>Install-Package Microsoft.AspNetCore.SignalR -Version 1.0.0-alpha2-final
+            services.AddSignalR();
 
             services.AddMvc();
 
@@ -87,6 +94,11 @@ namespace ScaffoldersProject
             });
 
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/Home/Chat");
+            });
 
             app.UseMvc(routes =>
             {

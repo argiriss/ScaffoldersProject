@@ -22,7 +22,7 @@ namespace ScaffoldersProject.Models
         public string Category { get; set; }
         public bool AdminApproved { get; set; }
         [Required]
-        public int Quantity { get; set; }
+        public int Stock { get; set; }
 
     }
 }

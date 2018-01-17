@@ -20,10 +20,8 @@ namespace ScaffoldersProject.Controllers
             _repository = repository;
             _userManager = userManager;
             cart = theCart;
-
-
-
         }
+
         public IActionResult Index()
         {
             ViewBag.ReturnUrl = TempData["returnUrl"];
@@ -48,12 +46,6 @@ namespace ScaffoldersProject.Controllers
                 //RETURN VIEW CART WITH THIS LIST
             }
             return RedirectToRoute("cart");
-
-
         }
-
-
-
-
     }
 }
