@@ -100,7 +100,7 @@ namespace ScaffoldersProject
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/Home/Chat");
+                routes.MapHub<ChatHub>("Home/Chat");
             });
 
             app.UseMvc(routes =>
