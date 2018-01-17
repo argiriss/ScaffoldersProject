@@ -7,6 +7,17 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+
+    <div class="col-md-3 nav navbar-nav center-block" style="margin-top: 7px">
+        <form asp-controller="Account" asp-action="Search" class="navbar-nav">
+            <div class="form-group has-feedback">
+                <label for="search" class="sr-only">Search</label>
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+        </form>
+    </div>   
+
     if (User.IsInRole("Client"))
     {
         <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
@@ -44,6 +55,7 @@
         </form>
 
     }
+   
 }
 else
 {
