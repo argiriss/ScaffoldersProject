@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Models.AccountViewModels;
 using ScaffoldersProject.Services;
+using ScaffoldersProject.Models.services;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -25,6 +26,7 @@ namespace ScaffoldersProject.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private RoleManager<IdentityRole> RoleManager;
+        private IProductRepository _repository;
 
 
         //Constructor Dependency Injection
@@ -33,13 +35,15 @@ namespace ScaffoldersProject.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IProductRepository repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             RoleManager = roleManager;
+            _repository = repository;
         }
 
         [TempData]
@@ -482,6 +486,22 @@ namespace ScaffoldersProject.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        public IActionResult Search(string search)
+        {
+            if (search == null) { search = "No Products Found!!!"; }
+            List<Products> list = new List<Products>();            
+            var products = _repository.Products.ToList();
+            foreach (var item in products)
+            {
+                if (search == item.Name || item.Category.Contains(search) || item.Quantity.Equals(search) || item.Price.Equals(search))
+                {
+                    list.Add(item);
+                }
+
+            }
+            return View(list);
         }
 
         #region Helpers
