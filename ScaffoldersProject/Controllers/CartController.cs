@@ -12,42 +12,48 @@ namespace ScaffoldersProject.Controllers
     public class CartController : Controller
     {
         private IProductRepository _repository;
-        private CartItem cart;
+        //private CartItem _item;
+        private Cart cart;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CartController(IProductRepository repository, UserManager<ApplicationUser> userManager , CartItem theCart)
+        public CartController(IProductRepository repository, UserManager<ApplicationUser> userManager , /*CartItem item*/  Cart cartService)
         {
             _repository = repository;
             _userManager = userManager;
-            cart = theCart;
-
+            //_item = item;
+            cart = cartService;
 
 
         }
-        public IActionResult Index()
+
+
+
+        public ViewResult Index()
         {
             ViewBag.ReturnUrl = TempData["returnUrl"];
-            //query for take cartitems for user id=current user .to list
+            //QUERY STON PINAKA Cart .where(x=>x.UserId==_userManager.GetUserId(HttpContext.User)) 
+            //GIA NA EMFANISEI TO CART TOU CURRENT USER
             return View(cart);
         }
 
-        public RedirectToRouteResult AddToCart(int ProductId, int q)
+        public ActionResult AddToCart(int ProductId, int Quantity, string returnUrl)
         {
             Products product = _repository.Products.SingleOrDefault(x => x.ProductId == ProductId);
             string cid = _userManager.GetUserId(HttpContext.User);
-            CartItem c = null;
-
+            
+            
             if (product != null)
             {
-                c = new CartItem(product, q)
-                {
-                    ClientId = cid
-                };
-                //ADD THE PRODUCT TO REPOSITORY
-                //THEN QUERY THE BASE TO TAKE ALL CARTITEMS WITH USERID=CURRENT USERID TO A LIST
-                //RETURN VIEW CART WITH THIS LIST
+               
+                cart.AddProduct(product, Quantity); //PROSTHETOUME TO PROION KAI TIN POSOTITA POU DIALEKSE O XRISTIS STHN METAVLITI CART
+                cart.UserId = _userManager.GetUserId(HttpContext.User);//EKXWROUME TO CURRENT USERID
+                cart.Checkout = false;
+                //UPDATE STON PINAKA CART .where(x=>x.UserId==_userManager.GetUserId(HttpContext.User)
+
             }
-            return RedirectToRoute("cart");
+            TempData["returnUrl"] = returnUrl;
+            return RedirectToAction("Index", new { cart = cart });
+            //return RedirectToRoute("cart");
 
 
         }

@@ -41,24 +41,24 @@ namespace ScaffoldersProject.Controllers
         }
 
         //ΚΑΛΕΙΤΑΙ ΟΤΑΝ Ο CLIENT ΠΑΤΑΕΙ TO KOYΜΠΙ ADDTOCART
-        public RedirectToRouteResult AddToCart(int ProductId, int q)
-        {
-            Products product = _repository.Products.SingleOrDefault(x => x.ProductId == ProductId);
-            string cid = _userManager.GetUserId(HttpContext.User);
-            CartItem c = null;
+        //public RedirectToRouteResult AddToCart(int ProductId, int q)
+        //{
+        //    Products product = _repository.Products.SingleOrDefault(x => x.ProductId == ProductId);
+        //    string cid = _userManager.GetUserId(HttpContext.User);
+        //    CartItem c = null;
 
-            if (product != null)
-            {
-                c = new CartItem(product, q)
-                {
-                    ClientId = cid
-                };
-            }
+        //    if (product != null)
+        //    {
+        //        c = new CartItem(product, q)
+        //        {
+        //            ClientId = cid
+        //        };
+        //    }
            
-            return RedirectToRoute("cart");
+        //    return RedirectToRoute("cart");
 
 
-        }
+        //}
 
     }
 }

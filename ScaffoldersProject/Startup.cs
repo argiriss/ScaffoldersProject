@@ -48,6 +48,8 @@ namespace ScaffoldersProject
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddTransient<IEmailSender, EmailSender>();
 
+            //ADD CART SERVICE
+            services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
             services.AddMvc();
 
             //Enabling sessions states with storing them into memory.
