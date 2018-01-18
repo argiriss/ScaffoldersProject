@@ -50,7 +50,7 @@ namespace ScaffoldersProject
             services.AddTransient<IEmailSender, EmailSender>();
 
             //Add cart service
-            services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+            //services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
 
             //SignalR can be used to add any sort of "real-time" web functionality 
             //to our ASP.NET application. 
@@ -98,9 +98,11 @@ namespace ScaffoldersProject
 
             app.UseAuthentication();
 
+            //app.UseFileServer();
+
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("Home/Chat");
+                routes.MapHub<ChatHub>("Chat");
             });
 
             app.UseMvc(routes =>

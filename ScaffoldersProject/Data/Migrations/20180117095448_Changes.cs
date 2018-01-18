@@ -4,22 +4,21 @@ using System.Collections.Generic;
 
 namespace ScaffoldersProject.Data.Migrations
 {
-    public partial class StockAdded : Migration
+    public partial class Changes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Quantity",
-                table: "Products",
-                newName: "Stock");
+            migrationBuilder.DropColumn(
+                name: "UserId",
+                table: "Cart");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Stock",
-                table: "Products",
-                newName: "Quantity");
+            migrationBuilder.AddColumn<string>(
+                name: "UserId",
+                table: "Cart",
+                nullable: true);
         }
     }
 }

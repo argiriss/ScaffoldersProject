@@ -8,10 +8,26 @@ namespace ScaffoldersProject.Models.services
 {
     public class ChatHub:Hub
     {
-        public void Send(string name, string message)
+        //To provide you a quick overview, the Hub is the center piece of the SignalR. 
+        //Similar to the Controller in ASP.NET MVC, a Hub is responsible for receiving 
+        //input and generating the output to the client.
+        static int NumberOfUsers=0;
+
+        public override Task OnConnectedAsync()
         {
-            // Call the broadcastMessage method to update clients.
-            Clients.All.InvokeAsync("broadcastMessage", name, message);
+            NumberOfUsers += 1;
+            return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} joined",NumberOfUsers);
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            NumberOfUsers -= 1;
+            return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} left",NumberOfUsers);
+        }
+
+        public Task Send(string message)
+        {    
+            return Clients.All.InvokeAsync("Send", message, NumberOfUsers);
         }
     }
 }
