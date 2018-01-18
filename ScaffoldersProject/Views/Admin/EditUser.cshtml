@@ -1,0 +1,26 @@
+﻿@model ApplicationUser
+@{
+    ViewData["Title"] = "Edit User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit User</h2>
+
+<form asp-action="EditUser" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="SecurityStamp" />
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <div><span asp-validation-for="UserName" class="text-danger"></span></div>
+        <input asp-for="UserName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <div><span asp-validation-for="Email" class="text-danger"></span></div>
+        <textarea asp-for="Email" class="form-control"></textarea>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a asp-action="Users" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
