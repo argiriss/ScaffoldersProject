@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ScaffoldersProject.Data;
 using System;
 
-namespace ScaffoldersProject.data.Migrations
+namespace ScaffoldersProject.Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
     partial class MainDbContextModelSnapshot : ModelSnapshot
@@ -25,9 +25,7 @@ namespace ScaffoldersProject.data.Migrations
                     b.Property<int>("CartId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("Checkout");
-
-                    b.Property<string>("UserCartId");
+                    b.Property<string>("UserCardId");
 
                     b.HasKey("CartId");
 
@@ -39,6 +37,8 @@ namespace ScaffoldersProject.data.Migrations
                     b.Property<int>("CartItemID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("CartId");
+
                     b.Property<int?>("OrderID");
 
                     b.Property<int?>("ProductId");
@@ -46,6 +46,8 @@ namespace ScaffoldersProject.data.Migrations
                     b.Property<int>("Quantity");
 
                     b.HasKey("CartItemID");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("OrderID");
 
@@ -75,6 +77,8 @@ namespace ScaffoldersProject.data.Migrations
 
                     b.Property<bool>("Shipped");
 
+                    b.Property<string>("UserOrderId");
+
                     b.Property<int>("Zip");
 
                     b.HasKey("OrderID");
@@ -95,6 +99,8 @@ namespace ScaffoldersProject.data.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
+                    b.Property<byte[]>("Image");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
@@ -109,6 +115,10 @@ namespace ScaffoldersProject.data.Migrations
 
             modelBuilder.Entity("ScaffoldersProject.Models.CartItem", b =>
                 {
+                    b.HasOne("ScaffoldersProject.Models.Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId");
+
                     b.HasOne("ScaffoldersProject.Models.Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderID");
