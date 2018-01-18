@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ScaffoldersProject.Data;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Models.services;
 
@@ -13,10 +15,14 @@ namespace ScaffoldersProject.Controllers
     public class AdminController : Controller
     {
         private IProductRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private MainDbContext _db;
 
-        public AdminController(IProductRepository repository)
+        public AdminController(IProductRepository repository, UserManager<ApplicationUser> userManager,MainDbContext db)
         {
             _repository = repository;
+            _userManager = userManager;
+            _db = db;
         }
 
         public IActionResult Index()
@@ -33,7 +39,35 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Users()
         {
-            return View();
+            return View(_userManager.Users);
+        }
+
+        public async Task<ViewResult> EditUser(string Id)
+        {
+            ApplicationUser userss = await _userManager.FindByIdAsync(Id);
+            return View(userss);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(ApplicationUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Users));
+            }
+            else
+            {
+                return View(user);
+            }
+        }
+        
+
+        public async Task<IActionResult> DeleteUser(string Id)
+        {
+            ApplicationUser userToBeDeleted = await _userManager.FindByIdAsync(Id);
+            await _userManager.DeleteAsync(userToBeDeleted);
+            return RedirectToAction(nameof(Users));
         }
 
         [HttpPost]
@@ -41,10 +75,10 @@ namespace ScaffoldersProject.Controllers
         {
             foreach (var item in productList)
             {
-                //if (item.AdminApproved)
-                //{
-                //    _repository.UpdateProduct(item);
-                //}
+                if (item.AdminApproved)
+                {
+                    _repository.UpdateProduct(item.Products);
+                }
             }
 
             return RedirectToAction(nameof(Index));
@@ -54,6 +88,8 @@ namespace ScaffoldersProject.Controllers
         {
             return View(_repository.Products.FirstOrDefault(i => i.ProductId == productId));
         }
+
+        
 
         [HttpPost]
         public IActionResult Edit(Products product)
@@ -87,6 +123,12 @@ namespace ScaffoldersProject.Controllers
             {
                 return View(product);
             }
+        }
+        
+        public IActionResult Delete(int productId)
+        {
+            var product = _repository.DeleteProduct(productId);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
