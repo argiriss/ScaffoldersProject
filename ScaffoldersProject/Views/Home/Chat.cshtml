@@ -19,7 +19,7 @@
             document.getElementById('numberOfUsers').innerHTML = data2;
         });
 
-        //Sending data to server
+        //Sending data to server .......
         document.getElementById('sendmessage').addEventListener('submit', event => {
             let data = document.getElementById('data').value;
             connection.invoke('send', data);
