@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ScaffoldersProject.Controllers
 {
     public class MemberController : Controller
     {
         private IProductRepository _repository;
-
+        
         //Dependency Injection
         public MemberController(IProductRepository repository)
         {

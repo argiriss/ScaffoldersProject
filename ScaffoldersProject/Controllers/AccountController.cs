@@ -490,12 +490,12 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Search(string search)
         {
-            if (search == null) { search = "No Products Found!!!"; }
+            if (search == null) { search = "No Products Found."; }
             List<Products> list = new List<Products>();            
             var products = _repository.Products.ToList();
             foreach (var item in products)
             {
-                if (search == item.Name || item.Category.Contains(search) || item.Quantity.Equals(search) || item.Price.Equals(search))
+                if ( item.Name.Contains(search) || item.Category.Contains(search) || item.Stock.Equals(int.Parse(search)) || item.Price.Equals(decimal.Parse(search)))
                 {
                     list.Add(item);
                 }
