@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ScaffoldersProject.Data;
 using System;
 
-namespace ScaffoldersProject.data.Migrations
+namespace ScaffoldersProject.Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180117095448_Changes")]
+    partial class Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +27,6 @@ namespace ScaffoldersProject.data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Checkout");
-
-                    b.Property<string>("UserCartId");
 
                     b.HasKey("CartId");
 

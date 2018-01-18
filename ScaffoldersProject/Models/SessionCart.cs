@@ -28,17 +28,17 @@ namespace ScaffoldersProject.Services
             }
         }
 
-        public override void AddProduct(Products product, int quantity)
-        {
-            base.AddProduct(product, quantity);
-            session.SetString(sessionKey, JsonConvert.SerializeObject(this));
-        }
+        //public override void AddProduct(Products product, int quantity)
+        //{
+        //    base.AddProduct(product, quantity);
+        //    session.SetString(sessionKey, JsonConvert.SerializeObject(this));
+        //}
 
-        public override void Clear()
-        {
-            base.Clear();
-            session.Remove(sessionKey);
-        }
+        //public override void Clear()
+        //{
+        //    base.Clear();
+        //    session.Remove(sessionKey);
+        //}
     }
 }
 

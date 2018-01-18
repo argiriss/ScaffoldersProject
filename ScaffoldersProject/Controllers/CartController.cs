@@ -37,9 +37,10 @@ namespace ScaffoldersProject.Controllers
             
             if (product != null)
             {
-                cart.AddProduct(product, Quantity); //PROSTHETOUME TO PROION KAI TIN POSOTITA POU DIALEKSE O XRISTIS STHN METAVLITI CART
-                cart.UserId = _userManager.GetUserId(HttpContext.User);//EKXWROUME TO CURRENT USERID
-                cart.Checkout = false;
+                
+                //cart.AddProduct(product, Quantity); //PROSTHETOUME TO PROION KAI TIN POSOTITA POU DIALEKSE O XRISTIS STHN METAVLITI CART
+                //cart.UserId = _userManager.GetUserId(HttpContext.User);//EKXWROUME TO CURRENT USERID
+                //cart.Checkout = false;
                 //UPDATE STON PINAKA CART .where(x=>x.UserId==_userManager.GetUserId(HttpContext.User)
             }
             TempData["returnUrl"] = returnUrl;

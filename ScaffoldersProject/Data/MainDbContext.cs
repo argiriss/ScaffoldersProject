@@ -12,6 +12,7 @@ namespace ScaffoldersProject.Data
         //Database for all the other uses ,Products,orders etc.....
         public DbSet<Products> Products { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<Order> Order { get; set; }
         //public DbSet<CartItem> CartItem {get; set;}
         //We can add other models ............
 

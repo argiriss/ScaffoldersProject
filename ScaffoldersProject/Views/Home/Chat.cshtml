@@ -1,27 +1,45 @@
 ﻿
-<h2>Chat</h2>
-<div>
-    <input type="text" id="message" />
-    <input type="button" id="sendMessage" value="Send" />
-    <ul id="discussion"></ul>
-</div>
-<script type="text/javascript" src="js/signalr-client-1.0.0-alpha2-final.js"></script>
+@{
+    ViewData["Title"] = "Chat";
+}
 
-<script type="text/javascript">
-        var transport = signalR.TransportType.WebSockets;
-        var connection = new signalR.HubConnection(http://localhost:61971/Home/Chat', { transport: transport });
-        var messageInput = document.getElementById('message');
-        var name = prompt('Enter your name:', '');
-        var button = document.getElementById("sendMessage");
-        connection.on('broadcastMessage', (name, message) => {
-            var liElement = document.createElement('li');
-            liElement.innerHTML = '<strong>' + name + '</strong>:&nbsp;&nbsp;' + message;
-            document.getElementById('discussion').appendChild(liElement);
+<h2>Chat</h2>
+<!--SignalR client-->
+<script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let connection = new signalR.HubConnection('/chat');
+
+        //Receive Data from server
+        connection.on('send', function(data,data2) {
+            let child = document.createElement('li');
+            child.innerText = data;
+            document.getElementById('messages').appendChild(child);
+            document.getElementById('numberOfUsers').innerHTML = data2;
         });
-        button.addEventListener("click", event => {
-            connection.invoke('send', name, messageInput.value);
-            messageInput.value = '';
-            messageInput.focus();
+
+        //Sending data to server
+        document.getElementById('sendmessage').addEventListener('submit', event => {
+            let data = document.getElementById('data').value;
+            connection.invoke('send', data);
+            event.preventDefault();
         });
-        connection.start();
+
+        connection.start().then(function () {
+            console.log("Started....");
+        })
+            .catch(function (err) {
+                console.log("Error");
+            })
+    });
 </script>
+
+<p>Number Of Users Online :<span id="numberOfUsers"></span></p>
+<form id="sendmessage">
+    <input type="text" id="data" />
+    <input type="submit" value="Send" />
+</form>
+
+<ul id="messages"></ul>
+

@@ -12,13 +12,11 @@ namespace ScaffoldersProject.Models
         public int CartItemID { get; set; }
         public Products Product { get; set; }
         public int Quantity { get; set; }
-        //public string ClientId { get; set; }
 
         public CartItem(Products p, int q)
         {
             Product = p;
             Quantity = q;
-
         }
 
         public CartItem()
