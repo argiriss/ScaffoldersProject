@@ -13,6 +13,8 @@ namespace ScaffoldersProject.Models.services
         //Properties
         IQueryable<Products> Products { get; }
 
+        
+
         //Methods 
         //We can add more methods...........
         void SaveProduct(Products product);
