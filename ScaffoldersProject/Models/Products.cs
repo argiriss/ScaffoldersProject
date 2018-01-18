@@ -24,6 +24,5 @@ namespace ScaffoldersProject.Models
         public bool AdminApproved { get; set; }
         [Required]
         public int Stock { get; set; }
-
     }
 }
