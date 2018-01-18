@@ -35,6 +35,10 @@
     height: 5vh;
 }
 
+video{
+    object-fit:fill;
+}
+
 #scroll {
     position: absolute;
     margin-left: 0;
@@ -102,7 +106,7 @@
     margin: 0 0 11px;
 }
 
-.modal {
+.modal .confirm-modal {
     top: 25%;
     width: 50%;
     margin: 0 auto;
