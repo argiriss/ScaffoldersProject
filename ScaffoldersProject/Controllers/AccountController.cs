@@ -495,7 +495,7 @@ namespace ScaffoldersProject.Controllers
             var products = _repository.Products.ToList();
             foreach (var item in products)
             {
-                if ( item.Name.Contains(search) || item.Category.Contains(search) || item.Stock.Equals(int.Parse(search)) || item.Price.Equals(decimal.Parse(search)))
+                if ( item.Name.Contains(search) || item.Category.Contains(search) /*|| item.Stock.Equals(int.Parse(search)) || item.Price.Equals(decimal.Parse(search))*/)
                 {
                     list.Add(item);
                 }
