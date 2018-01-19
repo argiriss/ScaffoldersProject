@@ -48,6 +48,7 @@ namespace ScaffoldersProject
             // Add application services.
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddTransient<ICartRepository, EfCartRepository>();
+            services.AddTransient<IOrderRepository, EfOrderRepository>();
             
             services.AddTransient<IEmailSender, EmailSender>();
 

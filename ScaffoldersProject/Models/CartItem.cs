@@ -18,6 +18,10 @@ namespace ScaffoldersProject.Models
         public int CartId { get; set; }
         public Cart cart;
 
+        public int OrderID { get; set; }
+        public Order order;
+
+
         public CartItem(Products p, int q)
         {
             Product = p;
