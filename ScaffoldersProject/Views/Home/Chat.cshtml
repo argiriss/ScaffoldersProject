@@ -26,7 +26,9 @@
 
         //Receive data only for signed user
         connection.on('OnlineUsers', function (data) {
-            document.getElementById('extra').innerHTML = data;
+            for (var i = 0; i < data.length; i++) {
+                document.getElementById('chat-text').innerHTML += '<p>' +data[i]+'</p>';
+            }
         })
 
         //Sending data to server .......
@@ -48,9 +50,9 @@
 
 <p>Extra message :<span id="extra"></span></p>
 <p>Number Of Users Online :<span id="numberOfUsers"></span></p>
-<div>
 
-</div>
+<div id="chat-text" style="width:200px; height:100px; overflow-y:scroll"></div>
+
 <form id="sendmessage">
     <input type="text" id="data" />
     <input type="submit" value="Send" />
