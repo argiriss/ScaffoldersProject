@@ -12,17 +12,28 @@
         let connection = new signalR.HubConnection('/chat');
 
         //Receive Data from server
-        connection.on('send', function(data,data2) {
+        connection.on('send', function (data, data2) {
             let child = document.createElement('li');
             child.innerText = data;
             document.getElementById('messages').appendChild(child);
             document.getElementById('numberOfUsers').innerHTML = data2;
         });
 
+        //Receive data only for signed user
+        connection.on('client', function (data) {
+            document.getElementById('extra').innerHTML = data;
+        })
+
+        //Receive data only for signed user
+        connection.on('OnlineUsers', function (data) {
+            document.getElementById('extra').innerHTML = data;
+        })
+
         //Sending data to server .......
         document.getElementById('sendmessage').addEventListener('submit', event => {
             let data = document.getElementById('data').value;
             connection.invoke('send', data);
+            connection.invoke('sendClient', data);
             event.preventDefault();
         });
 
@@ -35,7 +46,11 @@
     });
 </script>
 
+<p>Extra message :<span id="extra"></span></p>
 <p>Number Of Users Online :<span id="numberOfUsers"></span></p>
+<div>
+
+</div>
 <form id="sendmessage">
     <input type="text" id="data" />
     <input type="submit" value="Send" />
