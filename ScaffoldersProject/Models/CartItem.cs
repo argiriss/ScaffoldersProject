@@ -18,7 +18,7 @@ namespace ScaffoldersProject.Models
         public int CartId { get; set; }
         public Cart cart;
 
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
         public Order order;
 
 

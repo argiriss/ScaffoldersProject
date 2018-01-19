@@ -15,6 +15,7 @@ namespace ScaffoldersProject.Models.services
         //Similar to the Controller in ASP.NET MVC, a Hub is responsible for receiving 
         //input and generating the output to the client.
         private readonly UserManager<ApplicationUser> _userManager;
+        //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string,string> OnlineUser { get; set; }
         static int NumberOfUsers = 0;
 
@@ -30,9 +31,11 @@ namespace ScaffoldersProject.Models.services
             NumberOfUsers += 1;
             OnlineUser = new ConcurrentDictionary<string, string>();
             OnlineUser.AddOrUpdate(_userManager.GetUserId(Context.User), Context.ConnectionId,(key,value)=> Context.ConnectionId);
-            //Return a list of online users excepts us
+            //list of online users
             var onUsers=OnlineUser.Keys;
+            //Return user name and total login users
             await Clients.All.InvokeAsync("Send", $"{_userManager.GetUserName(Context.User)} joined",NumberOfUsers);
+            //return name of online users
             await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers",onUsers);
         }
 
@@ -43,12 +46,10 @@ namespace ScaffoldersProject.Models.services
             return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} left",NumberOfUsers);
         }
 
-        //When we invoke from client with Send value
+        //When we invoke from client with Send value end send back message from parameter
         public async Task Send(string message)
         {    
-            await Clients.All.InvokeAsync("Send", message, NumberOfUsers);
-          
-            
+            await Clients.All.InvokeAsync("Send", message, NumberOfUsers);  
         }
 
         //When we invoke from client with SendClient value

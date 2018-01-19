@@ -5,9 +5,11 @@ using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ScaffoldersProject.Controllers
 {
+    [Authorize(Roles = "Client")]
     public class ClientController : Controller
     {
         private IProductRepository _repository;
