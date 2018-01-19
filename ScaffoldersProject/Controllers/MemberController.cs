@@ -7,13 +7,14 @@ using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using ScaffoldersProject.Data;
 
 namespace ScaffoldersProject.Controllers
 {
     public class MemberController : Controller
     {
         private IProductRepository _repository;
-        
+
         //Dependency Injection
         public MemberController(IProductRepository repository)
         {
@@ -22,7 +23,23 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
-            return View(_repository.Products);
+
+            var viewImageList = new List<ViewImageViewModel>();
+            foreach (var product in _repository.Products)
+            {
+                var viewImage = new ViewImageViewModel();
+                viewImage.Description = product.Description;
+                viewImage.Name = product.Name;
+                viewImage.Price = product.Price;
+                viewImage.ContentType = product.ContentType;
+                
+                MemoryStream ms = new MemoryStream(product.Image);
+                byte[] imageBytes = ms.ToArray();
+                viewImage.Image = Convert.ToBase64String(imageBytes);
+                                             
+                viewImageList.Add(viewImage);
+            }
+            return View(viewImageList);
         }
 
         public ViewResult Create()
@@ -43,10 +60,12 @@ namespace ScaffoldersProject.Controllers
                     Price = imageView.Price,
                     Stock = imageView.Stock
                 };
+                //Upload Image
                 using (var memoryStream = new MemoryStream())
                 {
                     await imageView.Image.CopyToAsync(memoryStream);
                     product.Image = memoryStream.ToArray();
+                    product.ContentType = imageView.Image.ContentType;
                 }
                 _repository.SaveProduct(product);
                 return RedirectToAction(nameof(Index));
@@ -58,24 +77,17 @@ namespace ScaffoldersProject.Controllers
 
         }
 
-        [HttpPost]//process to upload files
-        public async Task<IActionResult> UploadFiles (List<IFormFile> files)
-        {
-            long size = files.Sum(f => f.Length);
-            //file in temp location
-            var filePath = Path.GetTempFileName();
+        //[HttpGet]
+        //public FileStreamResult ViewImage(int productId)
+        //{
+        //    Products product = _repository.Products.FirstOrDefault(m => m.ProductId == productId);
+        //    MemoryStream ms = new MemoryStream(product.Image);
 
-            foreach (var formfile in files)
-            {
-                if (formfile.Length > 0)
-                {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formfile.CopyToAsync(stream);
-                    }
-                }
-            }
-            return Ok(new { count = files.Count, size, filePath });
-        }
+        //    return new FileStreamResult(ms, product.ContentType);
+
+        //}
+
+
+
     }
 }
