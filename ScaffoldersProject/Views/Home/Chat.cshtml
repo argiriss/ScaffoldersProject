@@ -24,7 +24,7 @@
             document.getElementById('extra').innerHTML = data;
         })
 
-        //Receive data only for signed user
+        //Receive list of online users
         connection.on('OnlineUsers', function (data) {
             for (var i = 0; i < data.length; i++) {
                 document.getElementById('chat-text').innerHTML += '<p>' +data[i]+'</p>';
