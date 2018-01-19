@@ -31,7 +31,7 @@ namespace ScaffoldersProject.Models.services
             OnlineUser = new ConcurrentDictionary<string, string>();
             OnlineUser.AddOrUpdate(_userManager.GetUserId(Context.User), Context.ConnectionId,(key,value)=> Context.ConnectionId);
             //Return a list of online users excepts us
-            var onUsers=OnlineUser.Keys.Where(x => x != _userManager.GetUserId(Context.User));
+            var onUsers=OnlineUser.Keys;
             await Clients.All.InvokeAsync("Send", $"{_userManager.GetUserName(Context.User)} joined",NumberOfUsers);
             await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers",onUsers);
         }
