@@ -45,6 +45,20 @@ body {
     height: 95vh;
 }
 
+.admin-layout {
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.admin-layout .col{
+    padding:0;
+}
+
+.half-page{
+    min-height:50vh;
+}
+
+
 .full-screen{
     height:100vh;
     position:relative;

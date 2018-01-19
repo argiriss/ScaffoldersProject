@@ -18,7 +18,7 @@
         </environment>
 </head>
 
-<body class="m-1 p-1">
+<body class="admin-layout m-1 p-1">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -40,9 +40,31 @@
             </div>
         </div>
     </nav>
-    <div class="p-2">
-        <h2 class="text-center">@ViewBag.Title</h2>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col col-md-2 full-screen" style="background:red;">
+
+            </div>
+            <div class="col col-md-2">
+                <div class="half-page" style="background:blue;">
+
+                </div>
+                <div class="half-page" style="background:yellow;">
+
+                </div>
+            </div>
+            <div class="col col-md-8">
+                <div class="half-page" style="background:green;">
+
+                </div>
+                <div class="half-page" style="background:purple;">
+
+                </div>
+            </div>
+        </div>
     </div>
+
     @RenderBody()
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

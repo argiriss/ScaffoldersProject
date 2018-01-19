@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     $(function () {
         if ($("#scroll").length) {
-            $('body').css('overflow-y', 'hidden');
+            $('body').css('overflow-x', 'hidden');
             document.onkeydown = function (e) {
 
                 switch (e.keyCode) {
