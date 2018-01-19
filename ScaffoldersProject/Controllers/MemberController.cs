@@ -25,6 +25,7 @@ namespace ScaffoldersProject.Controllers
         {
 
             var viewImageList = new List<ViewImageViewModel>();
+            //convert the Products into readable type for the Model
             foreach (var product in _repository.Products)
             {
                 var viewImage = new ViewImageViewModel();
@@ -33,10 +34,13 @@ namespace ScaffoldersProject.Controllers
                 viewImage.Price = product.Price;
                 viewImage.ContentType = product.ContentType;
                 
-                MemoryStream ms = new MemoryStream(product.Image);
-                byte[] imageBytes = ms.ToArray();
-                viewImage.Image = Convert.ToBase64String(imageBytes);
-                                             
+                if (product.Image != null )
+                {                              
+                    MemoryStream ms = new MemoryStream(product.Image);
+                    byte[] imageBytes = ms.ToArray();
+                    viewImage.Image = Convert.ToBase64String(imageBytes);
+                }
+
                 viewImageList.Add(viewImage);
             }
             return View(viewImageList);
@@ -61,11 +65,14 @@ namespace ScaffoldersProject.Controllers
                     Stock = imageView.Stock
                 };
                 //Upload Image
-                using (var memoryStream = new MemoryStream())
+                if (imageView.Image != null)
                 {
-                    await imageView.Image.CopyToAsync(memoryStream);
-                    product.Image = memoryStream.ToArray();
-                    product.ContentType = imageView.Image.ContentType;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await imageView.Image.CopyToAsync(memoryStream);
+                        product.Image = memoryStream.ToArray();
+                        product.ContentType = imageView.Image.ContentType;
+                    }
                 }
                 _repository.SaveProduct(product);
                 return RedirectToAction(nameof(Index));
