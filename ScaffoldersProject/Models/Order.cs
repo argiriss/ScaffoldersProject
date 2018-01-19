@@ -11,7 +11,6 @@ namespace ScaffoldersProject.Models
     {
         [Key]
         public int OrderID { get; set; }
-        public ICollection<CartItem> Items { get; set; }
         [Required(ErrorMessage = "You have to provide a name!")]
         public string Name { get; set; }
         [Required(ErrorMessage = "You have to provide an address!")]
@@ -27,5 +26,8 @@ namespace ScaffoldersProject.Models
         [BindNever]
         public bool Shipped { get; set; }
         public string UserOrderId { get; set; } //similar to foreign Key
+
+        //One to many relationship with Items
+        public ICollection<CartItem> Items { get; set; }
     }
 }

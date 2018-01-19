@@ -9,9 +9,10 @@ namespace ScaffoldersProject.Models.services
     {
         IQueryable<Cart> Cart { get; }
 
-        void AddItem(Products product , int quantity , int cardId);
+        void CartSave(Cart cart);
+        void AddItem(Products product, int quantity, Cart cart);
         void RemoveItem(CartItem item);
-        decimal ComputeTotalCost(int cardId);
+        decimal ComputeTotalCost(Cart cart);
         void Clear();
 
     }

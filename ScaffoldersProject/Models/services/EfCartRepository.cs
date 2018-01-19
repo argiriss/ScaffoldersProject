@@ -9,54 +9,75 @@ namespace ScaffoldersProject.Models.services
     public class EfCartRepository : ICartRepository
     {
         private MainDbContext db;
+
+        //Depedency injection implemented on constructor.Instatiate db object
         public EfCartRepository(MainDbContext db)
         {
             this.db = db;
         }
 
         public IQueryable<Cart> Cart => db.Cart;
-        
 
-        public void AddItem(Products product , int quantity , int CardId)
+        public void CartSave(Cart cart)
         {
-            CartItem item = db.CartItem.SingleOrDefault(x => x.CartId==CardId);
-            if (item == null)
+            db.Cart.Add(cart);
+            db.SaveChanges();
+        }
+
+        public void AddItem(Products product, int quantity, Cart cart)
+        {
+            //If we find a cartId from this user
+            CartItem findProductInCart = db.CartItem.FirstOrDefault(x => x.CartId == cart.CartId);
+            if (findProductInCart != null)
             {
-                item = new CartItem
+                //If item exists then we look for similar productId 
+                CartItem findInCart = db.CartItem.FirstOrDefault(x => x.ProductId == product.ProductId && x.CartId == cart.CartId);
+                if (findInCart != null)
                 {
-                    ProductId = product.ProductId,
-                    Quantity = quantity,
-                    CartId = CardId,
-
-
-                };
-                db.CartItem.Update(item);
-                db.SaveChanges();
+                    findInCart.Quantity += quantity;
+                    db.CartItem.Update(findInCart);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //If there is not similar product then
+                    findInCart = new CartItem
+                    {
+                        ProductId = product.ProductId,
+                        Quantity = quantity,
+                        CartId = cart.CartId,
+                    };
+                    db.CartItem.Add(findInCart);
+                    db.SaveChanges();
+                }
             }
             else
             {
-                item.Quantity += quantity;
-                db.CartItem.Update(item);
+                findProductInCart = new CartItem
+                {
+                    ProductId = product.ProductId,
+                    Quantity = quantity,
+                    CartId = cart.CartId,
+                };
+                db.CartItem.Add(findProductInCart);
                 db.SaveChanges();
-
             }
-
-         
         }
 
         public void Clear()
         {
-            
+
         }
 
-        public decimal ComputeTotalCost(int CardId)
+        public decimal ComputeTotalCost(Cart cart)
         {
-            Cart c = db.Cart.SingleOrDefault(x => x.CartId == CardId);
-            if (c!=null)
+            decimal totalCost = 0;
+            var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId);
+            foreach (var item in findListOfItems)
             {
-                return c.Items.Sum(x => x.Product.Price * x.Quantity);
+                totalCost += item.Product.Price * item.Quantity;
             }
-            return 0;
+            return totalCost;
         }
 
         public void RemoveItem(CartItem item)

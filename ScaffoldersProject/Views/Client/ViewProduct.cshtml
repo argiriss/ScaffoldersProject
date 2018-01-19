@@ -15,7 +15,7 @@
                     </h3>
                 </header>
                 <section class="card m-1 p-1">
-                    <img  src="https://static.madata.gr/gim/greenthumb.php?src=/files/mpogdanos_547124350.jpg&w=350&h=350&zc=1&s=1" width="300" height="300">
+                    <img src="https://static.madata.gr/gim/greenthumb.php?src=/files/mpogdanos_547124350.jpg&w=350&h=350&zc=1&s=1" width="300" height="300">
                 </section>
             </div>
             <div class="col-md-4" style="margin-top:50px;">
@@ -36,27 +36,25 @@
                 </table>
 
                 <br><br>
-                <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId"  asp-route-Quantity="2" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
-                    <input type="hidden" name="ProductId" value=@Model.Product.ProductId>
-                    
+                <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-Quantity="2" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
+                    <input type="hidden" name="productId" value=@Model.Product.ProductId>
+
                     <span style="font-size:23px">Quantity</span>
 
-                             <select name="Quantity" style="margin-left:80px;">
-                                @for (int i = 1; i < 5; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
+                    <select name="quantity" style="margin-left:80px;">
+                        @for (int i = 1; i < 5; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
 
-                            <br><br>
-                    <div >
-                       <button  class="btn btn-primary" type="submit">Add To Cart</button>
-                       <button class="btn btn-primary" type="submit">Add To Wish List</button>
-                       <a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>
-
-                               
-                   </div>
-                 </form>
+                    <br><br>
+                    <div>
+                        <button class="btn btn-primary" type="submit">Add To Cart</button>
+                        <button class="btn btn-primary" type="submit">Add To Wish List</button>
+                        <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
+                    </div>
+                </form>
             </div>
 
             <div class="col-md-4"></div>
@@ -122,25 +120,25 @@
 
 
     @*<div>
-        @foreach (var item in Model.SimilarProducts)
-        {
-            <section class="card m-1 p-1">
-                <header class="bg-faded p-1">
-                    <h3>
-                        @Model.Product.Name
-                        <span class="badge badge-primary" style="float:right">
-                            <small>@Model.Product.Price.ToString("c")</small>
-                        </span>
-                    </h3>
-                </header>
-                <div class="card-text p-1">
-                    <p>@Model.Product.Description</p>
-                    <a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-productID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>
-                </div>
-            </section>
-        }
+            @foreach (var item in Model.SimilarProducts)
+            {
+                <section class="card m-1 p-1">
+                    <header class="bg-faded p-1">
+                        <h3>
+                            @Model.Product.Name
+                            <span class="badge badge-primary" style="float:right">
+                                <small>@Model.Product.Price.ToString("c")</small>
+                            </span>
+                        </h3>
+                    </header>
+                    <div class="card-text p-1">
+                        <p>@Model.Product.Description</p>
+                        <a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-productID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>
+                    </div>
+                </section>
+            }
 
-    </div>*@
+        </div>*@
 
 
 

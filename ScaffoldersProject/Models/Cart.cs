@@ -9,10 +9,13 @@ namespace ScaffoldersProject.Models
 {
     public class Cart
     {
+        
         [Key]
         public int CartId { get; set; }
-        public ICollection<CartItem> Items { get; set; }
         public string UserCardId { get; set; }
+
+        //One to many relationship with cartitem
+        public ICollection<CartItem> Items { get; set; }
 
     }
 }

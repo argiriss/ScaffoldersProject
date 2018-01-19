@@ -10,9 +10,11 @@ namespace ScaffoldersProject.Models
     {
         [Key]
         public int CartItemID { get; set; }
+        public int Quantity { get; set; }
+
         public int ProductId { get; set; }
         public Products Product { get; set; }
-        public int Quantity { get; set; }
+        
         public int CartId { get; set; }
         public Cart cart;
 
