@@ -27,5 +27,39 @@ $(document).ready(function () {
         $('#dataConfirmModal').modal({ show: true });
         return false;
     });
+
+    $('#login-button').click(function (event) {
+        event.preventDefault();
+        $("#modal").load("Account/Login #myModal", function () {
+            $('#myModal').appendTo("body").modal('show');
+        });
+    });
+
+    $('#register-button').click(function (event) {
+        event.preventDefault();
+        $("#Registermodal").load("Account/Register #myRegisterModal", function () {
+            $('#myRegisterModal').appendTo("body").modal('show');
+        });
+    });
+
+
+    $(function () {
+        if ($("#scroll").length) {
+            $('body').css('overflow-y', 'hidden');
+            document.onkeydown = function (e) {
+
+                switch (e.keyCode) {
+                    case 38:
+                        $('#second-anchor').trigger('click');
+                        break;
+                    case 40:
+                        $('#fourth-anchor').trigger('click');
+                        break;
+                }
+            };
+        }
+    });
+
+    
     
 });
