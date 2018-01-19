@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,23 +14,47 @@ namespace ScaffoldersProject.Models.services
         //To provide you a quick overview, the Hub is the center piece of the SignalR. 
         //Similar to the Controller in ASP.NET MVC, a Hub is responsible for receiving 
         //input and generating the output to the client.
-        static int NumberOfUsers=0;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private ConcurrentDictionary<string,string> OnlineUser { get; set; }
+        static int NumberOfUsers = 0;
 
-        public override Task OnConnectedAsync()
+        //Depedency injection
+        public ChatHub(UserManager<ApplicationUser> userManager)
         {
-            NumberOfUsers += 1;
-            return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} joined",NumberOfUsers);
+            _userManager = userManager;
         }
 
+        //This happens on connection
+        public async override Task OnConnectedAsync()
+        {
+            NumberOfUsers += 1;
+            OnlineUser = new ConcurrentDictionary<string, string>();
+            OnlineUser.AddOrUpdate(_userManager.GetUserId(Context.User), Context.ConnectionId,(key,value)=> Context.ConnectionId);
+            //Return a list of online users excepts us
+            var onUsers=OnlineUser.Keys.Where(x => x != _userManager.GetUserId(Context.User));
+            await Clients.All.InvokeAsync("Send", $"{_userManager.GetUserName(Context.User)} joined",NumberOfUsers);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers",onUsers);
+        }
+
+        //When the client disconnect
         public override Task OnDisconnectedAsync(Exception exception)
         {
             NumberOfUsers -= 1;
             return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} left",NumberOfUsers);
         }
 
-        public Task Send(string message)
+        //When we invoke from client with Send value
+        public async Task Send(string message)
         {    
-            return Clients.All.InvokeAsync("Send", message, NumberOfUsers);
+            await Clients.All.InvokeAsync("Send", message, NumberOfUsers);
+          
+            
+        }
+
+        //When we invoke from client with SendClient value
+        public Task SendClient(string message)
+        {
+            return Clients.Client(Context.ConnectionId).InvokeAsync("Client","Malaka"); 
         }
     }
 }
