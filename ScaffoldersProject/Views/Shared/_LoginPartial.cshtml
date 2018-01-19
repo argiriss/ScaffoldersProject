@@ -13,11 +13,11 @@
         <form asp-action="Search" asp-controller="Account" class="navbar-nav">
             <div class="form-group has-feedback">
                 <label for="search" class="sr-only">Search</label>
-                <input type="text" class="form-control" name="search" placeholder="Search">             
+                <input type="text" class="form-control" name="search" placeholder="Search">
                 <span class="glyphicon glyphicon-search form-control-feedback"></span>
             </div>
         </form>
-    </div>   
+    </div>
 
     if (User.IsInRole("Client"))
     {
@@ -56,12 +56,15 @@
         </form>
 
     }
-   
+
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+        <li><a id="register-button" asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+        <li><a id="login-button" asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }
+
+<div id="modal"></div>
+<div id="Registermodal"></div>

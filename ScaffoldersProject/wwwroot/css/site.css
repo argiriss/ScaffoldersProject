@@ -1,4 +1,18 @@
-﻿body {
+﻿@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(-30px);
+    }
+
+    40% {
+        transform: translateY(-60px);
+    }
+
+    60% {
+        transform: translateY(-45px);
+    }
+}
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -6,8 +20,8 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Carousel */
@@ -26,9 +40,14 @@
     margin: 15px;
 }
 
-.full-screen {
+.video-screen {
     position: relative;
     height: 95vh;
+}
+
+.full-screen{
+    height:100vh;
+    position:relative;
 }
 
 .navbar-inverse {
@@ -41,12 +60,17 @@ video{
 
 #scroll {
     position: absolute;
-    margin-left: 0;
-    margin-right: 0;
-    left: 50%;
-    right: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
     bottom: 5%;
-    cursor:pointer;
+    cursor: pointer;
+}
+
+#scroll img{
+    width:60px;
+    height:40px;
 }
 
 /*Admin view products*/
@@ -115,6 +139,19 @@ video{
 .modal-header,.modal-body,.modal-footer{
     background:white;
 }
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #d46d15;
+}
+
+.bounce {
+    -moz-animation: bounce 2s infinite;
+    -webkit-animation: bounce 2s infinite;
+    animation: bounce 2s infinite;
+    text-align:center;
+}
+
+
 
 
 /* Hide/rearrange for smaller screens */
