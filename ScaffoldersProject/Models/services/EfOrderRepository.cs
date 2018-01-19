@@ -18,13 +18,8 @@ namespace ScaffoldersProject.Models.services
         {
             this.db = db;
         }
-
-        public void SaveOrder(Order order)
-        {
-           
-        }
-
-        public void UpdateOrder(Order order)
+        //method for Adding the new order to Order table
+        public void InitializeOrder(Order orderDetails)
         {
             
         }

@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Models.services
 {
-    interface IOrderRepository
+    public interface IOrderRepository
     {
         //Properties
         IQueryable<Order> Orders { get; }
-
         //Methods 
         //We can add more methods...........
+        void InitializeOrder(Order orderDetails);
 
-        void SaveOrder(Order order);
+        //void SaveOrder(Order order);
 
-        void UpdateOrder(Order order);
+        //void UpdateOrder(Order order);
      
     }
 }
