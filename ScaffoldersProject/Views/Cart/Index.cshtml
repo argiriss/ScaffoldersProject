@@ -4,34 +4,50 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <h2>My cart</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th class="text-right">Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2" >
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>@item.Product.Name</td>
-                <td class="text-center">x @item.Quantity</td>
-                <td class="text-right">@(item.Product.Price * item.Quantity)</td>
-            </tr>
-        }
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">x @item.Quantity</td>
+                            <td class="text-right">@(item.Product.Price * item.Quantity)</td>
+                            <td><a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="RemoveItem" asp-route-ProductID="@item.Product.ProductId">Remove</a></td>
+                            <td></td>
+                        </tr>
+                    }
 
 
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="2" class="text-right">Total:</td>
-            <td class="text-right"></td>
-        </tr>
-    </tfoot>
-</table>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right">Total:</td>
+                        <td class="text-right">@ViewBag.Total</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1 col-md-offset-5" >
+            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Order" asp-action="" asp-route-CartID="@Model.CartId">Checkout</a>
+        </div>
+        <div class="col-md-1">
+            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a>
+        </div>
+    </div>
+</div>
 @if (ViewBag.ReturnUrl != null)
 {
     <div class="text-center">

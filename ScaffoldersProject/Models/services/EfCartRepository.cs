@@ -75,8 +75,12 @@ namespace ScaffoldersProject.Models.services
             var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId);
             foreach (var item in findListOfItems)
             {
-                totalCost += item.Product.Price * item.Quantity;
+                decimal price = db.Products.First(x => x.ProductId == item.ProductId).Price;
+                totalCost += price * item.Quantity;
             }
+           
+
+
             return totalCost;
         }
 
