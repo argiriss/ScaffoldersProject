@@ -64,6 +64,7 @@ namespace ScaffoldersProject.Controllers
 
             TempData["returnUrl"] = returnUrl;
             //return RedirectToAction("Index", new { c=c });
+            
             var res = _cartRepository.Cart.First(x => x.UserCardId == _userManager.GetUserId(User));
             var total=_cartRepository.ComputeTotalCost(res);
             ViewBag.Total = total;

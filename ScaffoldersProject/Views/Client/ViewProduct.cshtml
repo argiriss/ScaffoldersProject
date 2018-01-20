@@ -39,18 +39,27 @@
                 <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
                     <input type="hidden" name="productId" value=@Model.Product.ProductId>
 
-                    <span style="font-size:23px">Quantity</span>
+                    @if (Model.Product.Stock <= 0)
+                    {
+                        <h5 class="text-danger">OUT OF STOCK</h5>
+                    }
+                    else
+                    {
+                        <span style="font-size:23px">Quantity</span>
 
-                    <select name="quantity" style="margin-left:80px;">
-                        @for (int i = 1; i < 5; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
-
+                        <select name="quantity" style="margin-left:80px;">
+                            @for (int i = 1; i <= Model.Product.Stock; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    }
                     <br><br>
                     <div>
+                    @if (Model.Product.Stock > 0)
+                    {
                         <button class="btn btn-primary" type="submit">Add To Cart</button>
+                    }
                         <button class="btn btn-primary" type="submit">Add To Wish List</button>
                         <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
                     </div>

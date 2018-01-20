@@ -3,7 +3,6 @@
     ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<h2>My cart</h2>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2" >
@@ -13,19 +12,24 @@
                         <th>Product</th>
                         <th class="text-center">Quantity</th>
                         <th class="text-right">Subtotal</th>
+                        <th class="text-right"><a class="btn btn-danger btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.Items)
                     {
-                        <tr>
-                            <td>@item.Product.Name</td>
-                            <td class="text-center">x @item.Quantity</td>
-                            <td class="text-right">@(item.Product.Price * item.Quantity)</td>
-                            <td><a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="RemoveItem" asp-route-ProductID="@item.Product.ProductId">Remove</a></td>
-                            <td></td>
-                        </tr>
+                        
+                        if (item.OrderID==null || item.OrderID==0)
+	                    {
+		                    <tr>
+                                <td>@item.Product.Name</td>
+                                <td class="text-center">x @item.Quantity</td>
+                                <td class="text-right">@(item.Product.Price * item.Quantity)</td>
+                                <td><a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="RemoveItem" asp-route-ProductID="@item.Product.ProductId">Remove</a></td>
+                                <td></td>
+                            </tr> 
+	                    }
                     }
 
 
@@ -44,7 +48,7 @@
             <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
         </div>
         <div class="col-md-1">
-            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a>
+            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Client" asp-action="Index" asp-route-CartID="@Model.CartId">Continue Shopping</a>
         </div>
     </div>
 </div>
