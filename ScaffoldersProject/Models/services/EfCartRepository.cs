@@ -79,15 +79,13 @@ namespace ScaffoldersProject.Models.services
         public decimal ComputeTotalCost(Cart cart)
         {
             decimal totalCost = 0;
+            //find list of items with same card id
             var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId &&(x.OrderID==0 ||x.OrderID==null));
             foreach (var item in findListOfItems)
             {
                 decimal price = db.Products.First(x => x.ProductId == item.ProductId).Price;
                 totalCost += price * item.Quantity;
             }
-           
-
-
             return totalCost;
         }
 

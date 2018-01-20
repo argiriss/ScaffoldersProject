@@ -60,18 +60,21 @@
                 <div class="row">
                     <div class="col-md-2 full-screen" style="background:#111;">
                         <div class="sidenav">
+                            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a href="#services">Deposit History</a>
                             <a href="#clients">Buy History</a>
 
                             <div class="row">
-                                <form asp-action="Search" asp-controller="Account">
-                                    <div class="form-group has-feedback">
-                                        <label for="search" class="sr-only">Search</label>
-                                        <input type="text" class="form-control" name="search" placeholder="Search">
-                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                                    </div>
-                                </form>
+                                <div class="col-md-12">
+                                    <form asp-action="Search" asp-controller="Account">
+                                        <div class="form-group has-feedback">
+                                            <label for="search" class="sr-only">Search</label>
+                                            <input type="text" class="form-control" name="search" placeholder="Search">
+                                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
 
                             <div class="row" style="background-color:orangered">
@@ -88,7 +91,9 @@
                             </div>
                         </div>
                     </div>
-                    @RenderBody()
+                    <div class="col-md-10 full-screen">
+                        @RenderBody()
+                    </div>
                 </div>
             }
             else if (User.IsInRole("Admin"))
@@ -96,6 +101,7 @@
                 <div class="row">
                     <div class="col-md-2 full-screen" style="background:#111;">
                         <div class="sidenav">
+                            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Index">View Products</a>
                             <a asp-area="" asp-controller="Admin" asp-action="NewProducts">Verify Products</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Users">Manage Users</a>
@@ -125,7 +131,9 @@
                             </div>
                         </div>
                     </div>
-                    @RenderBody()
+                    <div class="col-md-10 full-screen">
+                        @RenderBody()
+                    </div>
                 </div>
             }
             else
@@ -133,6 +141,7 @@
                 <div class="row">
                     <div class="col-md-2 full-screen" style="background:#111;">
                         <div class="sidenav">
+                            <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a href="#services">Create Product</a>
                             <a href="#clients">Buy History</a>
@@ -161,7 +170,9 @@
                             </div>
                         </div>
                     </div>
-                    @RenderBody()
+                    <div class="col-md-10 full-screen">
+                        @RenderBody()
+                    </div>
                 </div>
             }
         }
@@ -171,10 +182,6 @@
                 @RenderBody()
             </div>
         }
-        <hr />
-        @*<footer>
-                <p>&copy; 2018 - ScaffoldersProject</p>
-            </footer>*@
     </div>
 
     <environment include="Development">
