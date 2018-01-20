@@ -27,11 +27,11 @@ namespace ScaffoldersProject.Models.services
         public void AddItem(Products product, int quantity, Cart cart)
         {
             //If we find a cartId from this user
-            CartItem findProductInCart = db.CartItem.FirstOrDefault(x => x.CartId == cart.CartId);
+            CartItem findProductInCart = db.CartItem.FirstOrDefault(x => x.CartId == cart.CartId && (x.OrderID == 0 || x.OrderID == null));
             if (findProductInCart != null)
             {
                 //If item exists then we look for similar productId 
-                CartItem findInCart = db.CartItem.FirstOrDefault(x => x.ProductId == product.ProductId && x.CartId == cart.CartId);
+                CartItem findInCart = db.CartItem.FirstOrDefault(x => x.ProductId == product.ProductId && x.CartId == cart.CartId && (x.OrderID == 0 || x.OrderID == null));
                 if (findInCart != null)
                 {
                     findInCart.Quantity += quantity;
@@ -63,16 +63,23 @@ namespace ScaffoldersProject.Models.services
                 db.SaveChanges();
             }
         }
-
-        public void Clear()
-        {
-
+        //Clear all rpoducts from cart
+        public void Clear(Cart c)
+        {   
+            var CartItemsRemove = db.CartItem.Where(x => x.CartId == c.CartId);
+            foreach (var item in CartItemsRemove)
+            {
+                item.CartId = 0;
+                db.CartItem.Update(item);
+            }
+            db.SaveChanges();
         }
+
 
         public decimal ComputeTotalCost(Cart cart)
         {
             decimal totalCost = 0;
-            var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId);
+            var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId &&(x.OrderID==0 ||x.OrderID==null));
             foreach (var item in findListOfItems)
             {
                 decimal price = db.Products.First(x => x.ProductId == item.ProductId).Price;

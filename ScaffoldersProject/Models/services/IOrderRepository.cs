@@ -11,7 +11,7 @@ namespace ScaffoldersProject.Models.services
         IQueryable<Order> Orders { get; }
         //Methods 
         //We can add more methods...........
-        void InitializeOrder(Order orderDetails);
+        void AddNewOrder(Order orderDetails  , Cart c);
 
         //void SaveOrder(Order order);
 

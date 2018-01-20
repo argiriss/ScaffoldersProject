@@ -13,7 +13,7 @@ namespace ScaffoldersProject.Models.services
         void AddItem(Products product, int quantity, Cart cart);
         void RemoveItem(CartItem item);
         decimal ComputeTotalCost(Cart cart);
-        void Clear();
+        void Clear(Cart c);
 
     }
 }
