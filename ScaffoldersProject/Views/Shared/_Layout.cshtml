@@ -49,29 +49,9 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ScaffoldersProject</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a id="home-anchor" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a id="second-anchor" href="#myCarousel">About</a></li>
-                    <li><a id="third-anchor" href="#two">Contact</a></li>
-                    <li><a id="fourth-anchor" href="#three">Test</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Chat">Chat</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
+
+    @await Html.PartialAsync("_LoginPartial")
+
     <div class="container-fluid">
         @if (SignInManager.IsSignedIn(User))
         {
@@ -84,10 +64,23 @@
                             <a href="#services">Deposit History</a>
                             <a href="#clients">Buy History</a>
 
+                            <div class="row">
+                                <form asp-action="Search" asp-controller="Account">
+                                    <div class="form-group has-feedback">
+                                        <label for="search" class="sr-only">Search</label>
+                                        <input type="text" class="form-control" name="search" placeholder="Search">
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </form>
+                            </div>
+
                             <div class="row" style="background-color:orangered">
                                 <div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">
                                     <div><h2 style="color:white">Balance</h2></div>
-                                    <div><h3>Euro</h3></div>
+                                    <div class="row" style="font-size:20px">
+                                        <div class="col-md-6">Euro</div>
+                                        <div class="col-md-6 text-right">0.00</div>
+                                    </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
                                     </div>
@@ -109,13 +102,25 @@
                             <a asp-area="" asp-controller="Admin" asp-action="Users">Order Book</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Users">History Book</a>
 
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form asp-action="Search" asp-controller="Account">
+                                        <div class="form-group has-feedback">
+                                            <label for="search" class="sr-only">Search</label>
+                                            <input type="text" class="form-control" name="search" placeholder="Search">
+                                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                             <div class="row" style="background-color:orangered">
                                 <div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">
                                     <div><h2 style="color:white">Balance</h2></div>
-                                    <div><h3>Euro</h3></div>
-                                    @*<div class="text-center">
-                                        <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
-                                    </div>*@
+                                    <div class="row" style="font-size:20px">
+                                        <div class="col-md-6">Euro</div>
+                                        <div class="col-md-6 text-right">0.00</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -129,13 +134,26 @@
                     <div class="col-md-2 full-screen" style="background:#111;">
                         <div class="sidenav">
                             <a href="/Client/Index">View Products</a>
-                            <a href="#services">Deposit History</a>
+                            <a href="#services">Create Product</a>
                             <a href="#clients">Buy History</a>
+
+                            <div class="row">
+                                <form asp-action="Search" asp-controller="Account">
+                                    <div class="form-group has-feedback">
+                                        <label for="search" class="sr-only">Search</label>
+                                        <input type="text" class="form-control" name="search" placeholder="Search">
+                                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </form>
+                            </div>
 
                             <div class="row" style="background-color:orangered">
                                 <div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">
                                     <div><h2 style="color:white">Balance</h2></div>
-                                    <div><h3>Euro</h3></div>
+                                    <div class="row" style="font-size:20px">
+                                        <div class="col-md-6">Euro</div>
+                                        <div class="col-md-6 text-right">0.00</div>
+                                    </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
                                     </div>
@@ -155,8 +173,8 @@
         }
         <hr />
         @*<footer>
-            <p>&copy; 2018 - ScaffoldersProject</p>
-        </footer>*@
+                <p>&copy; 2018 - ScaffoldersProject</p>
+            </footer>*@
     </div>
 
     <environment include="Development">
