@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ScaffoldersProject.Data;
 using ScaffoldersProject.Models;
+using ScaffoldersProject.Hubs;
 using ScaffoldersProject.Services;
 using ScaffoldersProject.Models.services;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -106,6 +107,11 @@ namespace ScaffoldersProject
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("Chat");
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MainHub>("Main");
             });
 
             app.UseMvc(routes =>

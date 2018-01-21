@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using ScaffoldersProject.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ScaffoldersProject.Models.services
+namespace ScaffoldersProject.Hubs
 {
     public class ChatHub:Hub
     {
