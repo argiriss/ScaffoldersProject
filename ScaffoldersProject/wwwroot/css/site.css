@@ -58,6 +58,11 @@ body {
     min-height:50vh;
 }
 
+.search {
+    margin-top: 20px;
+    width: 80%;
+    margin-left: 6px;
+}
 
 .full-screen{
     height:100vh;
