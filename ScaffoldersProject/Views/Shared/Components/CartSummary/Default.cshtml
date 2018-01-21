@@ -12,21 +12,26 @@
     
 </div>*@
 
-<a class="btn btn-sm btn-secondary" asp-route="Cart">
+<a class="btn btn-sm btn-secondary" asp-controller="Cart" asp-action="Index" asp-route-CartID="@Model.CartId">
     Cart 
-    @if (Model.Items.Count(x => x.OrderID == 0 || x.OrderID == null) > 0)
-    {
-        <span>
-            @*@Model.Items.Sum(x => x.Quantity) item(s)*@
-            (@ViewBag.Total.ToString("c"))
-        </span>
-    }
-    else
-    {
-        <span>(0)</span>
-    }
-
-
+   @if (Model != null)
+   {
+        if ((Model.Items!=null) && (Model.Items.Count(x => x.OrderID == 0 || x.OrderID == null) > 0))
+        {
+            <span>
+                @*@Model.Items.Sum(x => x.Quantity) item(s)*@
+                (@ViewBag.Total.ToString("c"))
+            </span>
+        }
+        else
+        {
+            <span>(0)</span>
+       }
+   }
+   else
+   {
+    <span>(0)</span>
+   }
 </a>
 
 @*asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()"*@

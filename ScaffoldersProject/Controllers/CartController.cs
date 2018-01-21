@@ -26,20 +26,23 @@ namespace ScaffoldersProject.Controllers
             _cartRepository = cartRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int cartID)
         {
-            //ViewBag.ReturnUrl = TempData["returnUrl"];
-            ////Cart c = cart.Cart.SingleOrDefault(x => x.UserCardId == _userManager.GetUserId(User));
+            var checkCartExist = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(User));
+            if (checkCartExist == null)
+            {
+                Cart cartNew = new Cart
+                {
+                    UserCardId = _userManager.GetUserId(User)
+                };
 
-            //if (c == null)
-            //{
-            //    c = new Cart
-            //    {
-            //        UserCardId = _userManager.GetUserId(User)
-            //    };
-            //}
-            ////ViewBag.Total = cart.ComputeTotalCost(c.CartId);
-            return View();
+                //Save cart to database for this user once and for all
+                _cartRepository.CartSave(cartNew);
+            }
+            var res = _cartRepository.Cart.First(x => x.UserCardId == _userManager.GetUserId(User));
+            var total = _cartRepository.ComputeTotalCost(res);
+            ViewBag.Total = total;
+            return View(res);
         }
 
         public ActionResult AddToCart(int productId, int quantity, string returnUrl)
