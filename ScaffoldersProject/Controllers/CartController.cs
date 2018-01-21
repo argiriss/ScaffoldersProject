@@ -71,5 +71,7 @@ namespace ScaffoldersProject.Controllers
             return View("Index",res);
             //return RedirectToRoute("cart");
         }
+
+     
     }
 }
