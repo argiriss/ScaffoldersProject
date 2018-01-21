@@ -89,9 +89,17 @@ namespace ScaffoldersProject.Models.services
             return totalCost;
         }
 
-        public void RemoveItem(CartItem item)
+        public void RemoveItem(int productId,int cartId)
         {
-            throw new NotImplementedException();
+            //The following returns a cartItem object if its exists with the given product Id 
+            //and cart id
+            CartItem item = db.CartItem.FirstOrDefault(p => p.ProductId == productId && p.CartId==cartId);
+            //If its exists we delete it from database => Table CartItem
+            if (item != null)
+            {
+                db.CartItem.Remove(item);
+                db.SaveChanges();
+            }
         }
     }
 }

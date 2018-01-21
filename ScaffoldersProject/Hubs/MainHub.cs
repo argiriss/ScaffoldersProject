@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using ScaffoldersProject.Models;
+using ScaffoldersProject.Models.services;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,47 +16,33 @@ namespace ScaffoldersProject.Hubs
         //Similar to the Controller in ASP.NET MVC, a Hub is responsible for receiving 
         //input and generating the output to the client.
         private readonly UserManager<ApplicationUser> _userManager;
+        private ICartRepository _cartRepository;
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
-        static int NumberOfUsers = 0;
-
+        
         //Depedency injection
-        public MainHub(UserManager<ApplicationUser> userManager)
+        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository)
         {
             _userManager = userManager;
-        }
-
-        //This happens on connection
-        public async override Task OnConnectedAsync()
-        {
-            NumberOfUsers += 1;
-            OnlineUser = new ConcurrentDictionary<string, string>();
-            OnlineUser.AddOrUpdate(_userManager.GetUserId(Context.User), Context.ConnectionId, (key, value) => Context.ConnectionId);
-            //list of online users
-            var onUsers = OnlineUser.Keys;
-            //Return user name and total login users
-            await Clients.All.InvokeAsync("Send", $"{_userManager.GetUserName(Context.User)} joined", NumberOfUsers);
-            //return name of online users
-            await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers", onUsers);
-        }
-
-        //When the client disconnect
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            NumberOfUsers -= 1;
-            return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId} left", NumberOfUsers);
+            _cartRepository = cartRepository;
         }
 
         //When we invoke from client with Send value end send back message from parameter
         public async Task Send(string message)
         {
-            await Clients.All.InvokeAsync("Send", message, NumberOfUsers);
+            await Clients.All.InvokeAsync("Send",message);
         }
 
         //When we invoke from client with SendClient value
-        public Task SendClient(string message)
+        public async Task SendClient(int productId)
         {
-            return Clients.Client(Context.ConnectionId).InvokeAsync("Client", "Malaka");
+            //First we look for a Cart with the login User Id
+            var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
+            //With the product id and the cart id we invoke the function remove item
+            _cartRepository.RemoveItem(productId, findClientCart.CartId);
+            //After the removal we compute the new total cost
+            var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
         }
 
     }
