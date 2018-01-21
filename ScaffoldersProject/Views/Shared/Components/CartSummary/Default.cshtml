@@ -1,0 +1,32 @@
+﻿@model Cart
+
+@*<div class="">
+    @if (Model.Items.Count(x=>x.OrderID==0 || x.OrderID==null) > 0)
+    {
+        <small class="navbar-text">
+            @Model.Items.Sum(x => x.Quantity) item(s)
+            @ViewBag.Total.ToString("c")
+        </small>
+    }
+   
+    
+</div>*@
+
+<a class="btn btn-sm btn-secondary" asp-route="Cart">
+    Cart 
+    @if (Model.Items.Count(x => x.OrderID == 0 || x.OrderID == null) > 0)
+    {
+        <span>
+            @*@Model.Items.Sum(x => x.Quantity) item(s)*@
+            (@ViewBag.Total.ToString("c"))
+        </span>
+    }
+    else
+    {
+        <span>(0)</span>
+    }
+
+
+</a>
+
+@*asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()"*@

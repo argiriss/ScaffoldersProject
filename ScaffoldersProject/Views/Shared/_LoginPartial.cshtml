@@ -22,9 +22,10 @@
                 <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a class="btn btn-sm btn-secondary" asp-route="Cart">
+                            @*<a class="btn btn-sm btn-secondary" asp-route="Cart">
                                 Cart <span>(0)</span>
-                            </a>
+                            </a>*@
+                            @await Component.InvokeAsync("CartSummary")
                         </li>
                         <li>
                             <a class="btn btn-sm btn-secondary" asp-route="Wish">

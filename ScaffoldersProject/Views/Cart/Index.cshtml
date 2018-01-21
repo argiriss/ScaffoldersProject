@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
     <div class="row">
-        <div class="col-md-8 col-md-offset-2" >
+        <div class="col-md-8 col-md-offset-1" >
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -40,23 +40,19 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="text-center">
+                <a class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
+                <a class="btn btn-primary" asp-controller="Client" asp-action="Index" asp-route-CartID="@Model.CartId">Continue shopping</a>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-1 col-md-offset-5" >
+    @*<div class="row">
+        <div class="col-md-1 col-md-offset-4" >
             <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
         </div>
         <div class="col-md-1">
             <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Client" asp-action="Index" asp-route-CartID="@Model.CartId">Continue Shopping</a>
-        </div>
-        @if (ViewBag.ReturnUrl != null)
-        {
-            <div class="text-center">
-                <a class="btn btn-primary" href="@ViewBag.ReturnUrl">Continue shopping</a>
-                <a class="btn btn-success" asp-controller="Order" asp-action="Checkout">Checkout</a>
-            </div>
-        }
-    </div>
-  
+        </div>*@
+
 
 
