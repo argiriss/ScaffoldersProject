@@ -5,11 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScaffoldersProject.Models;
+using ScaffoldersProject.Services;
 
 namespace ScaffoldersProject.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IWebApiFetch _webApiFetch;
+
+        //Depedency injection
+        public HomeController(IWebApiFetch webApiFetch)
+        {
+            _webApiFetch = webApiFetch;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -37,6 +46,13 @@ namespace ScaffoldersProject.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Test()
+        {
+            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com", "/v2/prices/spot?currency=EUR");
+            ViewBag.sent = send;
+            return View();
         }
     }
 }
