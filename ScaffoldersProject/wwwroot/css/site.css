@@ -170,7 +170,11 @@ video{
     text-align:center;
 }
 
-
+.sidenav-col {
+    background: #111;
+    position: fixed;
+    height: 100vh;
+}
 
 
 /* Hide/rearrange for smaller screens */
@@ -178,5 +182,22 @@ video{
     /* Hide captions */
     .carousel-caption {
         display: none;
+    }
+
+    .navbar-nav li {
+        display: inline-block;
+    }
+
+    .sidenav-col{
+        position:static;
+    }
+    
+
+    .navbar-nav {
+        /* margin: 7.5px -15px; */
+        position: absolute;
+        top: -8px;
+        right: 3%;
+        width: 33%;
     }
 }

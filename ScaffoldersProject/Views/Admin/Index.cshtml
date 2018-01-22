@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+
     <div class="well well-sm">
         <strong>Display</strong>
         <div class="btn-group">
@@ -19,8 +19,8 @@
     <div id="products" class="row list-group">
         @foreach (var prod in Model)
         {
-            <div class="item  col-xs-4 col-lg-4">
-                <div class="thumbnail">
+        <div class="item  col-xs-6 col-lg-4">
+            <div class="thumbnail">
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                         @if (prod.Image == null)
                         {
@@ -61,4 +61,3 @@
             </div>
         }
     </div>
-</div>
