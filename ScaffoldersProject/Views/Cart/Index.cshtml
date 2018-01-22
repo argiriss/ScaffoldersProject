@@ -5,16 +5,16 @@
 }
 
 <script>
-       
-            var connection = new signalR.HubConnection('/main');
 
-            connection.start().then(function () {
-                console.log("Started....");
-            })
-                .catch(function (err) {
-                    console.log("Error");
-                })
-        
+    var connection = new signalR.HubConnection('/main');
+
+    connection.start().then(function () {
+        console.log("Started....");
+    })
+        .catch(function (err) {
+            console.log("Error");
+        })
+
 </script>
 
 <div class="row">
@@ -47,7 +47,6 @@
                         }
                     }
 
-
                 </tbody>
                 <tfoot>
                     <tr>
@@ -56,11 +55,11 @@
                     </tr>
                 </tfoot>
             </table>
-        }
-        else
-        {
-            <h3 class="text-center">Your cart is empty!</h3>
-        }
+                        }
+                        else
+                        {
+                            <h3 class="text-center">Your cart is empty!</h3>
+                        }
 
         <div class="text-center">
             @if ((Model != null) && (Model.Items != null))
@@ -77,20 +76,16 @@
         connection.on('send', function (message, totalCost) {
             document.getElementById('test').innerHTML = message;
             document.getElementById('totalCost').innerHTML = totalCost;
+            document.getElementById('cartId').innerHTML = totalCost;
         });
 
         //sent to server product id for removal from database
         function btnRemove(elem) {
-            var productId = elem.value;    
+            var productId = elem.value;
             connection.invoke('SendClient', productId);
-            var row = document.getElementById("row"+ elem.value);
+            var row = document.getElementById("row" + elem.value);
             row.style.display = "none";
             //element.parentNode.removeChild(element);
-           
         }
     </script>
 </div>
-
-
-
-
