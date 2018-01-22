@@ -12,6 +12,18 @@
     }
 }
 
+@keyframes pop-in {
+    0% {
+        opacity: 0;
+        transform: translateY(-4rem) scale(.8);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -175,6 +187,53 @@ video{
     position: fixed;
     height: 100vh;
 }
+
+
+.header {
+    position: absolute;
+    top: 40%;
+    z-index: 99;
+    margin: 0 auto;
+    width: 100%;
+    text-shadow: 1px 1px 1px #000;
+}
+
+.header-title, .header-subtitle {
+    color: #d46d15;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.header-subtitle {
+    text-transform:none;
+    margin-bottom: 5rem;
+}
+
+
+.animate-pop-in {
+    animation: pop-in .6s cubic-bezier(0, 0.9, 0.3, 1.2) forwards;
+    opacity: 0;
+}
+
+.rocky-dashed {
+    animation-delay: .6s;
+}
+
+.header-title {
+    animation-delay: .8s;
+}
+
+.header-subtitle {
+    animation-delay: 1s;
+}
+
+.header-button {
+    animation-delay: 1.1s;
+}
+
+
+
+
 
 
 /* Hide/rearrange for smaller screens */

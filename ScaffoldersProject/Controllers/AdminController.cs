@@ -59,6 +59,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult NewProducts()
         {
+        //    var productsUnverified = _repository.Products.Where(i => i.AdminApproved==false);
             return View(_repository.Products);
         }
 
@@ -98,11 +99,14 @@ namespace ScaffoldersProject.Controllers
         [HttpPost]
         public IActionResult SaveProducts(IEnumerable<SaveProductsViewModel> productList)
         {
+            
             foreach (var item in productList)
             {
                 if (item.AdminApproved)
                 {
-                    _repository.UpdateProduct(item.Products);
+                    var changedProduct = _repository.Products.FirstOrDefault(i => i.ProductId == item.ProductId);
+                    changedProduct.AdminApproved = true;
+                    _repository.UpdateProduct(changedProduct);
                 }
             }
 
