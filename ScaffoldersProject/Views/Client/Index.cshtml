@@ -1,10 +1,8 @@
-﻿@model IEnumerable<Products>
+﻿@model IEnumerable<ViewImageViewModel>
 @{
     ViewData["Title"] = "Products";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-
 
 <div class="container">
     <div class="well well-sm">
@@ -19,14 +17,20 @@
         </div>
     </div>
     <div id="products" class="row list-group">
-
-
         @foreach (var prod in Model)
         {
             <div class="item  col-xs-4 col-lg-4">
                 <div class="thumbnail">
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                        <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                        @if (prod.Image == null)
+                        {
+                            <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                        }
+                        else
+                        {
+                            <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 400px; height:250px;" alt="" />
+
+                        }
                     </a>
                     <div class="caption">
                         <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">

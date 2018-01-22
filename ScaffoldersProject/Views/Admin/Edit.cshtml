@@ -1,10 +1,10 @@
-﻿@model Products
+﻿@model ImageViewModel
 @{
     ViewData["Title"] = "Edit Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<form asp-action="Edit" method="post">
+<form enctype="multipart/form-data" asp-action="Edit" method="post">
     <input type="hidden" asp-for="ProductId" />
     <div class="form-group">
         <label asp-for="Name"></label>
@@ -31,7 +31,12 @@
         <div><span asp-validation-for="Stock" class="text-danger"></span></div>
         <input asp-for="Stock" class="form-control" />
     </div>
-    <div class="text-center">
+    <div class="form-group">
+        <label class="btn btn-primary btn-file">Browse
+            <input type="file" asp-for="Image" style="display: none" />
+        </label>
+    </div>
+    <div class="text-center col-sm-12">
         <button class="btn btn-primary" type="submit">Save</button>
         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>

@@ -5,6 +5,8 @@ using ScaffoldersProject.Models.services;
 using ScaffoldersProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using System;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -26,8 +28,30 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("Data", "From session");
-            return View(_repository.Products);
+            //Turn repo.Products into a List of View Model to return in the View
+            var viewImageList = new List<ViewImageViewModel>();
+            foreach (var product in _repository.Products)
+            {
+                var viewImage = new ViewImageViewModel
+                {
+                    ProductId = product.ProductId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    ContentType = product.ContentType
+                };
+
+                if (product.Image != null)
+                {
+                    var ms = new MemoryStream(product.Image);
+                    byte[] imageBytes = ms.ToArray();
+                    viewImage.Image = Convert.ToBase64String(imageBytes);
+                }
+                viewImageList.Add(viewImage);
+            }
+
+           HttpContext.Session.SetString("Data", "From session");//Do we need this?
+            return View(viewImageList);
         }
 
         //Θα καλειται οταν ο client κλικαρει σε ενα προιον και θα του το εμφανιζει μονο του με τα details
@@ -35,9 +59,18 @@ namespace ScaffoldersProject.Controllers
         {
             ViewBag.Data = HttpContext.Session.GetString("Data");
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
-            List<Products> SimilarProducts = _repository.Products.Where(i => i.Category == product.Category).ToList();
-            SameCategoryViewModel r = new SameCategoryViewModel(product , SimilarProducts);
-            return View(r);
+
+            var viewImage = new ViewImageViewModel();
+            if(product.Image != null)
+            {
+                var ms = new MemoryStream(product.Image);
+                byte[] imageBytes = ms.ToArray();
+                viewImage.Image = Convert.ToBase64String(imageBytes);
+            }
+                      
+            List<Products> similarProducts = _repository.Products.Where(i => i.Category == product.Category).ToList();            
+            SameCategoryViewModel sameCategory = new SameCategoryViewModel(product , similarProducts, viewImage);
+            return View(sameCategory);
         }
 
         //ΚΑΛΕΙΤΑΙ ΟΤΑΝ Ο CLIENT ΠΑΤΑΕΙ TO KOYΜΠΙ ADDTOCART

@@ -28,12 +28,14 @@ namespace ScaffoldersProject.Controllers
             //convert the Products into readable type for the Model
             foreach (var product in _repository.Products)
             {
-                var viewImage = new ViewImageViewModel();
-                viewImage.Description = product.Description;
-                viewImage.Name = product.Name;
-                viewImage.Price = product.Price;
-                viewImage.ContentType = product.ContentType;
-                
+                var viewImage = new ViewImageViewModel
+                {
+                    Description = product.Description,
+                    Name = product.Name,
+                    Price = product.Price,
+                    ContentType = product.ContentType
+                };
+
                 if (product.Image != null )
                 {                              
                     MemoryStream ms = new MemoryStream(product.Image);

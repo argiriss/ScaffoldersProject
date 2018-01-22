@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Products>
+﻿@model IEnumerable<ViewImageViewModel>
 @{
     ViewData["Title"] = "Products";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -18,39 +18,47 @@
     </div>
     <div id="products" class="row list-group">
         @foreach (var prod in Model)
-    {
-        <div class="item  col-xs-4 col-lg-4">
-            <div class="thumbnail">
-                <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                </a>
-                <div class="caption">
+        {
+            <div class="item  col-xs-4 col-lg-4">
+                <div class="thumbnail">
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                        <h4 class="group inner list-group-item-heading">
-                            @prod.Name
-                        </h4>
+                        @if (prod.Image == null)
+                        {
+                            <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                        }
+                        else
+                        {
+                            <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 400px; height:250px;" alt="" />
+
+                        }
                     </a>
-                    <p class="group inner list-group-item-text">
-                        @prod.Description
-                    </p>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <p class="lead">
-                                @prod.Price.ToString("c")
-                            </p>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="#">Add to cart</a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a asp-action="Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
-                                <a asp-action="Delete" class="btn btn-primary" data-confirm="Are you sure you want to delete product @prod.Name?" asp-route-productId="@prod.ProductId">Delete</a>
-                            }
+                    <div class="caption">
+                        <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
+                            <h4 class="group inner list-group-item-heading">
+                                @prod.Name
+                            </h4>
+                        </a>
+                        <p class="group inner list-group-item-text">
+                            @prod.Description
+                        </p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p class="lead">
+                                    @prod.Price.ToString("c")
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="#">Add to cart</a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
+                                    <a asp-action="Delete" class="btn btn-primary" data-confirm="Are you sure you want to delete product @prod.Name?" asp-route-productId="@prod.ProductId">Delete</a>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
     </div>
 </div>
