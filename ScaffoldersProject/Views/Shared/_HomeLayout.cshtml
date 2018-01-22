@@ -53,10 +53,11 @@
 
     @await Html.PartialAsync("_LoginPartial")
 
-    <div class="row">
-        @RenderBody()
-    </div>    
-
+    <div class="container-fluid">
+        <div class="row">
+            @RenderBody()
+        </div>
+    </div>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
