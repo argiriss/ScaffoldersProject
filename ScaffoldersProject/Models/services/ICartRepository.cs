@@ -11,7 +11,7 @@ namespace ScaffoldersProject.Models.services
 
         void CartSave(Cart cart);
         void AddItem(Products product, int quantity, Cart cart);
-        void RemoveItem(CartItem item);
+        void RemoveItem(int productId,int cartId);
         decimal ComputeTotalCost(Cart cart);
         void Clear(Cart c);
 

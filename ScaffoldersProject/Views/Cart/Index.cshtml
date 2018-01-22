@@ -3,67 +3,94 @@
     ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <div class="row">
-        <div class="col-md-8 col-md-offset-1" >
-            @if ((Model!=null)&&(Model.Items != null))
-            {
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th class="text-center">Quantity</th>
-                            <th class="text-right">Subtotal</th>
-                            <th class="text-right"><a class="btn btn-danger btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a></th>
-                        </tr>
-                    </thead>
-                    <tbody>
 
-                        @foreach (var item in Model.Items)
+<script>
+       
+            var connection = new signalR.HubConnection('/main');
+
+            connection.start().then(function () {
+                console.log("Started....");
+            })
+                .catch(function (err) {
+                    console.log("Error");
+                })
+        
+</script>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-1">
+        @if ((Model != null) && (Model.Items != null))
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th class="text-center">Quantity</th>
+                        <th class="text-right">Subtotal</th>
+                        <th class="text-right"><a class="btn btn-danger btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var idtext = "row";}
+                    @foreach (var item in Model.Items)
+                    {
+
+                        if (item.OrderID == null || item.OrderID == 0)
                         {
-
-                            if (item.OrderID == null || item.OrderID == 0)
-                            {
-                                <tr>
-                                    <td>@item.Product.Name</td>
-                                    <td class="text-center">x @item.Quantity</td>
-                                    <td class="text-right">@(item.Product.Price * item.Quantity)</td>
-                                    <td><a class="btn btn-primary btn-sm" style="float:right" asp-controller="Cart" asp-action="RemoveItem" asp-route-ProductID="@item.Product.ProductId">Remove</a></td>
-                                    <td></td>
-                                </tr>
-                            }
+                            <tr id="@idtext@item.Product.ProductId">
+                                <td>@item.Product.Name</td>
+                                <td class="text-center">x @item.Quantity</td>
+                                <td class="text-right">@(item.Product.Price * item.Quantity)</td>
+                                <td><button class="btn btn-primary btn-sm" style="float:right" value="@item.Product.ProductId" onclick="btnRemove(this)">Remove</button></td>
+                                <td></td>
+                            </tr>
                         }
+                    }
 
 
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="2" class="text-right">Total:</td>
-                            <td class="text-right">@ViewBag.Total</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            }
-            else
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right">Total:</td>
+                        <td class="text-right" id="totalCost">@ViewBag.Total</td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+        else
+        {
+            <h3 class="text-center">Your cart is empty!</h3>
+        }
+
+        <div class="text-center">
+            @if ((Model != null) && (Model.Items != null))
             {
-               <h3 class="text-center">Your cart is empty!</h3>
+                <a class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
             }
-
-            <div class="text-center">
-               @if ((Model != null) && (Model.Items != null))
-               {
-                    <a class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
-                }
-                <a class="btn btn-primary" asp-controller="Client" asp-action="Index" >Continue shopping</a>
-            </div>
+            <a class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
         </div>
+        <p id="test"></p>
     </div>
-    @*<div class="row">
-        <div class="col-md-1 col-md-offset-4" >
-            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
-        </div>
-        <div class="col-md-1">
-            <a class="btn btn-primary btn-sm" style="float:right" asp-controller="Client" asp-action="Index" asp-route-CartID="@Model.CartId">Continue Shopping</a>
-        </div>*@
+
+    <script>
+        //Receive Data from server
+        connection.on('send', function (message, totalCost) {
+            document.getElementById('test').innerHTML = message;
+            document.getElementById('totalCost').innerHTML = totalCost;
+        });
+
+        //sent to server product id for removal from database
+        function btnRemove(elem) {
+            var productId = elem.value;    
+            connection.invoke('SendClient', productId);
+            var row = document.getElementById("row"+ elem.value);
+            row.style.display = "none";
+            //element.parentNode.removeChild(element);
+           
+        }
+    </script>
+</div>
+
 
 
 
