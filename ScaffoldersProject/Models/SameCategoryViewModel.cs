@@ -9,11 +9,13 @@ namespace ScaffoldersProject.Models
     {
         public Products Product { get; set; }
         public List<Products> SimilarProducts { get; set; }
+        public ViewImageViewModel ViewImage { get; set; }
 
-        public SameCategoryViewModel(Products p , List<Products> similarProducts)
+        public SameCategoryViewModel(Products p , List<Products> similarProducts, ViewImageViewModel viewImage)
         {
             Product = p;
             SimilarProducts = similarProducts;
+            ViewImage = viewImage;
         }
     }
 }

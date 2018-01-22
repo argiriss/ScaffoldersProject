@@ -12,7 +12,14 @@
                     </h3>
                 </header>
                 <section class="card m-1 p-1">
-                    <img src="https://static.madata.gr/gim/greenthumb.php?src=/files/mpogdanos_547124350.jpg&w=350&h=350&zc=1&s=1" width="300" height="300">
+                    @if (Model.ViewImage.Image == null)
+                    {
+                        <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    }
+                    else
+                    {
+                        <img src="data:@Model.ViewImage.ContentType;base64,@Model.ViewImage.Image" width="400" >
+                    }
                 </section>
             </div>
             <div class="col-md-4" style="margin-top:50px;">
@@ -22,12 +29,12 @@
                         <td><h3>@Model.Product.Name</h3></td>
                     </tr>
                     <tr>
-                        <td><h3>Name</h3></td>
-                        <td><h3>@Model.Product.Name</h3></td>
+                        <td><h3>Category</h3></td>
+                        <td><h3>@Model.Product.Category</h3></td>
                     <tr>
                     <tr>
                         <td><h3>Price</h3></td>
-                        <td><h3>@Model.Product.Price</h3></td>
+                        <td><h3>@Model.Product.Price.ToString("C2")</h3></td>
 
                     </tr>
                 </table>
@@ -101,7 +108,7 @@
                         </h3>
                     </header>
                     <section class="card m-1 p-1">
-                        <img src="http://neaselida.news/nsmedia/uploads/2017/10/1471284-adonis_georgiadis_930-120x120.jpg">
+                        <img src="https://memegenerator.net/img/images/120x120/15971207.jpg">
                     </section>
                 </section>
             </div>

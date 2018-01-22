@@ -1,9 +1,10 @@
-﻿@model IEnumerable<Products>
+﻿@model IEnumerable<ViewImageViewModel>
 @{
     ViewData["Title"] = "Products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<<<<<<< HEAD
 <div class="well well-sm" style="margin-top:10px">
     <strong>Display</strong>
     <div class="btn-group">
@@ -21,7 +22,15 @@
         <div class="item  col-xs-3 col-lg-3">
             <div class="thumbnail">
                 <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    @if (prod.Image == null)
+                    {
+                        <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                    }
+                    else
+                    {
+                        <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 400px; height:250px;" alt="" />
+
+                    }
                 </a>
                 <div class="caption">
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
@@ -47,4 +56,5 @@
         </div>
     }
 </div>
+
 
