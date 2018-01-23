@@ -1,6 +1,6 @@
 ﻿@model ImageViewModel
 @{
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,6 +10,7 @@
         position: absolute;
     }
 </style>
+
 
 <form enctype="multipart/form-data" asp-action="Edit" method="post">
     <input type="hidden" asp-for="ProductId" />
@@ -64,4 +65,5 @@
         $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 </script>
+
 

@@ -48,14 +48,14 @@
                             </p>
                         </div>
                         <div class="col-xs-12 col-md-6">
+
                             @if (!User.IsInRole("Admin"))
                             {
                                 <a class="btn btn-success" href="#">Add to cart</a>
                             }
-
-                            @if (User.IsInRole("Admin"))
+                            else
                             {
-                                <a asp-action="Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
+                                <a asp - action = "Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
                                 <a asp-action="Delete" class="btn btn-primary" data-confirm="Are you sure you want to delete product @prod.Name?" asp-route-productId="@prod.ProductId">Delete</a>
                             }
                         </div>
@@ -65,3 +65,5 @@
         </div>
     }
 </div>
+                        
+              
