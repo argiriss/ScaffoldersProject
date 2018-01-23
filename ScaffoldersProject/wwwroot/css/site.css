@@ -251,12 +251,13 @@ video{
         position:static;
     }
     
+}
 
-    .navbar-nav {
-        /* margin: 7.5px -15px; */
-        position: absolute;
-        top: -8px;
-        right: 3%;
-        width: 33%;
+
+@media screen and (max-width: 480px) {
+    .full-screen {
+        background:url(~/images/background.png);
+        background-size:cover;
+        background-position:center center;
     }
 }
