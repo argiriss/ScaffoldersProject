@@ -52,6 +52,7 @@ namespace ScaffoldersProject
             services.AddTransient<IOrderRepository, EfOrderRepository>();
             
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IWebApiFetch, WebApiFetch>();
 
             //Add cart service
             //services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
