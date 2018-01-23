@@ -8,9 +8,11 @@ using ScaffoldersProject.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using ScaffoldersProject.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ScaffoldersProject.Controllers
 {
+    [Authorize(Roles ="Member")]
     public class MemberController : Controller
     {
         private IProductRepository _repository;
@@ -30,6 +32,7 @@ namespace ScaffoldersProject.Controllers
             {
                 var viewImage = new ViewImageViewModel
                 {
+                    ProductId = product.ProductId,
                     Description = product.Description,
                     Name = product.Name,
                     Price = product.Price,
@@ -60,6 +63,7 @@ namespace ScaffoldersProject.Controllers
             {
                 var product = new Products
                 {
+                    ProductId = imageView.ProductId,
                     Name = imageView.Name,
                     Description = imageView.Description,
                     Category = imageView.Category,
@@ -84,6 +88,56 @@ namespace ScaffoldersProject.Controllers
                 return View(imageView);
             }
 
+        }
+
+        public ViewResult Edit (int productId)
+        {
+            //Turn the repo.products into view model so it can be edited
+            Products product = _repository.Products.FirstOrDefault(i => i.ProductId == productId);
+            var imageView = new ImageViewModel
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Category = product.Category,
+                Description = product.Description,
+                Price = product.Price,
+                Stock = product.Stock
+            };
+            return View(imageView);
+        }
+        
+
+        [HttpPost]
+        public async Task<IActionResult> Edit (ImageViewModel imageView)
+        {
+            //Update the changes from the Edit Form View model in the product DB
+            if (ModelState.IsValid)
+            {
+                var product = _repository.Products.FirstOrDefault(i => i.ProductId == imageView.ProductId);
+                product.ProductId = imageView.ProductId;
+                product.Name = imageView.Name;
+                product.Description = imageView.Description;
+                product.Category = imageView.Category;
+                product.Price = imageView.Price;
+                product.Stock = imageView.Stock;
+
+                if (imageView.Image !=null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await imageView.Image.CopyToAsync(memoryStream);
+                        product.Image = memoryStream.ToArray();
+                        product.ContentType = imageView.Image.ContentType;
+                    }                    
+                }
+                _repository.UpdateProduct(product);
+                TempData["Message"] = $"{imageView.Name} has been updated.";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(imageView);
+            }
         }
 
         //[HttpGet]

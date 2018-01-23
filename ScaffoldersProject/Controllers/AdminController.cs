@@ -70,8 +70,8 @@ namespace ScaffoldersProject.Controllers
 
         public async Task<ViewResult> EditUser(string Id)
         {
-            ApplicationUser userss = await _userManager.FindByIdAsync(Id);
-            return View(userss);
+            ApplicationUser users = await _userManager.FindByIdAsync(Id);
+            return View(users);
         }
 
         [HttpPost]
@@ -125,10 +125,7 @@ namespace ScaffoldersProject.Controllers
                 Category = product.Category,
                 Price = product.Price,
                 Stock = product.Stock,
-            };
-
-            //What about the Image?Have to check it.
-            
+            };                        
             return View(imageView);
         }
 
