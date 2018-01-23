@@ -4,18 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script>
 
-    var connection = new signalR.HubConnection('/main');
-
-    connection.start().then(function () {
-        console.log("Started....");
-    })
-        .catch(function (err) {
-            console.log("Error");
-        })
-
-</script>
 
 <div class="row">
     <div class="col-md-8 col-md-offset-1">

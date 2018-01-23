@@ -101,5 +101,12 @@ namespace ScaffoldersProject.Models.services
                 db.SaveChanges();
             }
         }
+        
+        public decimal GetOrderCost(int orderId, int cartId )
+        {
+            CartItem item = db.CartItem.FirstOrDefault(x => x.OrderID == orderId && x.CartId == cartId);
+            Products product = db.Products.FirstOrDefault(x => x.ProductId == item.ProductId);
+            return product.Price;
+        }
     }
 }

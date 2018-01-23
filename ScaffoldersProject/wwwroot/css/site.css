@@ -57,12 +57,16 @@ body {
     height: 95vh;
 }
 
-.admin-layout {
+.layout {
     min-height: 100vh;
     overflow: hidden;
 }
 
-.admin-layout .col{
+.layout .col{
+    padding:0;
+}
+
+.layout .full-screen{
     padding:0;
 }
 
@@ -102,6 +106,10 @@ video{
 #scroll img{
     width:60px;
     height:40px;
+}
+
+.col{
+    padding:0;
 }
 
 /*Admin view products*/

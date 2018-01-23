@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using Newtonsoft.Json.Linq;
 
 namespace ScaffoldersProject.Hubs
 {
@@ -17,14 +18,16 @@ namespace ScaffoldersProject.Hubs
         //input and generating the output to the client.
         private readonly UserManager<ApplicationUser> _userManager;
         private ICartRepository _cartRepository;
+        private IOrderRepository _orderRepository;
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
         
         //Depedency injection
-        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository)
+        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository, IOrderRepository orderRepository)
         {
             _userManager = userManager;
             _cartRepository = cartRepository;
+            _orderRepository = orderRepository;
         }
 
         //When we invoke from client with Send value end send back message from parameter
@@ -43,6 +46,20 @@ namespace ScaffoldersProject.Hubs
             //After the removal we compute the new total cost
             var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
             await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
+        }
+
+        public async Task Buy(Order orderObject)
+        {
+            //JObject Order = JObject.Parse(orderObject);
+            //First we look for a Cart with the login User Id
+            var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
+            orderObject.UserOrderId = _userManager.GetUserId(Context.User);
+            
+            _orderRepository.AddNewOrder(orderObject, findClientCart);
+            var orderPrice =_cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
+
+
+            await Clients.All.InvokeAsync("Buy","Order saved in database", orderPrice);
         }
 
     }

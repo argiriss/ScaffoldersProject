@@ -193,5 +193,10 @@ namespace ScaffoldersProject.Controllers
             var product = _repository.DeleteProduct(productId);
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult OrderBook()
+        {
+            return View();
+        }
     }
 }

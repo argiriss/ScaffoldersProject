@@ -14,6 +14,7 @@ namespace ScaffoldersProject.Models.services
         void RemoveItem(int productId,int cartId);
         decimal ComputeTotalCost(Cart cart);
         void Clear(Cart c);
+        decimal GetOrderCost(int orderId, int cartId);
 
     }
 }

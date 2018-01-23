@@ -40,20 +40,32 @@
             position: fixed;
         }*/
 
-            .sidenav a {
-                padding: 6px 8px 6px 16px;
-                text-decoration: none;
-                font-size: 20px;
-                color: #818181;
-                display: block;
-            }
+        .sidenav a {
+            padding: 6px 8px 6px 16px;
+            text-decoration: none;
+            font-size: 20px;
+            color: #818181;
+            display: block;
+        }
 
-                .sidenav a:hover {
-                    color: #f1f1f1;
-                }
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
     </style>
+    <script>
+
+        var connection = new signalR.HubConnection('/main');
+
+        connection.start().then(function () {
+            console.log("Started....");
+        })
+            .catch(function (err) {
+                console.log("Error");
+            })
+
+    </script>
 </head>
-<body>
+<body class="layout">
 
     @await Html.PartialAsync("_LoginPartial")
 
@@ -97,7 +109,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-10 col-sm-offset-2 full-screen">
+                    <div class="col-md-10 col-md-offset-2 full-screen">
                         @RenderBody()
                     </div>
                 </div>
@@ -111,8 +123,8 @@
                             <a asp-area="" asp-controller="Admin" asp-action="Index">View Products</a>
                             <a asp-area="" asp-controller="Admin" asp-action="NewProducts">Verify Products</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Users">Manage Users</a>
-                            <a asp-area="" asp-controller="Admin" asp-action="Users">Order Book</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Users">History Book</a>
+                            <a asp-area="" asp-controller="Admin" asp-action="OrderBook">Order Book</a>
 
 
                             <div class="row" style="background-color:orangered">

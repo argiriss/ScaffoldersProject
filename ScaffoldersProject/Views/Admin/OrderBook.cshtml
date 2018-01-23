@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "OrderBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col col-md-2">
+    <div id="Sell" class="half-page" style="background:#111; overflow-y:scroll;">
+        <span>eeeee</span>
+    </div>
+    <div id="Buy" class="half-page" style="background:yellow;">
+
+    </div>
+</div>
+<div class="col col-md-10">
+    <div class="half-page" style="background:green;">
+
+    </div>
+    <div class="half-page" style="background:purple;">
+
+    </div>
+</div>
+
+<script>
+    //Recieve data from server
+    connection.on('Buy', function (message, orderPrice) {
+        alert(message);
+        document.getElementById('Buy').innerHTML += orderPrice;
+    })
+</script>

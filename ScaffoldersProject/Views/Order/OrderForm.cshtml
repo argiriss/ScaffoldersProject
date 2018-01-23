@@ -1,5 +1,4 @@
-﻿@Model Order
-@{
+﻿@{
     ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,38 +9,55 @@
             <h2>Checkout</h2>
             <p>Please enter your details.</p>
             <div asp-validation-summary="All" class="text-danger"></div>
-            <form asp-controller="Order" asp-action="CompleteOrder" method="post">
+            <form onsubmit="btnSubmit()">
                 <h3>Ship to</h3>
                 <div class="form-group">
                     <label>Name:</label>
-                    <input type="text" name="Name" class="form-control">
+                    <input id="idName" type="text" name="Name" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Address 1:</label>
-                    <input type="text" name="Address1" class="form-control">
+                    <input id="idAddress1" type="text" name="Address1" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Address 2:</label>
-                    <input type="text" name="Address2" class="form-control">
+                    <input id="idAddress2" type="text" name="Address2" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>City:</label>
-                    <input type="text" name="City" class="form-control">
+                    <input id="idCity" type="text" name="City" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Country:</label>
-                    <input type="text" name="Country" class="form-control">
+                    <input id="idCountry" type="text" name="Country" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Zip:</label>
-                    <input type="text" name="Zip" class="form-control">
+                    <input id="idZip" type="text" name="Zip" class="form-control">
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-primary" type="submit">Complete Order</button>
+                    <button id="order-button"  class="btn btn-primary" type="submit">Complete Order</button>
                 </div>
             </form>
 
         </div>
     </div>
 </div>
+
+<script>
+    
+
+    function btnSubmit() {
+        
+        var order = {
+            Name: document.getElementById('idName').value,
+            Address1: document.getElementById('idAddress1').value,
+            Address2: document.getElementById('idAddress2').value,
+            City: document.getElementById('idCity').value,
+            Country: document.getElementById('idCountry').value,
+            Zip: document.getElementById('idZip').value
+        }
+        connection.invoke('Buy', order);
+    }
+</script>
 
