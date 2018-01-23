@@ -76,14 +76,15 @@
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right">0.00</div>
+                                        <div class="col-md-6 text-right">@UserManager.Users.First(x=>x.Id==UserManager.GetUserId(User)).Wallet</div>
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
+                                        <button class="btn btn-primary" asp-controller="Client" asp-action="Deposit" style="margin-bottom:5px">Deposit</button>
                                     </div>
+
                                 </div>
                             </div>
-
+                            @Url.Action("Index", "Home")
                             <div class="row search">
                                 <div class="col-md-12">
                                     <form asp-action="Search" asp-controller="Account">
@@ -163,7 +164,7 @@
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right">0.00</div>
+                                        <div class="col-md-6 text-right"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
