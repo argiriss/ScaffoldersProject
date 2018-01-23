@@ -17,7 +17,7 @@ namespace ScaffoldersProject.Controllers
     {
         private IProductRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private Cart cart;
+        //private Cart cart;
 
         //Constructor depedency injection 
         public ClientController(IProductRepository repository, UserManager<ApplicationUser> userManager)
