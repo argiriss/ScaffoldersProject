@@ -42,9 +42,14 @@ $(document).ready(function () {
         });
     });
 
+    $('.navbar-toggle').on("click", function () {
+        $('#myNavbar').slideToggle();
+    });
+
     $(function () {
-        if ($("#orderbook").length) {
+        if ($(".orderbook").length) {
             $('body').css('overflow-y', 'hidden');
+            $('.full-screen').css('padding', '0');
         }
     });
 

@@ -36,6 +36,12 @@ body {
     padding-right: 0px;
 }
 
+a {
+    color: #d46d15;
+    text-decoration:none;
+}
+
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -240,32 +246,38 @@ video{
 }
 
 
+    @media screen and (max-width: 995px) {
+        body {
+            overflow-y: scroll !important;
+        }
 
+        #myNavbar {
+            display:none;
+            background-color: #101010;
+        }
 
-
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
+        .navbar-nav {
+            margin: -1px -15px;
+        }
     }
 
-    .navbar-nav li {
-        display: inline-block;
+    /* Hide/rearrange for smaller screens */
+    @media screen and (max-width: 767px) {
+        /* Hide captions */
+        .carousel-caption {
+            display: none;
+        }
+
+        .sidenav-col {
+            position: static;
+        }
     }
 
-    .sidenav-col{
-        position:static;
-    }
-    
-}
 
-
-@media screen and (max-width: 480px) {
-    .full-screen {
-        background:url(~/images/background.png);
-        background-size:cover;
-        background-position:center center;
+    @media screen and (max-width: 480px) {
+        .full-screen {
+            background: url(~/images/background.png);
+            background-size: cover;
+            background-position: center center;
+        }
     }
-}
