@@ -16,7 +16,6 @@ namespace ScaffoldersProject.Data
         public DbSet<CartItem> CartItem { get; set; }
         public DbSet<Deposit> Deposit { get; set; }
 
-
         //We can add other models ............
 
         //constructor 
