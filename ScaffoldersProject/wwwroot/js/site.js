@@ -42,6 +42,11 @@ $(document).ready(function () {
         });
     });
 
+    $(function () {
+        if ($("#orderbook").length) {
+            $('body').css('overflow-y', 'hidden');
+        }
+    });
 
     $(function () {
         if ($("#scroll").length) {
