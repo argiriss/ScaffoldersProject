@@ -67,6 +67,17 @@ namespace ScaffoldersProject.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                // The users have to confirm the email before they can log in 
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError(string.Empty,
+                                      "You must have a confirmed email to log in.");
+                        return View(model);
+                    }
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
 
@@ -81,9 +92,8 @@ namespace ScaffoldersProject.Controllers
                 // Resolve the user via their email
                 //We getting the ApplicationUser object that represents the user, 
                 //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
-                //class.
-                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                //class.               
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -276,14 +286,15 @@ namespace ScaffoldersProject.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, "Member");
                     }
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-            
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
+                    //await _signInManager.SignInAsync(user, isPersistent: false); We commnent it out so the newly registered cannot Log in
+                    _logger.LogInformation("User created a new account with password.");
+                               
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

@@ -42,7 +42,19 @@ namespace ScaffoldersProject
                 options.UseSqlServer(Configuration.GetConnectionString("MainConnection")));
 
             //Authentication
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>( options =>
+            {
+                //Lockout Settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+
+                //User Setting
+                options.User.RequireUniqueEmail = true;
+
+                //Sing In Settings
+                options.SignIn.RequireConfirmedEmail = true;
+                
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -65,6 +77,7 @@ namespace ScaffoldersProject
 
             services.AddMvc();
 
+            services.Configure<AuthMessageSenderOptions>(Configuration);
             //Enabling sessions states with storing them into memory.
             //The addMemoryCash method call sets up the in-memory data store
             //The AddSession method registers the services used to access session data, 
@@ -72,6 +85,8 @@ namespace ScaffoldersProject
             //associate requests with sessions when they arrive from the client.
             services.AddMemoryCache();
             services.AddSession();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the
