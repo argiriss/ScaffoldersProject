@@ -4,125 +4,110 @@
     ViewData["Title"] = "ViewProduct";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-        <div class="row" style="margin-top:20px;">
-            <div class="col-md-4">
-                <header class="bg-faded p-1">
-                    <h3>
-                        @Model.Product.Name
-                    </h3>
-                </header>
-                <section class="card m-1 p-1">
-                    @if (Model.ViewImage.Image == null)
-                    {
-                        <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                    }
-                    else
-                    {
-                        <img src="data:@Model.ViewImage.ContentType;base64,@Model.ViewImage.Image" width="400" >
-                    }
-                </section>
-            </div>
-            <div class="col-md-4" style="margin-top:50px;">
-                <table style="width:80%">
-                    <tr>
-                        <td><h3>Name</h3></td>
-                        <td><h3>@Model.Product.Name</h3></td>
-                    </tr>
-                    <tr>
-                        <td><h3>Category</h3></td>
-                        <td><h3>@Model.Product.Category</h3></td>
-                    <tr>
-                    <tr>
-                        <td><h3>Price</h3></td>
-                        <td><h3>@Model.Product.Price.ToString("C2")</h3></td>
+<div class="row" style="margin-top:20px;">
+    <div class="col-md-4">
+        <header class="bg-faded p-1">
+            <h3>
+                @Model.Product.Name
+            </h3>
+        </header>
+        <section class="card m-1 p-1">
+            @if (Model.ViewImage.Image == null)
+            {
+                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+            }
+            else
+            {
+                <img src="data:@Model.ViewImage.ContentType;base64,@Model.ViewImage.Image" width="400">
+            }
+        </section>
+    </div>
+    <div class="col-md-4" style="margin-top:50px;">
+        <table style="width:80%">
+            <tr>
+                <td><h3>Name</h3></td>
+                <td><h3>@Model.Product.Name</h3></td>
+            </tr>
+            <tr>
+                <td><h3>Category</h3></td>
+                <td><h3>@Model.Product.Category</h3></td>
+            <tr>
+            <tr>
+                <td><h3>Price</h3></td>
+                <td><h3>@Model.Product.Price.ToString("C2")</h3></td>
 
-                    </tr>
-                </table>
+            </tr>
+        </table>
 
-                <br><br>
-                <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
-                    <input type="hidden" name="productId" value=@Model.Product.ProductId>
-
-                    @if (Model.Product.Stock <= 0)
-                    {
-                        <h5 class="text-danger">Currently out of stock</h5>
-                    }
-                    else
-                    {
-                        <span style="font-size:23px">Quantity</span>
+        <br><br>
+        <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
+            <input type="hidden" name="productId" value=@Model.Product.ProductId>
+            @if (Model.Product.Stock <= 0)
+            {
+                <h5 class="text-danger">Currently out of stock</h5>
+            }
+            else
+            {
+                <span style="font-size:23px">Quantity</span>
                         <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
                         <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
-                      
-                    }
-                    <br><br>
-                    <div>
-                    @if (Model.Product.Stock > 0)
+
+            }
+            <br><br>
+            <div>
+                @if (Model.Product.Stock > 0)
+                {
+                    <button class="btn btn-primary" type="submit">Add To Cart</button>
+                }
+                <button class="btn btn-primary" type="submit">Add To Wish List</button>
+                <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-4"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Description</h3>
+        <p>@Model.Product.Description</p>
+    </div>
+    <div class="col-md-6"></div>
+</div>
+
+<div class="row">
+    @{ int count = 0;
+        @foreach (var product in Model.SimilarViewImage)
+        {
+            @if (count <= 2 && product.Name != Model.Product.Name)
+            {
+                <div class="col-md-2">
+                    <section class="card m-1 p-1">
+                        <header class="bg-faded p-1">
+                            <h4>
+                                @product.Name
+                                <span class="badge" style="background-color:black">
+                                    <small><b style="color:orangered">@product.Price.ToString("c")</b></small>
+                                </span>
+                            </h4>
+                        </header>
+                        <section class="card m-1 p-1">
+                            @if (product.Image == null)
                     {
-                        <button class="btn btn-primary" type="submit">Add To Cart</button>
-                    }
-                        <button class="btn btn-primary" type="submit">Add To Wish List</button>
-                        <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-md-4"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Description</h3>
-                <p>EISTE POLY ANWMALOI!</p>
-            </div>
-            <div class="col-md-6"></div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-2">
-                <section class="card m-1 p-1">
-                    <header class="bg-faded p-1">
-                        <h3>
-                            @Model.Product.Name
-                            <span class="badge badge-primary" style="float:right">
-                                <small>@Model.Product.Price.ToString("c")</small>
-                            </span>
-                        </h3>
-                    </header>
-                    <section class="card m-1 p-1">
-                        <img src="https://memegenerator.net/img/images/120x120/15971207.jpg">
+                                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                            }
+                            else
+                            {
+                                <img class="group list-group-image" src="data:@product.ContentType;base64,@product.Image" style="width: 100px;" alt="" />
+                            }
+                        </section>
                     </section>
-                </section>
-            </div>
-            <div class="col-md-2">
-                <section class="card m-1 p-1">
-                    <header class="bg-faded p-1">
-                        <h3>
-                            @Model.Product.Name
-                            <span class="badge badge-primary" style="float:right">
-                                <small>@Model.Product.Price.ToString("c")</small>
-                            </span>
-                        </h3>
-                    </header>
-                    <section class="card m-1 p-1">
-                        <img src="https://memegenerator.net/img/images/120x120/15971207.jpg">
-                    </section>
-                </section>
-            </div>
-            <div class="col-md-2">
-                <section class="card m-1 p-1">
-                    <header class="bg-faded p-1">
-                        <h3>
-                            @Model.Product.Name
-                            <span class="badge badge-primary" style="float:right">
-                                <small>@Model.Product.Price.ToString("c")</small>
-                            </span>
-                        </h3>
-                    </header>
-                    <section class="card m-1 p-1">
-                        <img src="http://ysterografa.gr/wp-content/uploads/2017/12/Screen-Shot-2017-12-10-at-12.20.52-PM-120x120.png">
-                    </section>
-                </section>
-            </div>
+                </div>
+                count += 1;
+            }
+        }
+    }
+</div>
 
-        </div>
-    
+

@@ -62,7 +62,7 @@ namespace ScaffoldersProject.Controllers
         {
             ViewBag.Data = HttpContext.Session.GetString("Data");
             var product = _repository.Products.FirstOrDefault(p => p.ProductId == productId);
-
+            //Image Procedure for the Main Product of the View
             var viewImage = new ViewImageViewModel();
             if(product.Image != null)
             {
@@ -71,8 +71,30 @@ namespace ScaffoldersProject.Controllers
                 viewImage.Image = Convert.ToBase64String(imageBytes);
             }
                       
-            List<Products> similarProducts = _repository.Products.Where(i => i.Category == product.Category).ToList();            
-            SameCategoryViewModel sameCategory = new SameCategoryViewModel(product , similarProducts, viewImage);
+            List<Products> similarProducts = _repository.Products.Where(i => i.Category == product.Category).ToList();
+            //Image Procedure for the Same Category Products of the view
+            var similarViewImageList = new List<ViewImageViewModel>();
+            foreach (var prod in similarProducts)
+            {
+                var similarViewImage = new ViewImageViewModel
+                {
+                    ProductId = prod.ProductId,
+                    Name = prod.Name,
+                    Description = prod.Description,
+                    Price = prod.Price,
+                    ContentType = prod.ContentType
+                };
+                if(prod.Image != null)
+                {
+                    var ms = new MemoryStream(prod.Image);
+                    byte[] imageBytes = ms.ToArray();
+                    similarViewImage.Image = Convert.ToBase64String(imageBytes);
+                    
+                }
+                similarViewImageList.Add(similarViewImage);
+
+            }
+            SameCategoryViewModel sameCategory = new SameCategoryViewModel(product , similarProducts, viewImage, similarViewImageList);
             return View(sameCategory);
         }
 
