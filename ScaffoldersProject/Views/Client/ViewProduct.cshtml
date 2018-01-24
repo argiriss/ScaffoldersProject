@@ -45,18 +45,14 @@
 
                     @if (Model.Product.Stock <= 0)
                     {
-                        <h5 class="text-danger">OUT OF STOCK</h5>
+                        <h5 class="text-danger">Currently out of stock</h5>
                     }
                     else
                     {
                         <span style="font-size:23px">Quantity</span>
-
-                        <select name="quantity" style="margin-left:80px;">
-                            @for (int i = 1; i <= Model.Product.Stock; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
+                        <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
+                        <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
+                      
                     }
                     <br><br>
                     <div>

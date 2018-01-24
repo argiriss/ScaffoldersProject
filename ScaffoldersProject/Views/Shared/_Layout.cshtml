@@ -94,9 +94,9 @@
                                         <div class="col-md-6 text-right">@UserManager.Users.First(x=>x.Id==UserManager.GetUserId(User)).Wallet</div>
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn btn-primary" asp-controller="Client" asp-action="Deposit" style="margin-bottom:5px">Deposit</button>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target=".bootstrapmodal" style="margin-bottom:5px">Deposit</button>
                                     </div>
-
+                                   
                                 </div>
                             </div>
                             @Url.Action("Index", "Home")
@@ -233,5 +233,24 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    @*deposit modal*@
+    <div class="modal fade bootstrapmodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button data-dismiss="modal" class="close"><span>&times;</span></button>
+                    <div class="modal-title">Deposit via Paypall</div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Your current balance: @UserManager.Users.First(x => x.Id == UserManager.GetUserId(User)).Wallet</p>
+                <form>
+                    <input type="number" min="5" name="amount" />
+                    <button class="btn btn-primary" type="submit">Deposit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    @*modal end*@
 </body>
 </html>
