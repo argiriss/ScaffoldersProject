@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Confirm email";
+
+
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -8,3 +10,15 @@
         Thank you for confirming your email.
     </p>
 </div>
+
+
+<script type="text/javascript">
+
+    document.getElementById("login-button").onclick = function () {
+        location.href = "/Account/Login";
+    };
+    document.getElementById("register-button").onclick = function () {
+        location.href = "/Account/Register";
+
+    };
+</script>
