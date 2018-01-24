@@ -77,25 +77,7 @@ namespace ScaffoldersProject.Data.Migrations
                     b.Property<int>("OrderID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address1")
-                        .IsRequired();
-
-                    b.Property<string>("Address2");
-
-                    b.Property<string>("City")
-                        .IsRequired();
-
-                    b.Property<string>("Country")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<bool>("Shipped");
-
                     b.Property<string>("UserOrderId");
-
-                    b.Property<int>("Zip");
 
                     b.HasKey("OrderID");
 
@@ -133,13 +115,13 @@ namespace ScaffoldersProject.Data.Migrations
 
             modelBuilder.Entity("ScaffoldersProject.Models.CartItem", b =>
                 {
-                    b.HasOne("ScaffoldersProject.Models.Cart")
+                    b.HasOne("ScaffoldersProject.Models.Cart", "Cart")
                         .WithMany("Items")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ScaffoldersProject.Models.Order")
-                        .WithMany("Items")
+                    b.HasOne("ScaffoldersProject.Models.Order", "Order")
+                        .WithMany()
                         .HasForeignKey("OrderID");
 
                     b.HasOne("ScaffoldersProject.Models.Products", "Product")

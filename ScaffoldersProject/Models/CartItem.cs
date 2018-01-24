@@ -14,13 +14,12 @@ namespace ScaffoldersProject.Models
 
         public int ProductId { get; set; }
         public Products Product { get; set; }
-        
+
         public int CartId { get; set; }
-        public Cart cart;
+        public Cart Cart { get; set; }
 
         public int? OrderID { get; set; }
-        public Order order;
-
+        public Order Order {get;set;}
 
         public CartItem(Products p, int q)
         {
