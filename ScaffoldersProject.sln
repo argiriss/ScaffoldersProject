@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaffoldersProject", "ScaffoldersProject\ScaffoldersProject.csproj", "{05CDCF8C-164B-4478-AA53-5C912CA68521}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaffoldersProject", "ScaffoldersProject\ScaffoldersProject.csproj", "{05CDCF8C-164B-4478-AA53-5C912CA68521}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
