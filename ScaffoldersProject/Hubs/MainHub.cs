@@ -37,12 +37,12 @@ namespace ScaffoldersProject.Hubs
         }
 
         //When we invoke from client with SendClient value
-        public async Task SendClient(int productId)
+        public  async  Task SendClient(int productId)
         {
             //First we look for a Cart with the login User Id
             var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
             //With the product id and the cart id we invoke the function remove item
-            _cartRepository.RemoveItem(productId, findClientCart.CartId);
+             _cartRepository.RemoveItem(productId, findClientCart.CartId);
             //After the removal we compute the new total cost
             var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
             await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
