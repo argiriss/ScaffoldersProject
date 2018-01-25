@@ -21,13 +21,13 @@
                     @{ var idtext = "row";}
                     @foreach (var item in Model)
                     {
-                            <tr id="@idtext@item.Product.ProductId">
-                                <td>@item.Product.Name</td>
-                                <td class="text-center">x @item.Quantity</td>
-                                <td class="text-right">@(item.Product.Price * item.Quantity)</td>
-                                <td><button class="btn btn-primary btn-sm" style="float:right" value="@item.Product.ProductId" onclick="btnRemove(this)">Remove</button></td>
-                                <td></td>
-                            </tr>
+                        <tr id="@idtext@item.Product.ProductId">
+                            <td>@item.Product.Name</td>
+                            <td class="text-center">x @item.Quantity</td>
+                            <td class="text-right">@(item.Product.Price * item.Quantity)</td>
+                            <td><button class="btn btn-primary btn-sm" style="float:right" value="@item.Product.ProductId" data-toggle="modal" data-target="#RemovedModal" onclick="btnRemove(this)">Remove</button></td>
+                            <td></td>
+                        </tr>
                     }
 
                 </tbody>
@@ -38,11 +38,11 @@
                     </tr>
                 </tfoot>
             </table>
-                        }
-                        else
-                        {
-                            <h3 class="text-center">Your cart is empty!</h3>
-                        }
+        }
+        else
+        {
+            <h3 class="text-center">Your cart is empty!</h3>
+        }
 
         <div class="text-center">
             @if (Model != null)
@@ -51,13 +51,33 @@
             }
             <a class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
         </div>
-        <p id="test"></p>
+    </div>
+
+    <div id="RemovedModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Item Removed</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="messageRemove"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
         //Receive Data from server
-        connection.on('send', function (message, totalCost) {
-            document.getElementById('test').innerHTML = message;
+        connection.on('Remove', function (message, totalCost) {
+            document.getElementById('messageRemove').innerHTML += message;
+            $('RemovedModal').modal();
             document.getElementById('totalCost').innerHTML = totalCost;
             document.getElementById('cartId').innerHTML = totalCost;
         });
@@ -65,7 +85,7 @@
         //sent to server product id for removal from database
         function btnRemove(elem) {
             var productId = elem.value;
-            connection.invoke('SendClient', productId);
+            connection.invoke('RemoveItem', productId);
             var row = document.getElementById("row" + elem.value);
             row.style.display = "none";
             //element.parentNode.removeChild(element);

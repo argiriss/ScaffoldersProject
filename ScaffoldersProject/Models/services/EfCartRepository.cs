@@ -93,15 +93,15 @@ namespace ScaffoldersProject.Models.services
         //Implemented in mainhub
         public void RemoveItem(int productId,string UserId)
         {
-            //The following returns a cartItem object if its exists with the given product Id 
+            //The following returns a cartItem object if its exists with the given product Id
             //and cart id
-            //CartItem item = db.CartItem.FirstOrDefault(p => p.ProductId == productId && p.CartId==cartId);
-            ////If its exists we delete it from database => Table CartItem
-            //if (item != null)
-            //{
-            //    db.CartItem.Remove(item);
-            //    db.SaveChanges();
-            //}
+            Cart item = db.Cart.FirstOrDefault(p => p.ProductId == productId && p.UserCartId == UserId);
+            //If its exists we delete it from database => Table CartItem
+            if (item != null)
+            {
+                db.Cart.Remove(item);
+                db.SaveChanges();
+            }
         }
         
         public decimal GetOrderCost(int orderId, string userId )

@@ -19,15 +19,17 @@ namespace ScaffoldersProject.Hubs
         private readonly UserManager<ApplicationUser> _userManager;
         private ICartRepository _cartRepository;
         private IOrderRepository _orderRepository;
+        private IProductRepository _productRepository;
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
         
         //Depedency injection
-        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository, IOrderRepository orderRepository)
+        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository, IOrderRepository orderRepository, IProductRepository productRepository)
         {
             _userManager = userManager;
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
+            _productRepository = productRepository;
         }
 
         //When we invoke from client with Send value end send back message from parameter
@@ -37,15 +39,16 @@ namespace ScaffoldersProject.Hubs
         }
 
         //When we invoke from client with SendClient value
-        public  async  Task SendClient(int productId)
+        public  async  Task RemoveItem(int productId)
         {
+            var productName = _productRepository.Products.FirstOrDefault(x => x.ProductId == productId).Name;
             ////First we look for a Cart with the login User Id
-            //var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
+            var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCartId == _userManager.GetUserId(Context.User));
             ////With the product id and the cart id we invoke the function remove item
-            // _cartRepository.RemoveItem(productId, findClientCart.CartId);
+            _cartRepository.RemoveItem(productId, findClientCart.UserCartId);
             ////After the removal we compute the new total cost
-            //var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
-            //await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
+            var totalCost = _cartRepository.ComputeTotalCost(findClientCart.UserCartId);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Remove", $"Product {productName} was successfully removed from your cart!", totalCost.ToString("C"));
         }
 
         public async Task Buy(Order orderObject)

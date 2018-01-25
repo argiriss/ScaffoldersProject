@@ -60,10 +60,14 @@
         var connection = new signalR.HubConnection('/main');
 
         connection.start().then(function () {
+            $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
+            $('.status-glyph').text(" Status OK");
+            $('.status-glyph').css('color', 'lightgreen');
             console.log("Started....");
         })
             .catch(function (err) {
                 console.log("Error");
+                $('.status-glyph').text("Error");
             })
 
     </script>
