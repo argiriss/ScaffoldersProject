@@ -43,7 +43,7 @@ $(document).ready(function () {
     });
 
     $('.navbar-toggle').on("click", function () {
-        $('#myNavbar').slideToggle();
+        $('#myNavbar').toggle("slide");
     });
 
     $(function () {

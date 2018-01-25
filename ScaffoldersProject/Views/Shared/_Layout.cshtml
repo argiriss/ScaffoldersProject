@@ -48,7 +48,7 @@
             text-decoration: none;
             font-size: 20px;
             color: #818181;
-            display: block;
+            display: inline-block;
         }
 
             .sidenav a:hover {
@@ -91,18 +91,17 @@
                             <a href="#services">Deposit History</a>
                             <a href="#clients">Buy History</a>
 
-                            <div class="row" style="background-color:orangered; padding-left:30px;">
+                            <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
-                                <div class="col-md-12" style="background-color:orangered;">
+                                <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right">@UserManager.Users.First(x=>x.Id==UserManager.GetUserId(User)).Wallet</div>
+                                        <div class="col-md-6 text-right">0.00</div>
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn btn-primary" data-toggle="modal" data-target=".bootstrapmodal" style="margin-bottom:5px">Deposit</button>
+                                        <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
                                     </div>
-                                   
                                 </div>
                             </div>
                             @Url.Action("Index", "Home")

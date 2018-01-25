@@ -45,6 +45,11 @@ namespace ScaffoldersProject.Controllers
 
             if (product != null)
             {
+                // if you add to cart from product view, add it with quantity 1 instead of 0
+                if (quantity == 0)
+                {
+                    quantity = 1;
+                }
                 _cartRepository.AddItem(product, quantity, _userManager.GetUserId(User));
             }
             
