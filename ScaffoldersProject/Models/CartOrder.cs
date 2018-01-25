@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,19 +6,17 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Models
 {
-    public class Cart
+    public class CartOrder
     {
-
         [Key]
-        public int CartId { get; set; }
-      
+        public int CartOrderId { get; set; }
+
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
+
         public int ProductId { get; set; }
         public Products Product { get; set; }
 
         public int Quantity { get; set; }
-
-        [BindNever]
-        public string UserCartId { get; set; } //similar to foreign Key
-
     }
 }

@@ -40,7 +40,7 @@
         </table>
 
         <br><br>
-        <form asp-controller="Cart" asp-action="AddtoCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
+        <form asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
             <input type="hidden" name="productId" value=@Model.Product.ProductId>
             @if (Model.Product.Stock <= 0)
             {

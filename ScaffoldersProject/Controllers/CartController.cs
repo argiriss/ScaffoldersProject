@@ -26,50 +26,29 @@ namespace ScaffoldersProject.Controllers
             _cartRepository = cartRepository;
         }
 
-        public IActionResult Index(int cartID)
+        public IActionResult Index()
         {
-            var checkCartExist = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(User));
-            if (checkCartExist == null)
-            {
-                Cart cartNew = new Cart
-                {
-                    UserCardId = _userManager.GetUserId(User)
-                };
 
-                //Save cart to database for this user once and for all
-                _cartRepository.CartSave(cartNew);
-            }
-            var res = _cartRepository.Cart.First(x => x.UserCardId == _userManager.GetUserId(User));
-            var total = _cartRepository.ComputeTotalCost(res);
+            var cartList = _cartRepository.Cart.Where(x => x.UserCartId == _userManager.GetUserId(User));
+            var total = _cartRepository.ComputeTotalCost(_userManager.GetUserId(User));
             ViewBag.Total = total;
-            return View(res);
+            ViewBag.UserId = _userManager.GetUserId(User);
+            return View(cartList);//return Res inside view
         }
+
 
         public ActionResult AddToCart(int productId, int quantity, string returnUrl)
         {
-            //Find the product with the given Id
-            Products selectedProduct = _repository.Products.First(x => x.ProductId == productId);
-            //Check Cart database if exist one with this userId and creates one if null
-            var checkCartExist = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(User));
-            if (checkCartExist == null)
+
+            //Find a product with the given Id from the parameters
+            Products product = _repository.Products.SingleOrDefault(x => x.ProductId == productId);
+
+            if (product != null)
             {
-                Cart cartNew = new Cart
-                {
-                    UserCardId = _userManager.GetUserId(User)
-                };
-
-                //Save cart to database for this user once and for all
-                _cartRepository.CartSave(cartNew);
+                _cartRepository.AddItem(product, quantity, _userManager.GetUserId(User));
             }
-            _cartRepository.AddItem(selectedProduct, quantity, checkCartExist);
-
-          
-            TempData["returnUrl"] = returnUrl;
             
-            var res = _cartRepository.Cart.First(x => x.UserCardId == _userManager.GetUserId(User));
-            var total=_cartRepository.ComputeTotalCost(res);
-            ViewBag.Total = total;
-            return View("Index",res);
+            return Redirect("Index");
         }
     }
 }

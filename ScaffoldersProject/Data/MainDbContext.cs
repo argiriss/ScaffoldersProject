@@ -13,7 +13,7 @@ namespace ScaffoldersProject.Data
         public DbSet<Products> Products { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<Order> Order { get; set; }
-        public DbSet<CartItem> CartItem { get; set; }
+        public DbSet<CartOrder> CartOrder { get; set; }
         public DbSet<Deposit> Deposit { get; set; }
 
         //We can add other models ............

@@ -13,6 +13,8 @@ namespace ScaffoldersProject.Models
         [Key]
         public int OrderID { get; set; }
 
+        public DateTime OrderDay { get; set; }
+
         [BindNever]
         public string UserOrderId { get; set; } //similar to foreign Key
 

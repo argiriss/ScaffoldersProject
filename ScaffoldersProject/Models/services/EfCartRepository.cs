@@ -24,63 +24,64 @@ namespace ScaffoldersProject.Models.services
             db.SaveChanges();
         }
 
-        public void AddItem(Products product, int quantity, Cart cart)
+        public void AddItem(Products product, int quantity, string userId)
         {
-            //If we find a cartId from this user
-            CartItem findProductInCart = db.CartItem.FirstOrDefault(x => x.CartId == cart.CartId && (x.OrderID == 0 || x.OrderID == null));
+            //Check If we find a cartId from this user
+            Cart findProductInCart = db.Cart.FirstOrDefault(x => x.UserCartId == userId);
             if (findProductInCart != null)
             {
                 //If item exists then we look for similar productId 
-                CartItem findInCart = db.CartItem.FirstOrDefault(x => x.ProductId == product.ProductId && x.CartId == cart.CartId && (x.OrderID == 0 || x.OrderID == null));
+                Cart findInCart = db.Cart.FirstOrDefault(x => x.ProductId == product.ProductId && x.UserCartId == userId);
                 if (findInCart != null)
                 {
                     findInCart.Quantity += quantity;
-                    db.CartItem.Update(findInCart);
+                    db.Cart.Update(findInCart);
                     db.SaveChanges();
                 }
                 else
                 {
                     //If there is not similar product then
-                    findInCart = new CartItem
+                    findInCart = new Cart
                     {
                         ProductId = product.ProductId,
                         Quantity = quantity,
-                        CartId = cart.CartId,
+                        UserCartId = userId
                     };
-                    db.CartItem.Add(findInCart);
+                    db.Cart.Add(findInCart);
                     db.SaveChanges();
                 }
             }
             else
             {
-                findProductInCart = new CartItem
+                //If we dont find a cart then we create a new one with userId
+                findProductInCart = new Cart
                 {
                     ProductId = product.ProductId,
                     Quantity = quantity,
-                    CartId = cart.CartId,
+                    UserCartId = userId
                 };
-                db.CartItem.Add(findProductInCart);
+                db.Cart.Add(findProductInCart);
                 db.SaveChanges();
             }
         }
+
         //Clear all rpoducts from cart
-        public void Clear(Cart c)
-        {   
-            var CartItemsRemove = db.CartItem.Where(x => x.CartId == c.CartId);
+        public void Clear(string userId)
+        {
+            var CartItemsRemove = db.Cart.Where(x => x.UserCartId == userId);
             foreach (var item in CartItemsRemove)
             {
-                item.CartId = 0;
-                db.CartItem.Update(item);
+                db.Cart.Remove(item);
             }
             db.SaveChanges();
         }
 
 
-        public decimal ComputeTotalCost(Cart cart)
+        public decimal ComputeTotalCost(string userId)
         {
             decimal totalCost = 0;
-            //find list of items with same card id
-            var findListOfItems = db.CartItem.Where(x => x.CartId == cart.CartId &&(x.OrderID==0 ||x.OrderID==null));
+            //find list of items with same user id
+            var findListOfItems = db.Cart.Where(x => x.UserCartId == userId);
             foreach (var item in findListOfItems)
             {
                 decimal price = db.Products.First(x => x.ProductId == item.ProductId).Price;
@@ -89,24 +90,26 @@ namespace ScaffoldersProject.Models.services
             return totalCost;
         }
 
-        public void RemoveItem(int productId,int cartId)
+        //Implemented in mainhub
+        public void RemoveItem(int productId,string UserId)
         {
             //The following returns a cartItem object if its exists with the given product Id 
             //and cart id
-            CartItem item = db.CartItem.FirstOrDefault(p => p.ProductId == productId && p.CartId==cartId);
-            //If its exists we delete it from database => Table CartItem
-            if (item != null)
-            {
-                db.CartItem.Remove(item);
-                db.SaveChanges();
-            }
+            //CartItem item = db.CartItem.FirstOrDefault(p => p.ProductId == productId && p.CartId==cartId);
+            ////If its exists we delete it from database => Table CartItem
+            //if (item != null)
+            //{
+            //    db.CartItem.Remove(item);
+            //    db.SaveChanges();
+            //}
         }
         
-        public decimal GetOrderCost(int orderId, int cartId )
+        public decimal GetOrderCost(int orderId, string userId )
         {
-            CartItem item = db.CartItem.FirstOrDefault(x => x.OrderID == orderId && x.CartId == cartId);
-            Products product = db.Products.FirstOrDefault(x => x.ProductId == item.ProductId);
-            return product.Price;
+            //CartItem item = db.CartItem.FirstOrDefault(x => x.OrderID == orderId && x.CartId == cartId);
+            //Products product = db.Products.FirstOrDefault(x => x.ProductId == item.ProductId);
+            //return product.Price;
+            return 0;
         }
     }
 }

@@ -21,30 +21,30 @@ namespace ScaffoldersProject.Models.services
         //method for Adding the new order to Order table
         public void AddNewOrder(Order orderDetails , Cart c)
         {
-            //Add the order to Order Table
-            db.Order.Add(orderDetails);
-            db.SaveChanges();
-            //Find the cartitems which exist in User's Cart
-            var CartItemsOrdered = db.CartItem.Where(x => x.CartId == c.CartId);
-            //for those CartItems set the Orderid(fk) to marked as ordered
-            foreach (var item in CartItemsOrdered)
-            {
-                item.OrderID = orderDetails.OrderID;
-                //for each product in product table which productId exist in CartItemsOrdered list reduce the stock
-                foreach (var prod in db.Products)
-                {
-                    if (prod.ProductId==item.ProductId)
-                    {
-                        prod.Stock -= item.Quantity; //reduce the stock
-                        db.Products.Update(prod); //update the table
-                    }
-                }
+        //    //Add the order to Order Table
+        //    db.Order.Add(orderDetails);
+        //    db.SaveChanges();
+        //    //Find the cartitems which exist in User's Cart
+        //    var CartItemsOrdered = db.CartItem.Where(x => x.CartId == c.CartId);
+        //    //for those CartItems set the Orderid(fk) to marked as ordered
+        //    foreach (var item in CartItemsOrdered)
+        //    {
+        //        item.OrderID = orderDetails.OrderID;
+        //        //for each product in product table which productId exist in CartItemsOrdered list reduce the stock
+        //        foreach (var prod in db.Products)
+        //        {
+        //            if (prod.ProductId==item.ProductId)
+        //            {
+        //                prod.Stock -= item.Quantity; //reduce the stock
+        //                db.Products.Update(prod); //update the table
+        //            }
+        //        }
                 
-            }
-            db.CartItem.UpdateRange(CartItemsOrdered);
-            //Update the Product table by reducing the stock of ordered product respectively
+        //    }
+        //    db.CartItem.UpdateRange(CartItemsOrdered);
+        //    //Update the Product table by reducing the stock of ordered product respectively
             
-            db.SaveChanges();
+        //    db.SaveChanges();
         }
     }
 }

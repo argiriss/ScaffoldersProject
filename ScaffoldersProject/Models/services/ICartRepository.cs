@@ -10,11 +10,11 @@ namespace ScaffoldersProject.Models.services
         IQueryable<Cart> Cart { get; }
 
         void CartSave(Cart cart);
-        void AddItem(Products product, int quantity, Cart cart);
-        void RemoveItem(int productId,int cartId);
-        decimal ComputeTotalCost(Cart cart);
-        void Clear(Cart c);
-        decimal GetOrderCost(int orderId, int cartId);
+        void AddItem(Products product, int quantity, string userId);
+        void RemoveItem(int productId,string userId);
+        decimal ComputeTotalCost(string userId);
+        void Clear(string userId);
+        decimal GetOrderCost(int orderId, string userId);
 
     }
 }

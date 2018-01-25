@@ -22,26 +22,20 @@ namespace ScaffoldersProject.Components
 
         public IViewComponentResult Invoke()
         {
-            Cart cartSummary = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(HttpContext.User));
-            if (cartSummary == null)
+            decimal totalCost = 0;
+            Cart cartSummary = _cartRepository.Cart.FirstOrDefault(x => x.UserCartId == _userManager.GetUserId(HttpContext.User));
+            if (cartSummary != null)
             {
-                Cart cartNew = new Cart
-                {
-                    UserCardId = _userManager.GetUserId(HttpContext.User)
-                };
-
-                //Save cart to database for this user once and for all
-                _cartRepository.CartSave(cartNew);
+                totalCost = _cartRepository.ComputeTotalCost(_userManager.GetUserId(HttpContext.User));
+                ViewBag.total = totalCost;
                 return View(cartSummary);
             }
             else
             {
-                var total = _cartRepository.ComputeTotalCost(cartSummary);
-                ViewBag.Total = total;
+                ViewBag.total = totalCost;
                 return View(cartSummary);
             }
-            
+          
         }
-
     }
 }

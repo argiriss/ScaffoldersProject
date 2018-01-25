@@ -39,27 +39,27 @@ namespace ScaffoldersProject.Hubs
         //When we invoke from client with SendClient value
         public  async  Task SendClient(int productId)
         {
-            //First we look for a Cart with the login User Id
-            var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
-            //With the product id and the cart id we invoke the function remove item
-             _cartRepository.RemoveItem(productId, findClientCart.CartId);
-            //After the removal we compute the new total cost
-            var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
+            ////First we look for a Cart with the login User Id
+            //var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
+            ////With the product id and the cart id we invoke the function remove item
+            // _cartRepository.RemoveItem(productId, findClientCart.CartId);
+            ////After the removal we compute the new total cost
+            //var totalCost=_cartRepository.ComputeTotalCost(findClientCart);
+            //await Clients.Client(Context.ConnectionId).InvokeAsync("Send", "Product Remove",totalCost.ToString("C"));
         }
 
         public async Task Buy(Order orderObject)
         {
             //JObject Order = JObject.Parse(orderObject);
             //First we look for a Cart with the login User Id
-            var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
-            orderObject.UserOrderId = _userManager.GetUserId(Context.User);
+            //var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
+            //orderObject.UserOrderId = _userManager.GetUserId(Context.User);
             
-            _orderRepository.AddNewOrder(orderObject, findClientCart);
-            var orderPrice =_cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
+            //_orderRepository.AddNewOrder(orderObject, findClientCart);
+            //var orderPrice =_cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
 
 
-            await Clients.All.InvokeAsync("Buy","Order saved in database", orderPrice);
+            //await Clients.All.InvokeAsync("Buy","Order saved in database", orderPrice);
         }
 
     }

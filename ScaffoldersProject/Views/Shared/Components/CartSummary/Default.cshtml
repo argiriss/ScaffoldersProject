@@ -1,25 +1,16 @@
 ﻿@model Cart
 
-<a class="btn btn-sm btn-secondary" asp-controller="Cart" asp-action="Index" asp-route-CartID="@Model.CartId">
-    Cart 
-   @if (Model != null)
-   {
-        if ((Model.Items!=null) && (Model.Items.Count(x => x.OrderID == 0 || x.OrderID == null) > 0))
-        {
-            <span id="cartId">
-                @*@Model.Items.Sum(x => x.Quantity) item(s)*@
-                (@ViewBag.Total.ToString("c"))
-            </span>
-        }
-        else
-        {
-            <span>(0)</span>
-       }
-   }
-   else
-   {
-    <span>(0)</span>
-   }
-</a>
+    @if (Model!= null)
+    {
+        <a class="btn btn-sm btn-secondary" asp-controller="Cart" asp-action="Index" asp-route-CartId="@Model.CartId">
+            Cart  <span id="cartId">(@ViewBag.Total.ToString("c"))</span>
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-sm btn-secondary">
+            Cart  <span id="cartId">(@ViewBag.Total.ToString("c"))</span>
+        </a>
 
-@*asp-route-returnurl="@ViewContext.HttpContext.Request.PathAndQuery()"*@
+    }
+

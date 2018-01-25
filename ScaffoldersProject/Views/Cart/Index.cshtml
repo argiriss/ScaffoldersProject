@@ -1,14 +1,12 @@
-﻿@model Cart
+﻿@model IQueryable<Cart>
 @{
     ViewData["Title"] = "Cart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 <div class="row">
     <div class="col-md-8 col-md-offset-1">
-        @if ((Model != null) && (Model.Items != null))
+        @if (Model != null)
         {
             <table class="table table-striped">
                 <thead>
@@ -16,16 +14,13 @@
                         <th>Product</th>
                         <th class="text-center">Quantity</th>
                         <th class="text-right">Subtotal</th>
-                        <th class="text-right"><a class="btn btn-danger btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartID="@Model.CartId">Clear</a></th>
+                        <th class="text-right"><a class="btn btn-danger btn-sm" style="float:right" asp-controller="Cart" asp-action="" asp-route-CartId="@ViewBag.UserId)">Clear</a></th>
                     </tr>
                 </thead>
                 <tbody>
                     @{ var idtext = "row";}
-                    @foreach (var item in Model.Items)
+                    @foreach (var item in Model)
                     {
-
-                        if (item.OrderID == null || item.OrderID == 0)
-                        {
                             <tr id="@idtext@item.Product.ProductId">
                                 <td>@item.Product.Name</td>
                                 <td class="text-center">x @item.Quantity</td>
@@ -33,7 +28,6 @@
                                 <td><button class="btn btn-primary btn-sm" style="float:right" value="@item.Product.ProductId" onclick="btnRemove(this)">Remove</button></td>
                                 <td></td>
                             </tr>
-                        }
                     }
 
                 </tbody>
@@ -51,9 +45,9 @@
                         }
 
         <div class="text-center">
-            @if ((Model != null) && (Model.Items != null))
+            @if (Model != null)
             {
-                <a class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartID="@Model.CartId">Checkout</a>
+                <a class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartId="@ViewBag.UserId)">Checkout</a>
             }
             <a class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
         </div>
