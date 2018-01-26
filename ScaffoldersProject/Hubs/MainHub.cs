@@ -55,14 +55,17 @@ namespace ScaffoldersProject.Hubs
         {
             //JObject Order = JObject.Parse(orderObject);
             //First we look for a Cart with the login User Id
-            //var findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCardId == _userManager.GetUserId(Context.User));
-            //orderObject.UserOrderId = _userManager.GetUserId(Context.User);
-            
-            //_orderRepository.AddNewOrder(orderObject, findClientCart);
-            //var orderPrice =_cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
+            Cart findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCartId == _userManager.GetUserId(Context.User));
+            //set order userId 
+            orderObject.UserOrderId = _userManager.GetUserId(Context.User);
+            //Add order to table
+            _orderRepository.AddNewOrder(orderObject, findClientCart);
 
 
-            //await Clients.All.InvokeAsync("Buy","Order saved in database", orderPrice);
+            //var orderPrice = _cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
+            var orderPrice = 0;
+
+            await Clients.All.InvokeAsync("Buy", "Order saved in database", orderPrice);
         }
 
     }
