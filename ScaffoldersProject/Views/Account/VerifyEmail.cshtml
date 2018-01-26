@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Email Verification";
+}
+
+
+<h2 style="color:darkred">@ViewData["Title"]</h2>
+<div>
+    <h4 style="color:darkred">Verification email sent. Please check your email.</h4>
+</div>
+
+<script type="text/javascript">
+
+    document.getElementById("login-button").onclick = function () {
+        location.href = "/Account/Login";
+    };
+    document.getElementById("register-button").onclick = function () {
+        location.href = "/Account/Register";
+
+    };
+</script>

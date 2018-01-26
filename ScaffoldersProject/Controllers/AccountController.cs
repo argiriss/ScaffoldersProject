@@ -93,7 +93,7 @@ namespace ScaffoldersProject.Controllers
                 //We getting the ApplicationUser object that represents the user, 
                 //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
                 //class.               
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

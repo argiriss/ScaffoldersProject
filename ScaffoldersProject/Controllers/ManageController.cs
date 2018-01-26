@@ -495,7 +495,7 @@ namespace ScaffoldersProject.Controllers
         {
             return string.Format(
                 AuthenicatorUriFormat,
-                _urlEncoder.Encode("ScaffoldersProject"),
+                _urlEncoder.Encode("Cryptocurrency Platform"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
