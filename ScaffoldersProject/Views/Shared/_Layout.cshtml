@@ -249,13 +249,45 @@
             </div>
             <div class="modal-body">
                 <p>Your current balance: @UserManager.Users.First(x => x.Id == UserManager.GetUserId(User)).Wallet</p>
-                <form>
-                    <input type="number" min="5" name="amount" />
-                    <button class="btn btn-primary" type="submit">Deposit</button>
+                <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="L7N8JEUJBAFVJ">
+                    <INPUT TYPE="hidden" N="return" value="https://www.youtube.com/">
+                    <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
                 </form>
+
+
             </div>
         </div>
     </div>
     @*modal end*@
 </body>
 </html>
+@*<form>
+    <input type="number" min="5" name="amount" />
+    <button class="btn btn-primary" type="submit">Deposit</button>
+</form>*@
+@*<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+
+    <!-- Identify your business so that you can collect the payments. -->
+    <input type="hidden" name="business" value="charilaos@gmail.com">
+
+    <!-- Specify a Buy Now button. -->
+    <input type="hidden" name="cmd" value="_xclick">
+    <input type="hidden" name="return" value="YXNEHVL7HGGXW6RP">
+
+    <!-- Specify details about the item that buyers will purchase. -->
+    <input type="number" min="5" name="amount" />
+    <input type="hidden" name="currency_code" value="EUR">
+
+    <!-- Display the payment button. -->
+    <input type="image" name="submit" border="0"
+           src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif"
+           alt="Buy Now">
+    <img alt="" border="0" width="1" height="1"
+         src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
+
+</form>*@
+
+@*S_No1JXlEPYCNM-rpD_bt8q34d1WUipIUn-V8YuT44k_Crvvo3y6GX4Nxta*@
