@@ -46,7 +46,7 @@ namespace ScaffoldersProject
             {
                 //Lockout Settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 3;
+               //options.Lockout.MaxFailedAccessAttempts = 3;
 
                 //User Setting
                 options.User.RequireUniqueEmail = true;
