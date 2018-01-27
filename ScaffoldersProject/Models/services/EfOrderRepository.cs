@@ -19,35 +19,53 @@ namespace ScaffoldersProject.Models.services
             this.db = db;
         }
 
+        //Save to Order Table
+        public async Task OrderSave(Order order)
+        {
+            db.Order.Add(order);
+            await db.SaveChangesAsync();
+        }
+
+        //Save to CartOrder Table
+        public async Task CartOrderSave(CartOrder cartOrder)
+        {
+            db.CartOrder.Add(cartOrder);
+            await db.SaveChangesAsync();
+        }
+
         //method for Adding the new order to Order table
-        public void AddNewOrder(Order orderDetails , Cart c)
+        public async Task AddNewOrder(Order orderDetails)
         {
             //Add the order to Order Table and save it
-          
-            db.Order.Add(orderDetails);
-            db.SaveChanges();
+            await OrderSave(orderDetails);
 
-            //Find the cartitems which exist in User's Cart
-            var CartItemsOrdered = db.Cart.Where(x => x.UserCartId == c.UserCartId);
-            //for those CartItems set the Orderid(fk) to marked as ordered
+            //Find the cart items List which exist in User's Cart
+            var CartItemsOrdered = db.Cart.Where(x => x.UserCartId == orderDetails.UserOrderId).ToList();
+
+            //for those Cart Items 
+            CartOrder cartOrderTable = new CartOrder();
             foreach (var item in CartItemsOrdered)
             {
-                item.OrderID = orderDetails.OrderID;
-                //for each product in product table which productId exist in CartItemsOrdered list reduce the stock
-                foreach (var prod in db.Products)
-                {
-                    if (prod.ProductId == item.ProductId)
-                    {
-                        prod.Stock -= item.Quantity; //reduce the stock
-                        db.Products.Update(prod); //update the table
-                    }
-                }
+                //!!!!!!Inside foreach no Iquerable thats why i made CartItemsOrdered 
+                //To List!!!!!!!!.........Important...............
 
-            }
-            db.CartItem.UpdateRange(CartItemsOrdered);
-            //Update the Product table by reducing the stock of ordered product respectively
+                //Creation of cartOrder ID in CartOrder Table for transfer items from cart 
+                //to cartOrder so as to clear cart table
+                cartOrderTable.OrderId = orderDetails.OrderID;
+                cartOrderTable.ProductId = item.ProductId;
+                cartOrderTable.Quantity = item.Quantity;
 
-            db.SaveChanges();
+                await CartOrderSave(cartOrderTable);
+
+                //Remove item from cart table so as to clear this table after order placed
+                //db.Cart.Remove(item);
+
+                ////for each item removing,  reduce its stock by the buying quantity
+                //Products productReduseStock = db.Products.FirstOrDefault(p => p.ProductId == item.ProductId);
+                //productReduseStock.Stock -= item.Quantity; //reduce the stock
+                //db.Products.Update(productReduseStock); //update the table
+                //db.SaveChanges();
+            }//End of foreach loop in cart table
         }
     }
 }
