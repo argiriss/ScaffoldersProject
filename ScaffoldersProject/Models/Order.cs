@@ -14,7 +14,7 @@ namespace ScaffoldersProject.Models
         public int OrderID { get; set; }
 
         [BindNever]
-        public DateTime OrderDay { get; set; } = DateTime.Now;
+        public DateTime OrderDay { get; set; } 
 
         [BindNever]
         public string UserOrderId { get; set; } //similar to foreign Key
