@@ -500,6 +500,21 @@ namespace ScaffoldersProject.Controllers
                 unformattedKey);
         }
 
+        public IActionResult Search(string search)
+        {
+            if (search == null ) { search = "No Users Found."; }
+            List<ApplicationUser> usersList = new List<ApplicationUser>();
+            var users = _userManager.Users.ToList();
+            foreach (var item in users)
+            {
+                if ( item.Email.Contains(search) || item.UserName.Contains(search))
+                {
+                    usersList.Add(item);
+                }                
+            }
+                return View(usersList);
+        }
+
         #endregion
     }
 }
