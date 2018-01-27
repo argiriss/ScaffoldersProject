@@ -33,6 +33,13 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
+        //Reduse product stock quantity
+        public async Task ProductReduseStock(Products product)
+        {
+            db.Products.Update(product); //update the table
+            await db.SaveChangesAsync();
+        }
+
         //method for Adding the new order to Order table
         public async Task AddNewOrder(Order orderDetails)
         {
@@ -58,13 +65,13 @@ namespace ScaffoldersProject.Models.services
                 await CartOrderSave(cartOrderTable);
 
                 //Remove item from cart table so as to clear this table after order placed
-                //db.Cart.Remove(item);
+                db.Cart.Remove(item);
 
-                ////for each item removing,  reduce its stock by the buying quantity
-                //Products productReduseStock = db.Products.FirstOrDefault(p => p.ProductId == item.ProductId);
-                //productReduseStock.Stock -= item.Quantity; //reduce the stock
-                //db.Products.Update(productReduseStock); //update the table
-                //db.SaveChanges();
+                //for each item removing,  reduce its stock by the buying quantity
+                Products productReduseStock = db.Products.FirstOrDefault(p => p.ProductId == item.ProductId);
+                productReduseStock.Stock -= item.Quantity; //reduce the stock
+                await ProductReduseStock(productReduseStock);
+
             }//End of foreach loop in cart table
         }
     }
