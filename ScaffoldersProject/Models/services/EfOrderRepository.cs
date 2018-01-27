@@ -32,7 +32,7 @@ namespace ScaffoldersProject.Models.services
             //for those CartItems set the Orderid(fk) to marked as ordered
             foreach (var item in CartItemsOrdered)
             {
-                item.OrderID = orderDetails.OrderID;
+                //item.OrderID = orderDetails.OrderID;
                 //for each product in product table which productId exist in CartItemsOrdered list reduce the stock
                 foreach (var prod in db.Products)
                 {
@@ -44,7 +44,7 @@ namespace ScaffoldersProject.Models.services
                 }
 
             }
-            db.CartItem.UpdateRange(CartItemsOrdered);
+            //db.CartItem.UpdateRange(CartItemsOrdered);
             //Update the Product table by reducing the stock of ordered product respectively
 
             db.SaveChanges();
