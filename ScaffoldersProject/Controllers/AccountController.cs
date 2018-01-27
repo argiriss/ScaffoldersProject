@@ -502,17 +502,17 @@ namespace ScaffoldersProject.Controllers
         public IActionResult Search(string search)
         {
             if (search == null) { search = "No Products Found."; }
-            List<Products> list = new List<Products>();            
+            List<Products> productsList = new List<Products>();            
             var products = _repository.Products.ToList();
             foreach (var item in products)
             {
                 if ( item.Name.Contains(search) || item.Category.Contains(search) /*|| item.Stock.Equals(int.Parse(search)) || item.Price.Equals(decimal.Parse(search))*/)
                 {
-                    list.Add(item);
+                    productsList.Add(item);
                 }
 
             }
-            return View(list);
+            return View(productsList);
         }
 
         #region Helpers

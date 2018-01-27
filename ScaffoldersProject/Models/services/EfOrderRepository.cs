@@ -53,6 +53,7 @@ namespace ScaffoldersProject.Models.services
             CartOrder cartOrderTable = new CartOrder();
             foreach (var item in CartItemsOrdered)
             {
+
                 //!!!!!!Inside foreach no Iquerable thats why i made CartItemsOrdered 
                 //To List!!!!!!!!.........Important...............
 
@@ -73,6 +74,7 @@ namespace ScaffoldersProject.Models.services
                 await ProductReduseStock(productReduseStock);
 
             }//End of foreach loop in cart table
+
         }
     }
 }
