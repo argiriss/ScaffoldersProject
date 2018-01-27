@@ -75,6 +75,7 @@ namespace ScaffoldersProject.Models.services
 
             }//End of foreach loop in cart table
 
+
         }
     }
 }
