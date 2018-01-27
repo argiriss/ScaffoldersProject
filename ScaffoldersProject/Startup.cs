@@ -31,6 +31,13 @@ namespace ScaffoldersProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Adding new service for reading values of Appsettings.json file
+            //After adding the service, we will read the values of 
+            //Connection string, keys and value pairs.
+            //We are going to use Constructor injection in every class we want 
+            //reading the values
+            services.AddSingleton<IConfiguration>(Configuration);
+
             //Identity database for user authentication.
             //Connection string in appsettings.json.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -85,8 +92,6 @@ namespace ScaffoldersProject
             //associate requests with sessions when they arrive from the client.
             services.AddMemoryCache();
             services.AddSession();
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the
