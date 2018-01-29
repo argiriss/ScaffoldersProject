@@ -32,11 +32,11 @@ namespace ScaffoldersProject.Hubs
             _productRepository = productRepository;
         }
 
-        //When we invoke from client with Send value end send back message from parameter
-        public async Task Send(string message)
-        {
-            await Clients.All.InvokeAsync("Send",message);
-        }
+        ////When we invoke from client with Send value end send back message from parameter
+        //public async Task Send(string message)
+        //{
+        //    await Clients.All.InvokeAsync("Send",message);
+        //}
 
         //When we invoke from client with SendClient value
         public  async  Task RemoveItem(int productId)
@@ -51,21 +51,22 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("Remove", $"Product {productName} was successfully removed from your cart!", totalCost.ToString("C"));
         }
 
-        public async Task Buy(Order orderObject)
+        public async Task Buy(string text)
         {
-            //JObject Order = JObject.Parse(orderObject);
-            //First we look for a Cart with the login User Id
-            Cart findClientCart = _cartRepository.Cart.FirstOrDefault(x => x.UserCartId == _userManager.GetUserId(Context.User));
-            //set order userId 
-            orderObject.UserOrderId = _userManager.GetUserId(Context.User);
-            //Add order to table
-            _orderRepository.AddNewOrder(orderObject, findClientCart);
 
+            Order orderObject = new Order { };
+            //JObject Order = JObject.Parse(orderObject);
+            //set order userId to order table
+            orderObject.UserOrderId = _userManager.GetUserId(Context.User);
+            orderObject.OrderDay = DateTime.Now;
+            //Add order to database and save it with this method from EfOrderRepository passing
+            //the order Object with the above properties
+            await _orderRepository.AddNewOrder(orderObject);
 
             //var orderPrice = _cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
-            var orderPrice = 0;
+            //var orderPrice = 0;
 
-            await Clients.All.InvokeAsync("Buy", "Order saved in database", orderPrice);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok");
         }
 
     }

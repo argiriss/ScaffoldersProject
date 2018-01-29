@@ -50,8 +50,10 @@ namespace ScaffoldersProject.Controllers
 
         public async Task<IActionResult> Test()
         {
-            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com", "/v2/prices/spot?currency=EUR");
-            ViewBag.sent = send;
+            var send = await _webApiFetch.PaypalToken("https://api.sandbox.paypal.com/v1/oauth2/token");
+            //var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com", "/v2/prices/spot?currency=EUR");
+            ViewBag.token = send.access_token;
+            ViewBag.type = send.token_type;
             return View();
         }
     }
