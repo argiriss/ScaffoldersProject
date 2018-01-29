@@ -74,7 +74,6 @@ namespace ScaffoldersProject.Models.services
                 await ProductReduseStock(productReduseStock);
 
             }//End of foreach loop in cart table
-            
         }
     }
 }

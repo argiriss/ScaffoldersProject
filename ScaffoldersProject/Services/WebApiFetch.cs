@@ -89,5 +89,25 @@ namespace ScaffoldersProject.Services
                 };
             }
         }
+
+        public async Task<string> CreatePayment(string token)
+        {
+            //Add headers
+            client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var serializePaymentReq = new DataContractJsonSerializer(typeof(PaymentReq));
+            HttpContent _body = new StringContent(serializePaymentReq, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("https://api.sandbox.paypal.com/v1/payments/payment", _body);
+
+            //Response           
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
+
+
+
+        }
     }
 }
