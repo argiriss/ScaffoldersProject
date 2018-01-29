@@ -53,7 +53,6 @@ namespace ScaffoldersProject.Hubs
 
         public async Task Buy(string text)
         {
-
             Order orderObject = new Order { };
             //JObject Order = JObject.Parse(orderObject);
             //set order userId to order table

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using System;
 using System.Threading.Tasks;
+using ScaffoldersProject.Services;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -18,16 +19,19 @@ namespace ScaffoldersProject.Controllers
         private IProductRepository _repository;
         private ICartRepository _cartRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebApiFetch _webApiFetch;
         //private Cart cart;
 
         //Constructor depedency injection 
         public ClientController(IProductRepository repository,
             ICartRepository cartRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IWebApiFetch webApiFetch)
         {
             _repository = repository;
             _cartRepository = cartRepository;
             _userManager = userManager;
+            _webApiFetch = webApiFetch;
 
         }
 
@@ -96,6 +100,25 @@ namespace ScaffoldersProject.Controllers
             }
             SameCategoryViewModel sameCategory = new SameCategoryViewModel(product, similarProducts, viewImage, similarViewImageList);
             return View(sameCategory);
+        }
+
+        public async Task<IActionResult> Deposit()
+        {
+            var send = await _webApiFetch.PaypalToken("https://api.sandbox.paypal.com/v1/oauth2/token");
+            //var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com", "/v2/prices/spot?currency=EUR");
+            ViewBag.token = send.access_token;
+            ViewBag.type = send.token_type;
+            return View();
+        }
+
+        public IActionResult CreatePayment()
+        {
+            return View();
+        }
+
+        public IActionResult ExecutePayment()
+        {
+            return View();
         }
     }
 }
