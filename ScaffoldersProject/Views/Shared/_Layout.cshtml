@@ -107,6 +107,8 @@
                             <a href="/Client/Index">View Products</a>
                             <a href="#services">Deposit History</a>
                             <a href="#clients">Buy History</a>
+                            <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
+                            
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
@@ -114,7 +116,7 @@
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-3">Euro</div>
-                                        <div id="balanceClientId" class="col-md-9 text-right">0.00</div>
+                                        <div id="balanceClientId" class="col-md-9 text-right"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
@@ -166,7 +168,7 @@
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-3">Euro</div>
-                                        <div class="col-md-9 text-right">0.00</div>
+                                        <div class="col-md-9 text-right"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>

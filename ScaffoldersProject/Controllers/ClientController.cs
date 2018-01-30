@@ -37,7 +37,6 @@ namespace ScaffoldersProject.Controllers
             _cartRepository = cartRepository;
             _userManager = userManager;
             _webApiFetch = webApiFetch;
-
         }
 
         public IActionResult Index()
@@ -114,6 +113,7 @@ namespace ScaffoldersProject.Controllers
             return View();
         }
         
+        //Don't FORGET..... parameter same name witn parameter request name ..?amt=100
         public async Task<IActionResult> CreatePayment(string amt)
         {
             var res = await _webApiFetch.CreatePayment(token,amt);

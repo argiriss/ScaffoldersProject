@@ -8,7 +8,7 @@ namespace ScaffoldersProject.Services
 {
     public interface IWebApiFetch
     {
-        Task<string> WebApiFetchAsync(string baseurl,string path);
+        Task<string> WebApiFetchAsync(string path);
         Task<TokenRes> PaypalToken(string url);
         Task<PaymentIdRes> CreatePayment(string token,string getAmount);
         Task<string> ExecutePayment(string token, string paymentId, string payerId);

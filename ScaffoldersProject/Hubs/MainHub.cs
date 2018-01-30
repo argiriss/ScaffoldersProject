@@ -77,8 +77,11 @@ namespace ScaffoldersProject.Hubs
         public async Task Deposit(string amount)
         {
             var desAmount = Convert.ToDecimal(amount);
+            //Make the deposit
             await _walletRepository.Deposit(desAmount, _userManager.GetUserId(Context.User));
+            //Calculate total amount in my wallet
             var totalAmount=await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            //Send to client balance area in left menu, the total amount 
             await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
         }
 
