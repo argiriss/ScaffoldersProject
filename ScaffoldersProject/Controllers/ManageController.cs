@@ -507,7 +507,7 @@ namespace ScaffoldersProject.Controllers
             var users = _userManager.Users.ToList();
             foreach (var item in users)
             {
-                if ( item.Email.Contains(search) || item.UserName.Contains(search))
+                if ( item.Email.ToLower().Contains(search.ToLower()) || item.UserName.ToLower().Contains(search.ToLower()))
                 {
                     usersList.Add(item);
                 }                
