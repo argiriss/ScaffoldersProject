@@ -10,6 +10,9 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using ScaffoldersProject.Services;
+using ScaffoldersProject.Services.PaypalObj;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -20,6 +23,8 @@ namespace ScaffoldersProject.Controllers
         private ICartRepository _cartRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebApiFetch _webApiFetch;
+        private static string token;
+        private static string paymentId;
         //private Cart cart;
 
         //Constructor depedency injection 
@@ -105,18 +110,38 @@ namespace ScaffoldersProject.Controllers
         public async Task<IActionResult> Deposit()
         {
             var send = await _webApiFetch.PaypalToken("https://api.sandbox.paypal.com/v1/oauth2/token");
-            //var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com", "/v2/prices/spot?currency=EUR");
-            ViewBag.token = send.access_token;
-            ViewBag.type = send.token_type;
+            token = send.access_token;          
+            return View();
+        }
+        
+        public async Task<IActionResult> CreatePayment(string amt)
+        {
+            var res = await _webApiFetch.CreatePayment(token,amt);
+            DataContractJsonSerializer reqId = new DataContractJsonSerializer(typeof(PaymentIdRes));
+            PaymentIdRes resId = new PaymentIdRes();
+            resId.id = res.id;
+            paymentId = res.id;
+            MemoryStream ms = new MemoryStream();
+            reqId.WriteObject(ms, resId);
+            byte[] json = ms.ToArray();
+            ms.Close();
+            string jsonToSend= Encoding.UTF8.GetString(json, 0, json.Length);
+
+            return Content(jsonToSend);
+        }
+
+        public async Task<IActionResult> ExecutePayment(string payerId)
+        {
+            var res = await _webApiFetch.ExecutePayment(token, paymentId, payerId);
             return View();
         }
 
-        public IActionResult CreatePayment()
+        public IActionResult Success()
         {
             return View();
         }
 
-        public IActionResult ExecutePayment()
+        public IActionResult Cancel()
         {
             return View();
         }

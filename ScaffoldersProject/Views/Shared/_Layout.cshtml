@@ -23,7 +23,6 @@
         <!--SignalR client-->
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
-        
     </environment>
     <style>
         body {
@@ -55,26 +54,23 @@
             }
     </style>
     <script>
-
         var connection = new signalR.HubConnection('/main');
-
         connection.start().then(function () {
             $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
             $('.status-glyph').text(" Status OK");
             $('.status-glyph').css('color', 'lightgreen');
             console.log("Started....");
+            connection.invoke('Balance');
         })
             .catch(function (err) {
                 console.log("Error");
                 $('.status-glyph').text("Error");
             })
-
     </script>
 </head>
 
 
 <body>
-
     @await Html.PartialAsync("_LoginPartial")
 
     <div class="container-fluid">
@@ -95,8 +91,8 @@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
-                                        <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right">0.00</div>
+                                        <div class="col-md-3">Euro</div>
+                                        <div id="balanceClientId" class="col-md-9 text-right">0.00</div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
@@ -119,7 +115,7 @@
                     </div>
                     <div class="col-md-8 col-md-offset-2">
                         @RenderBody()
-                    </div>                   
+                    </div>
                 </div>
             }
             else if (User.IsInRole("Admin"))
@@ -140,8 +136,8 @@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
-                                        <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right">0.00</div>
+                                        <div class="col-md-3">Euro</div>
+                                        <div class="col-md-9 text-right">0.00</div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
@@ -180,8 +176,8 @@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
-                                        <div class="col-md-6">Euro</div>
-                                        <div class="col-md-6 text-right"></div>
+                                        <div class="col-md-3">Euro</div>
+                                        <div class="col-md-9 text-right"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" data-toggle="modal" data-target=".bootstrapmodal" style="margin-bottom:5px">Deposit</button>
@@ -235,32 +231,11 @@
         <script src="/js/site.js" asp-append-version="true"></script>
         <script src="/js/vidbg.min.js" asp-append-version="true"></script>
     </environment>
-
     @RenderSection("Scripts", required: false)
-    @*deposit modal*@
-    <div class="modal fade bootstrapmodal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button data-dismiss="modal" class="close"><span>&times;</span></button>
-                    <div class="modal-title">Deposit via Paypall</div>
-                </div>
-            </div>
-            <div class="modal-body">
-                <p>Your current balance: @UserManager.Users.First(x => x.Id == UserManager.GetUserId(User)).Wallet</p>
-                <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                    <input type="hidden" name="cmd" value="_s-xclick">
-                    <input type="hidden" name="hosted_button_id" value="L7N8JEUJBAFVJ">
-                    <input TYPE="hidden" name="return" value="http://localhost:50256/">
-                    <input type="image" src="https://www.sandbox.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                    <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                </form>
-
-
-            </div>
-        </div>
-    </div>
-    @*modal end*@
+    <script>
+        connection.on('balance', function (walletTotal) {
+            document.getElementById('balanceClientId').innerHTML = walletTotal;
+        })
+    </script>
 </body>
 </html>
-
