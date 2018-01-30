@@ -31,7 +31,8 @@
             <td>@user.Id</td>
             <td>@user.UserName</td>
             <td>@user.Email</td>
-            <td><a asp-controller="Admin" asp-action="EditUser" class="btn btn-primary" asp-route-Id="@user.Id">Edit</a>
+            <td>
+                <a asp-controller="Admin" asp-action="EditUser" class="btn btn-primary" asp-route-Id="@user.Id">Edit</a>
                 <a asp-controller="Admin" asp-action="DeleteUser" data-confirm="Are you sure you want to delete user @user.UserName?" class="btn btn-primary" asp-route-Id="@user.Id">Delete</a>
             </td>
         </tr>

@@ -20,31 +20,24 @@
     {
         <h4>Search Results</h4>
 
-        <div class="table-responsive table-bordered">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var product in Model)
+        <table class="table table-sm table-bordered">
+            <tr>
+                <th>Product</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+            </tr>
+            @foreach (var product in Model)
                 {
-                        <tr>
-                            <td>@product.Name</td>
-                            <td>@product.Description</td>
-                            <td>@product.Category</td>
-                            <td>@product.Price.ToString("c")</td>
-                            <td>@product.Stock</td>
-                        </tr>
-
-                    }
-                </tbody>
-            </table>
-        </div>
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Category</td>
+                    <td>@product.Price.ToString("c")</td>
+                    <td>@product.Stock</td>
+                </tr>
+            }
+        </table>
     }
 </div>
