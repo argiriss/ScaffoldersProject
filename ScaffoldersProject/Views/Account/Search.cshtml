@@ -27,6 +27,7 @@
                 <th>Category</th>
                 <th>Price</th>
                 <th>Stock</th>
+                <th>View Product</th>
             </tr>
             @foreach (var product in Model)
                 {
@@ -36,6 +37,9 @@
                     <td>@product.Category</td>
                     <td>@product.Price.ToString("c")</td>
                     <td>@product.Stock</td>
+                    <td>
+                        <a asp-area="" asp-controller="Client" asp-action="ViewProduct" class="btn btn-primary" asp-route-productId="@product.ProductId">View</a>
+                    </td>
                 </tr>
             }
         </table>
