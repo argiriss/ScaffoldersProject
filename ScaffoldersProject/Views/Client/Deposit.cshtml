@@ -4,14 +4,67 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Deposit</h2>
-<label>Enter Amount To Deposit:</label>
-<input id="amountId" type="text"/>
-<div id="paypal-button"></div>
+<row>
+    <div class="col-md-6">
+        <h2>Deposit</h2>
+        <label>Enter Amount To Deposit:</label>
+        <input id="amountId" type="text" />
+        <div id="paypal-button"></div>
 
-<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
-<div id="paypal-button-container"></div>
+        <div id="paypal-button-container"></div>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center" colspan="2">CALCULATE DEPOSIT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width:50px">Deposit</td>
+                    <td><span id="deposit-amount"></span></td>
+                </tr>
+                <tr>
+                    <td style="width:50px">Our fee</td>
+                    <td><span id="fee-amount"></span></td>
+                </tr>
+                <tr>
+                    <td style="width:50px">Total</td>
+                    <td><span id="total-amount"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</row>
+
+<script>
+    $('input#amountId').on("change keyup paste", function () {
+        $value = (this).value.replace(',','.');
+        $fee = ($value * 0.05).toFixed(2);
+        $total = ($value - ($value * 0.05)).toFixed(2);
+        if ($value.match(/\d+.*\d*/)) {
+            $('#deposit-amount').empty();
+            $('#deposit-amount').append($value + '€');
+            $('#fee-amount').empty();
+            $('#fee-amount').append($fee + '€');
+            $('#total-amount').empty();
+            $('#total-amount').append($total + '€');
+        }
+        else {
+            $('#deposit-amount').empty();
+            $('#deposit-amount').append('Only number can be inserted');
+            $('#fee-amount').empty();
+            $('#fee-amount').append('Only number can be inserted');
+            $('#total-amount').empty();
+            $('#total-amount').append('Only number can be inserted');
+        }
+        
+    });
+</script>
+
 
 <script>
     var amount;
