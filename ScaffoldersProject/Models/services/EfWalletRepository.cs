@@ -6,22 +6,56 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Models.services
 {
-    public class EfWalletRepository
+    public class EfWalletRepository:IWalletRepository
     {
-        private MainDbContext db;
-        public IQueryable<Deposit> Orders => db.Deposit;
+        public IQueryable<Deposit> Deposits => db.Deposit;
 
+        private MainDbContext db;
+
+        //Depedency Injection
         public EfWalletRepository(MainDbContext db)
         {
             this.db = db;
         }
+
+        //Save to Deposit Table
+        public async Task WalletSave(Deposit deposit)
+        {
+            db.Deposit.Add(deposit);
+            await db.SaveChangesAsync();
+        }
+
         //Deposit to my wallet via Paypal
-        public void Deposit(decimal Amount , string UserId)
-        {            
+        public async Task Deposit(decimal amount , string userId)
+        {
+            Deposit depForSave = new Deposit();
+            depForSave.DepositAmount += amount;
+            depForSave.DepositDate = DateTime.Now;
+            depForSave.UserDepositId = userId;
+
+            await WalletSave(depForSave);
+            
+        }
+
+        public async Task<decimal> TotalInMyWallet(string userId)
+        {
+            decimal total = 0;
+            var userRecordsInWallet = db.Deposit.Where(x => x.UserDepositId == userId).ToList();
+
+            foreach (var item in userRecordsInWallet)
+            {
+                total += item.DepositAmount;
+            }
+
+            return total;
         }
 
         //pay from my wallet
-        public void PayFromWallet(decimal Amount , string UserId) { }
+        public void PayFromWallet(decimal Amount , string UserId)
+        {
+
+        }
+        
 
     }
 }

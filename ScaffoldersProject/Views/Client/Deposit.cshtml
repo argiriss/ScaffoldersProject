@@ -5,15 +5,16 @@
 }
 
 <h2>Deposit</h2>
+<label>Enter Amount To Deposit:</label>
+<input id="amountId" type="text"/>
 <div id="paypal-button"></div>
 
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
 <div id="paypal-button-container"></div>
-<p>Access Token: @ViewBag.token</p>
-<p>Token Type: @ViewBag.type</p>
 
 <script>
+    var amount;
     paypal.Button.render({
 
         env: 'sandbox', // sandbox | production
@@ -25,12 +26,13 @@
         payment: function () {
 
             // Set up a url on your server to create the payment
-            var CREATE_URL = 'https://localhost:61971/Client/CreatePayment';
-
+            amount = document.getElementById('amountId').value;
+            var CREATE_URL = 'http://localhost:61971/Client/CreatePayment?amt=' + amount ;
+            
             // Make a call to your server to set up the payment
             return paypal.request.post(CREATE_URL)
                 .then(function (res) {
-                    return res.paymentID;
+                    return res.id;
                 });
         },
 
@@ -38,7 +40,7 @@
         onAuthorize: function (data, actions) {
 
             // Set up a url on your server to execute the payment
-            var EXECUTE_URL = 'https://localhost:61971/Client/ExecutePayment';
+            var EXECUTE_URL = 'http://localhost:61971/Client/ExecutePayment';
 
             // Set up the data you need to pass to your server
             var data = {
@@ -49,10 +51,19 @@
             // Make a call to your server to execute the payment
             return paypal.request.post(EXECUTE_URL, data)
                 .then(function (res) {
+                    Success(amount);
                     window.alert('Payment Complete!');
                 });
         }
 
     }, '#paypal-button-container');
+
+    connection.on('Success', function (amount) {
+        document.getElementById('balanceClientId').innerHTML = amount;
+    });
+
+    function Success(amount) {
+        connection.invoke('Deposit', amount);
+    };
 </script>
 

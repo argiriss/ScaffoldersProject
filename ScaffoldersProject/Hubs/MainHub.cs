@@ -20,16 +20,22 @@ namespace ScaffoldersProject.Hubs
         private ICartRepository _cartRepository;
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
+        private IWalletRepository _walletRepository;
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
         
         //Depedency injection
-        public MainHub(UserManager<ApplicationUser> userManager,ICartRepository cartRepository, IOrderRepository orderRepository, IProductRepository productRepository)
+        public MainHub(UserManager<ApplicationUser> userManager,
+            ICartRepository cartRepository, 
+            IOrderRepository orderRepository, 
+            IProductRepository productRepository,
+            IWalletRepository walletRepository)
         {
             _userManager = userManager;
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
+            _walletRepository = walletRepository;
         }
 
         ////When we invoke from client with Send value end send back message from parameter
@@ -66,6 +72,20 @@ namespace ScaffoldersProject.Hubs
             //var orderPrice = 0;
 
             await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok");
+        }
+
+        public async Task Deposit(string amount)
+        {
+            var desAmount = Convert.ToDecimal(amount);
+            await _walletRepository.Deposit(desAmount, _userManager.GetUserId(Context.User));
+            var totalAmount=await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
+        }
+
+        public async Task Balance()
+        {
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Balance", totalAmount.ToString("C"));
         }
 
     }
