@@ -90,9 +90,9 @@ a h4 {
 }
 
 .search {
-    margin-top: 20px;
-    width: 80%;
-    margin-left: 6px;
+    margin: 0px;
+    width: auto;
+    margin-top: 10px;
 }
 
 .full-screen{
@@ -200,6 +200,8 @@ video{
 
 .list-group-wrapper{
     overflow:hidden;
+    max-width:408px;
+    float:left;
 }
  
  .confirm-modal {

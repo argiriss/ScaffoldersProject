@@ -46,13 +46,35 @@
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: #818181;
+            color: white;
             display: inline-block;
         }
 
+        .sidenav a:visited {
+            color: #818181;
+        }
+
+        /* mouse over link */
             .sidenav a:hover {
-                color: #f1f1f1;
+                color: #d46d15;
             }
+
+        /* selected link */
+            .sidenav a:active {
+                color: #d46d15;
+            }
+
+        .row.button-row {
+            margin: 15px;
+        }
+
+        .row.button-row button {
+            width: 100%;
+            padding: 5px;
+            border: 2px solid transparent;
+            border-right: 1px solid #111;
+        }
+
     </style>
     <script>
 
@@ -103,7 +125,14 @@
                                     </div>
                                 </div>
                             </div>
-                            @Url.Action("Index", "Home")
+                            <div class="row button-row">
+                                <div class="col col-sm-6">
+                                    <button class="buy-button btn-success">Buy</button>
+                                </div>
+                                <div class="col col-sm-6">
+                                    <button class="sell-button btn-danger">Sell</button>
+                                </div>
+                            </div>
                             <div class="row search">
                                 <div class="col-md-12">
                                     <form asp-action="Search" asp-controller="Account">
@@ -117,7 +146,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8 col-md-offset-2">
+                    <div class="col-md-10 col-md-offset-2">
                         @RenderBody()
                     </div>                   
                 </div>

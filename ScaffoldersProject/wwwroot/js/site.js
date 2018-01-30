@@ -10,11 +10,13 @@ $(document).ready(function () {
     $('#list').click(function (event) {
         event.preventDefault();
         $('#products .item').addClass('list-group-item');
+        $('.list-group-wrapper').css('margin-right', '10px');
     });
     $('#grid').click(function (event) {
         event.preventDefault();
         $('#products .item').removeClass('list-group-item');
         $('#products .item').addClass('grid-group-item');
+        $('.list-group-wrapper').css('margin-right', '0');
     });
 
     $('a[data-confirm]').click(function (ev) {
