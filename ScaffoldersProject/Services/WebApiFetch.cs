@@ -33,11 +33,10 @@ namespace ScaffoldersProject.Services
             _iconfiguration = iconfiguration;
         }
 
-        public async Task<string> WebApiFetchAsync(string url, string path)
+        public async Task<string> WebApiFetchAsync(string path)
         {
             try
             {
-                client.BaseAddress = new Uri(url);
                 HttpResponseMessage response = await client.GetAsync(path);
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -47,12 +46,6 @@ namespace ScaffoldersProject.Services
             {
                 var error = $"Message : {e.Message}";
                 return error;
-            }
-            finally
-            {
-                // Need to call dispose on the HttpClient object
-                // when done using it, so the app doesn't leak resources
-                client.Dispose();
             }
         }
 
