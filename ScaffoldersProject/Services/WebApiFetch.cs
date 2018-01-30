@@ -98,7 +98,7 @@ namespace ScaffoldersProject.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var serializePaymentReq = new DataContractJsonSerializer(typeof(PaymentReq));
-            HttpContent _body = new StringContent(serializePaymentReq, Encoding.UTF8, "application/json");
+            HttpContent _body = new StringContent("", Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync("https://api.sandbox.paypal.com/v1/payments/payment", _body);
 
             //Response           

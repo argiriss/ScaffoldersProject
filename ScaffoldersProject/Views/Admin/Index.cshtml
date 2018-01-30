@@ -21,7 +21,7 @@
     {
         <div class="item  col-sm-6 col-md-4">
             <div class="thumbnail">
-                <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
+                <a asp-area="" asp-controller="Admin" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                     @if (prod.Image == null)
                     {
                         <div class="list-group-wrapper">
@@ -36,7 +36,7 @@
                     }
                 </a>
                 <div class="caption">
-                    <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
+                    <a asp-area="" asp-controller="Admin" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                         <h4 class="group inner list-group-item-heading">
                             @prod.Name
                         </h4>
