@@ -18,14 +18,20 @@ namespace ScaffoldersProject.Controllers
     public class AdminController : Controller
     {
         private IProductRepository _repository;
+        private IWalletRepository _walletRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private MainDbContext _db;
 
-        public AdminController(IProductRepository repository, UserManager<ApplicationUser> userManager, MainDbContext db)
+        public AdminController(IProductRepository repository,
+            UserManager<ApplicationUser> userManager,
+            MainDbContext db,
+            IWalletRepository walletRepository
+        )
         {
             _repository = repository;
             _userManager = userManager;
             _db = db;
+            _walletRepository = walletRepository;
         }
         //_repository.Products returns db.Products which is Products table from database
         //Includes all the products
@@ -129,8 +135,6 @@ namespace ScaffoldersProject.Controllers
             return View(imageView);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Edit(ImageViewModel imageView)
         {
@@ -193,7 +197,9 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult OrderBook()
         {
-            return View();
+            var depositHistoryTable = _walletRepository.GetDepositHistory();
+            //depositHistoryTable.Sort();
+            return View(depositHistoryTable);
         }
     }
 }
