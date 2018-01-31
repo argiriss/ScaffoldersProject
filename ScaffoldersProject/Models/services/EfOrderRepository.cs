@@ -76,10 +76,17 @@ namespace ScaffoldersProject.Models.services
             }//End of foreach loop in cart table
         }
 
-        public async Task<List<Order>> GetClientOrders(string userId)
+        public async Task<List<string>> GetClientOrders(string userId)
         {
             var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
-            return clientOrders;
+            var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
+            var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId)).ToList();
+            var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
+
+            var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
+            var prodNames = orderedProducts.Select(x => x.Name).ToList();
+
+            return prodNames;
         }
     }
 }
