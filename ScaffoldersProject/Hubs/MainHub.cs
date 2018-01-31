@@ -38,11 +38,13 @@ namespace ScaffoldersProject.Hubs
             _walletRepository = walletRepository;
         }
 
-        ////When we invoke from client with Send value end send back message from parameter
-        //public async Task Send(string message)
-        //{
-        //    await Clients.All.InvokeAsync("Send",message);
-        //}
+        //This happens on connection
+        public async override Task OnConnectedAsync()
+        {
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            var clientOrders = await _orderRepository.GetClientOrders(_userManager.GetUserId(Context.User));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Balance", totalAmount.ToString("C"),clientOrders);
+        }
 
         //When we invoke from client with SendClient value
         public  async  Task RemoveItem(int productId)
@@ -55,6 +57,14 @@ namespace ScaffoldersProject.Hubs
             ////After the removal we compute the new total cost
             var totalCost = _cartRepository.ComputeTotalCost(findClientCart.UserCartId);
             await Clients.Client(Context.ConnectionId).InvokeAsync("Remove", $"Product {productName} was successfully removed from your cart!", totalCost.ToString("C"));
+        }
+
+        //Clear cart from all products items
+        public async Task ClearCart()
+        {
+            await _cartRepository.Clear(_userManager.GetUserId(Context.User));
+            var totalCost = 0;
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Clear",totalCost.ToString("c"));
         }
 
         public async Task Buy(string text)

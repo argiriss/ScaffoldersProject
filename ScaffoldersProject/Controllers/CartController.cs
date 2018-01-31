@@ -37,7 +37,7 @@ namespace ScaffoldersProject.Controllers
         }
 
 
-        public ActionResult AddToCart(int productId, int quantity, string returnUrl)
+        public async Task<ActionResult> AddToCart(int productId, int quantity, string returnUrl)
         {
 
             //Find a product with the given Id from the parameters
@@ -50,7 +50,7 @@ namespace ScaffoldersProject.Controllers
                 {
                     quantity = 1;
                 }
-                _cartRepository.AddItem(product, quantity, _userManager.GetUserId(User));
+                await _cartRepository.AddItem(product, quantity, _userManager.GetUserId(User));
             }
             
             return Redirect("Index");

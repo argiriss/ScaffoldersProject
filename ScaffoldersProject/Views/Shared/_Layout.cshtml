@@ -1,6 +1,7 @@
 ﻿<!--Depedency injection of service into view-->
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,16 +50,16 @@
             display: inline-block;
         }
 
-        .sidenav a:visited {
-            color: #818181;
-        }
+            .sidenav a:visited {
+                color: #818181;
+            }
 
-        /* mouse over link */
+            /* mouse over link */
             .sidenav a:hover {
                 color: #d46d15;
             }
 
-        /* selected link */
+            /* selected link */
             .sidenav a:active {
                 color: #d46d15;
             }
@@ -67,13 +68,12 @@
             margin: 15px;
         }
 
-        .row.button-row button {
-            width: 100%;
-            padding: 5px;
-            border: 2px solid transparent;
-            border-right: 1px solid #111;
-        }
-
+            .row.button-row button {
+                width: 100%;
+                padding: 5px;
+                border: 2px solid transparent;
+                border-right: 1px solid #111;
+            }
     </style>
     <script>
         var connection = new signalR.HubConnection('/main');
@@ -82,7 +82,7 @@
             $('.status-glyph').text(" Status OK");
             $('.status-glyph').css('color', 'lightgreen');
             console.log("Started....");
-            connection.invoke('Balance');
+            //connection.invoke('Balance');
         })
             .catch(function (err) {
                 console.log("Error");
@@ -103,12 +103,21 @@
                 <div class="row">
                     <div class="col-md-2 sidenav-col">
                         <div class="sidenav">
+                            <div class="dropdown">
+                                @*startof dropdown*@
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Select Product
+                                    <span class="caret"></span>
+                                </button>
+                                <ul id="dropMenuId" class="dropdown-menu">
+                                </ul>
+                            </div> @*end of dropdown*@
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a href="#services">Deposit History</a>
                             <a href="#clients">Buy History</a>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
-                            
+
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
@@ -264,9 +273,22 @@
     </environment>
     @RenderSection("Scripts", required: false)
     <script>
-        connection.on('balance', function (walletTotal) {
+        //connection.invoke('Balance');
+        connection.on('balance', function (walletTotal, clientOrders) {
             document.getElementById('balanceClientId').innerHTML = walletTotal;
+            dropClientsItems(clientOrders);
         })
+
+        function dropClientsItems(clientOrders) {
+            var parent = document.getElementById('dropMenuId');
+           
+            var i;
+            for (i = 0; i < clientOrders.length; i++) {
+                var liCreate = document.createElement('li');
+                liCreate.innerHTML = clientOrders[i].orderID;
+                parent.appendChild(liCreate);
+            }
+        }
     </script>
 </body>
 </html>

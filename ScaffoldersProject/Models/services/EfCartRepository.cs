@@ -18,13 +18,13 @@ namespace ScaffoldersProject.Models.services
 
         public IQueryable<Cart> Cart => db.Cart;
 
-        public void CartSave(Cart cart)
+        public async Task CartSave(Cart cart)
         {
             db.Cart.Add(cart);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        public void AddItem(Products product, int quantity, string userId)
+        public async Task AddItem(Products product, int quantity, string userId)
         {
             //Check If we find a cartId from this user
             Cart findProductInCart = db.Cart.FirstOrDefault(x => x.UserCartId == userId);
@@ -36,7 +36,7 @@ namespace ScaffoldersProject.Models.services
                 {
                     findInCart.Quantity += quantity;
                     db.Cart.Update(findInCart);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 else
                 {
@@ -47,8 +47,7 @@ namespace ScaffoldersProject.Models.services
                         Quantity = quantity,
                         UserCartId = userId
                     };
-                    db.Cart.Add(findInCart);
-                    db.SaveChanges();
+                    await CartSave(findInCart);
                 }
             }
             else
@@ -60,20 +59,19 @@ namespace ScaffoldersProject.Models.services
                     Quantity = quantity,
                     UserCartId = userId
                 };
-                db.Cart.Add(findProductInCart);
-                db.SaveChanges();
+                await CartSave(findProductInCart);
             }
         }
 
         //Clear all rpoducts from cart
-        public void Clear(string userId)
+        public async Task Clear(string userId)
         {
-            var CartItemsRemove = db.Cart.Where(x => x.UserCartId == userId);
-            foreach (var item in CartItemsRemove)
+            var CartClear = db.Cart.Where(x => x.UserCartId == userId).ToList();
+            foreach (var item in CartClear)
             {
                 db.Cart.Remove(item);
             }
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
 
