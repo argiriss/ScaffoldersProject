@@ -51,6 +51,7 @@ $(document).ready(function () {
     $(function () {
         if ($(".orderbook").length) {
             $('body').css('overflow-y', 'hidden');
+            $('body').css('padding-bottom', '0');
             $('.full-screen').css('padding', '0');
         }
     });

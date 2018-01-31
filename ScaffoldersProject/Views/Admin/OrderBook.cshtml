@@ -9,12 +9,12 @@
         <div id="Sell" class="half-page" style="background:#111; overflow-y:scroll;">
 
         </div>
-        <div id="Buy" class="half-page" style="background:yellow; overflow-y:scroll;">
+        <div id="Buy" class="half-page" style="background:yellow; padding-left: 10px; overflow-y: scroll;">
             <table id="depositId">
                 <thead>
                     <tr>
-                        <th class="text-center">Price</th>
-                        <th class="text-center">Time</th>
+                        <th>Price</th>
+                        <th>Time</th>
                     </tr>
                 </thead>
                 @foreach (var item in Model)
@@ -96,5 +96,12 @@
             }
         }
     });
+    var i = myChart.data.datasets.length;
+    setInterval(function () {
+        myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
+        myChart.data.labels[i] = "test";
+        myChart.update();
+        i++;
+    }, 1000);
 
 </script>

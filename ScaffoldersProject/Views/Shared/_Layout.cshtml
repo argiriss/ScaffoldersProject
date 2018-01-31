@@ -161,7 +161,7 @@
             else if (User.IsInRole("Admin"))
             {
                 <div class="row">
-                    <div class="col-sm-2 sidenav-col">
+                    <div class="col-md-2 sidenav-col">
                         <div class="sidenav">
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Index">View Products</a>
@@ -196,7 +196,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-10 col-sm-offset-2 full-screen">
+                    <div class="col-md-10 col-md-offset-2 full-screen">
                         @RenderBody()
                     </div>
                 </div>
