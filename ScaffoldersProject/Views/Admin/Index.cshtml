@@ -4,69 +4,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<div class="well well-sm">
-    <strong>Display</strong>
-    <div class="btn-group">
-        <a href="#" id="list" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-th-list">
-            </span>List
-        </a> <a href="#" id="grid" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-th"></span>Grid
-        </a>
-    </div>
-</div>
-<div id="products" class="row list-group">
+<table class="table table-responsive table-condensed">
+    <tr>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Product Price
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
     @foreach (var prod in Model)
-    {
-        <div class="item  col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <a asp-area="" asp-controller="Admin" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                    @if (prod.Image == null)
-                    {
-                        <div class="list-group-wrapper">
-                            <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="list-group-wrapper">
-                            <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 100%; height:250px;" alt="" />
-                        </div>
-                    }
-                </a>
-                <div class="caption">
-                    <a asp-area="" asp-controller="Admin" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
-                        <h4 class="group inner list-group-item-heading">
-                            @prod.Name
-                        </h4>
-                    </a>
-                    <p class="group inner list-group-item-text">
-                        @prod.Description
-                    </p>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <p class="lead">
-                                @prod.Price.ToString("c")
-                            </p>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-
-                            @if (!User.IsInRole("Admin"))
-                            {
-                                <a class="btn btn-success" href="#">Add to cart</a>
-                            }
-                            else
-                            {
-                                <a asp-action = "Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
-                                <a asp-action="Delete" class="btn btn-primary" data-confirm="Are you sure you want to delete product @prod.Name?" asp-route-productId="@prod.ProductId">Delete</a>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    { 
+    <tr>
+        <td>
+            @prod.Name
+        </td>
+        <td>
+            @prod.Price.ToString("C")
+        </td>
+        <td>
+            <a asp-action="Edit" class="btn btn-warning" asp-route-productId="@prod.ProductId">Edit</a>
+            <a asp-action="Delete" class="btn btn-primary" data-confirm="Are you sure you want to delete product @prod.Name?" asp-route-productId="@prod.ProductId">Delete</a>
+        </td>
+    </tr>
     }
-</div>
+
+    </table>
                         
               
