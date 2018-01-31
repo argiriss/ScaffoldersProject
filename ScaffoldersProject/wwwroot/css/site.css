@@ -223,7 +223,7 @@ video{
 }
 
 .modal-header, .modal-body, .modal-footer {
-    background: #415867;
+    background: #4f8cb3;
 }
 
 .modal-header h4, .modal-body h4, .modal-footer h4, .modal-header label, .modal-body label, .modal-footer label {
@@ -389,7 +389,12 @@ td.deposit-amount {
     }
 
     .sidenav-col {
+        height:auto;
         position: static;
+    }
+
+    .sidenav a{
+        display:block !important;
     }
 
 }
