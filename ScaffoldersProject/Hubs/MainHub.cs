@@ -80,8 +80,9 @@ namespace ScaffoldersProject.Hubs
 
             //var orderPrice = _cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
             //var orderPrice = 0;
+            var totalCost = 0;
 
-            await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok");
+            await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok",totalCost.ToString("c"));
         }
 
         public async Task Deposit(string amount)

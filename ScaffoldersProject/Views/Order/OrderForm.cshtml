@@ -16,7 +16,8 @@
 
     <script>
 
-        connection.on('BuyItem', function (message) {
+        connection.on('BuyItem', function (message,totalCost) {
+            document.getElementById('cartId').innerHTML = '('+totalCost+')';
             alert(message);
         });
 
