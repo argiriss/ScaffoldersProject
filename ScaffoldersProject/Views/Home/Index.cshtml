@@ -1,4 +1,8 @@
-﻿@{
+﻿@model List<Crypto>
+@using ScaffoldersProject.Services.CryptoObj
+
+
+@{
     ViewData["Title"] = "Home Page";
 
 }
@@ -15,3 +19,12 @@
     </div>
 </div>
 
+<marquee style="font-family: Impact; font-size: 18pt">
+    @foreach (var item in Model)
+    {
+        <span class="banner"> @item.symbol:</span>
+        <span class="banner"> @item.price_eur €|| </span>
+
+
+    }
+</marquee>
