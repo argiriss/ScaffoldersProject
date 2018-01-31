@@ -12,7 +12,7 @@ namespace ScaffoldersProject.Models.services
         //Methods 
         //We can add more methods...........
         Task AddNewOrder(Order orderDetails);
-        Task<List<Order>> GetClientOrders(string userId);
+        Task<List<string>> GetClientOrders(string userId);
 
 
         //void SaveOrder(Order order);
