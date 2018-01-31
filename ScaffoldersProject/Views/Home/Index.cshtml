@@ -7,6 +7,16 @@
 
 }
 <div class="video-screen">
+    <div id="crypto-bar">
+        <marquee style="font-family: Impact; font-size: 18pt">
+            @foreach (var item in Model)
+            {
+                <span class="crypto-divider">|</span>
+                <span class="crypto-symbol"> @item.symbol:</span>
+                <span class="crypto-price"> @item.price_eur.ToString("C4")</span>
+            }
+        </marquee>
+    </div>
     <video autoplay loop muted poster="~/images/background.png" style="margin: auto; visibility: visible; opacity: 1; width: 100%; height: 100%;">
         <source src="~/video/intro.mp4" type="video/mp4">
     </video>
@@ -19,12 +29,4 @@
     </div>
 </div>
 
-<marquee style="font-family: Impact; font-size: 18pt">
-    @foreach (var item in Model)
-    {
-        <span class="banner"> @item.symbol:</span>
-        <span class="banner"> @item.price_eur €|| </span>
 
-
-    }
-</marquee>

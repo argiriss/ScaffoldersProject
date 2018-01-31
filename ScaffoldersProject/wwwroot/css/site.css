@@ -108,6 +108,20 @@ video{
     object-fit:fill;
 }
 
+div#crypto-bar {
+    position: absolute;
+    background: #ddd;
+}
+
+span.crypto-divider {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.crypto-price {
+    color:#d46d15;
+}
+
 #scroll {
     position: absolute;
     margin-left: auto;
