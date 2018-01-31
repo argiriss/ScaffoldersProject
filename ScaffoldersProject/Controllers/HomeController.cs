@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Services;
+using ScaffoldersProject.Services.CryptoObj;
+using Newtonsoft.Json;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -19,9 +21,11 @@ namespace ScaffoldersProject.Controllers
             _webApiFetch = webApiFetch;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=20");
+            List<Crypto> cryptos = JsonConvert.DeserializeObject<List<Crypto>>(send);      
+            return View(cryptos);
         }
 
         public IActionResult About()
@@ -50,9 +54,9 @@ namespace ScaffoldersProject.Controllers
 
         public async Task<IActionResult> Test()
         {
-            //var send = await _webApiFetch.PaypalToken("https://api.sandbox.paypal.com/v1/oauth2/token");
-            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinbase.com/v2/prices/spot?currency=EUR");
-            ViewBag.type = send;
+
+            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=10");
+            ViewBag.send = send;
             return View();
         }
     }
