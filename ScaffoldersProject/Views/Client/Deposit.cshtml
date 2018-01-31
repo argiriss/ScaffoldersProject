@@ -16,7 +16,7 @@
         <div id="paypal-button-container"></div>
     </div>
     <div class="col-md-6">
-        <table class="table table-responsive">
+        <table id="deposit-calculator" class="table table-responsive">
             <thead>
                 <tr>
                     <th class="text-center" colspan="2">CALCULATE DEPOSIT</th>
@@ -24,16 +24,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <td style="width:50px">Deposit</td>
-                    <td><span id="deposit-amount"></span></td>
+                    <td class="deposit-prefix" style="width:50px">Deposit</td>
+                    <td class="deposit-amount"><span id="deposit-amount"></span></td>
                 </tr>
                 <tr>
-                    <td style="width:50px">Our fee</td>
-                    <td><span id="fee-amount"></span></td>
+                    <td class="deposit-prefix" style="width:50px">Our fee</td>
+                    <td class="deposit-amount"><span id="fee-amount"></span></td>
                 </tr>
                 <tr>
-                    <td style="width:50px">Total</td>
-                    <td><span id="total-amount"></span></td>
+                    <td class="deposit-prefix" style="width:50px">Total</td>
+                    <td class="deposit-amount"><span id="total-amount"></span></td>
                 </tr>
             </tbody>
         </table>
