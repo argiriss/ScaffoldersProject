@@ -37,28 +37,28 @@
             <form asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
                 <input type="hidden" name="productId" value=@Model.Product.ProductId>
                 @if (Model.Product.Stock <= 0)
-                {
-                    <h5 class="text-danger">Currently out of stock</h5>
-                }
-                else
-                {
-                        <span style="font-size:23px">Quantity</span>
-                        <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
-                        <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
+    {
+            <h5 class="text-danger">Currently out of stock</h5>
+}
+else
+{
+            <span style="font-size:23px">Quantity</span>
+            <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
+            <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
 
-                }
+}
+
+                    @if (Model.Product.Stock > 0)
+        {
+            <button class="btn btn-primary" type="submit">Add To Cart</button>
+}
+                    <button class="btn btn-primary" type="submit">Add To Wish List</button>
+                    <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
 
             </form>
         </div>
         
-        <div>
-            @if (Model.Product.Stock > 0)
-        {
-            <button class="btn btn-primary" type="submit">Add To Cart</button>
-    }
-            <button class="btn btn-primary" type="submit">Add To Wish List</button>
-            <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
-        </div>
+        
     </div>
     <div class="col-md-3"></div>
     </div>

@@ -70,6 +70,12 @@ namespace ScaffoldersProject.Models.services
             return deposits;
         }
 
+        public List<Deposit> GetDepositHistory(string userId)
+        {
+            var UserDeposits = db.Deposit.Where(x=>x.UserDepositId==userId).ToList();
+            return UserDeposits;
+        }
+
 
     }
 }

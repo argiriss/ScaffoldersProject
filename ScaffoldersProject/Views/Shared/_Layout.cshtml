@@ -114,10 +114,10 @@
                             </div> @*end of dropdown*@
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
-                            <a href="#services">Deposit History</a>
+                            <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
                             <a href="#clients">Buy History</a>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
-
+                            
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@

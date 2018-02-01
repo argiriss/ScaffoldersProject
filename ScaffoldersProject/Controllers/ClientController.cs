@@ -21,6 +21,7 @@ namespace ScaffoldersProject.Controllers
     {
         private IProductRepository _repository;
         private ICartRepository _cartRepository;
+        private IWalletRepository _walletRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebApiFetch _webApiFetch;
         private static string token;
@@ -31,12 +32,14 @@ namespace ScaffoldersProject.Controllers
         public ClientController(IProductRepository repository,
             ICartRepository cartRepository,
             UserManager<ApplicationUser> userManager,
-            IWebApiFetch webApiFetch)
+            IWebApiFetch webApiFetch,
+            IWalletRepository walletRepository)
         {
             _repository = repository;
             _cartRepository = cartRepository;
             _userManager = userManager;
             _webApiFetch = webApiFetch;
+            _walletRepository = walletRepository;
         }
 
         public IActionResult Index()
@@ -144,6 +147,14 @@ namespace ScaffoldersProject.Controllers
         public IActionResult Cancel()
         {
             return View();
+        }
+
+        public async Task<IActionResult> DepositHistory()
+        {
+            var userId =  _userManager.GetUserId(User);
+            var depositHistoryTable = _walletRepository.GetDepositHistory(userId);
+            //depositHistoryTable.Sort();
+            return View(depositHistoryTable);
         }
     }
 }
