@@ -78,15 +78,17 @@
                 <div class="row">
                     <div class="col-md-2 sidenav-col">
                         <div class="sidenav">
-                            <div class="dropdown">
-                                @*startof dropdown*@
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Select Product
-                                    <span class="caret"></span>
-                                </button>
-                                <ul id="dropMenuId" class="dropdown-menu">
-                                </ul>
-                            </div> @*end of dropdown*@
+                            <div class="row">
+                                <div class="dropdown">
+                                    @*startof dropdown*@
+                                    <button id="dropdown-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        <span id="dropdown-button-text">Select Product</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="dropMenuId" class="dropdown-menu"></ul>
+                                </div> @*end of dropdown*@
+                            </div>
+                            
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
@@ -101,6 +103,10 @@
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-3">Euro</div>
                                         <div id="balanceClientId" class="col-md-9 text-right"></div>
+                                    </div>
+                                    <div class="row" style="font-size:20px" id="dropdown-option-row">
+                                        <div id="dropdown-option-text" class="col-md-6">Your coin</div>
+                                        <div class="col-md-6 text-center"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
@@ -259,10 +265,14 @@
             var i;
             for (i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
-                liCreate.innerHTML = clientOrders[i];
+                var aCreate = document.createElement('a');
+                aCreate.classList.add('dropdown-link');
+                liCreate.appendChild(aCreate);
+                aCreate.innerHTML = clientOrders[i];
                 parent.appendChild(liCreate);
             }
         }
+        
 
         //Start signalR connection
         connection.start().then(function () {

@@ -56,6 +56,12 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on("click", "a.dropdown-link", function () {
+        $linktext = $(this).text();
+        $('#dropdown-button-text').text($linktext);
+        $("#dropdown-option-text").text($linktext);
+    });
+
     $(function () {
         if ($("#scroll").length) {
             $('body').css('overflow-x', 'hidden');

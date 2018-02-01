@@ -270,6 +270,17 @@ span.crypto-divider {
     height: 100vh;
 }
 
+button#dropdown-button {
+    width: 100%;
+    background: orangered;
+    border-color: orangered;
+    border-radius:0;
+}
+
+ul#dropMenuId {
+    width: 100%;
+    background:#ddd;
+}
 
 .header {
     position: absolute;
