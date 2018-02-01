@@ -15,6 +15,7 @@ namespace ScaffoldersProject.Controllers
         private ICartRepository _cartRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private IOrderRepository _orderRepository;
+        
 
         public OrderController(IProductRepository repository , ICartRepository cartRepository, UserManager<ApplicationUser> userManager,  IOrderRepository orderRepository)
         {
@@ -30,6 +31,14 @@ namespace ScaffoldersProject.Controllers
             
             return View();
         }
+
+        //
+        //public void  AddOffer(decimal price , double quantity , int productId)
+        //{
+        //    string userid = _userManager.GetUserId(User);
+        //    _orderRepository.AddOffer(userid , price , quantity ,productId);
+
+        //}
 
         //public IActionResult CompleteOrder(string Name, string Address1, string Address2, string City, string Country, int Zip)
         //{

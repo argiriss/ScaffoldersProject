@@ -15,6 +15,8 @@ namespace ScaffoldersProject.Data
         public DbSet<Order> Order { get; set; }
         public DbSet<CartOrder> CartOrder { get; set; }
         public DbSet<Deposit> Deposit { get; set; }
+        public DbSet<Offer> Offer { get; set; }
+        public DbSet<Ask> Ask { get; set; }
 
         //We can add other models ............
 

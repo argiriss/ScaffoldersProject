@@ -56,7 +56,7 @@
         {
             <button class="btn btn-primary" type="submit">Add To Cart</button>
     }
-            <button class="btn btn-primary" type="submit">Add To Wish List</button>
+            <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
             <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
         </div>
     </div>
@@ -99,5 +99,42 @@
             }
         }
     </div>
+@*Modal*@
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Place your bid</h4>
+            </div>
+            <div class="modal-body">
+                
+                    <input type="hidden" id="productId" value="@Model.Product.ProductId"/>
+                    <span>@Model.Product.Name</span><br>
+                    <span>Quantity</span><input type="number" min="0" name="quantity" id="quantity"/>
+                    <span>Price</span><input type="text" min="0" max="@Model.Product.Price" name="price" id="price" />
+                    <button class="btn btn-primary" onclick="btnPlaceBid()">Bid</button>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function btnPlaceBid() { 
+        var productId = document.getElementById('productId').value; //take productId from user's bid
+        var desiredPrice = document.getElementById('price').value;
+        var desiredQuantity = document.getElementById('quantity').value;
+        console.log(productId);
+        connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
+    };
+</script>
+
 
 
