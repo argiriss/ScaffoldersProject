@@ -21,6 +21,9 @@ namespace ScaffoldersProject.Hubs
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
         private IWalletRepository _walletRepository;
+        private IAskRepository _askRepository;
+        private IOfferRepository _offerRepository;
+        
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
         
@@ -29,13 +32,18 @@ namespace ScaffoldersProject.Hubs
             ICartRepository cartRepository, 
             IOrderRepository orderRepository, 
             IProductRepository productRepository,
-            IWalletRepository walletRepository)
+            IWalletRepository walletRepository,
+            IAskRepository askRepository,
+            IOfferRepository offerRepository
+           )
         {
             _userManager = userManager;
             _cartRepository = cartRepository;
             _orderRepository = orderRepository;
             _productRepository = productRepository;
             _walletRepository = walletRepository;
+            _askRepository = askRepository;
+            _offerRepository = offerRepository;
         }
 
         //This happens on connection
@@ -102,6 +110,12 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("Balance", totalAmount.ToString("C"));
         }
-
+       
+        //when user place a bid and asks a price and a quanity for specific product
+        public async Task PlaceBid(int productId , decimal desiredPrice, double desiredQuantity)
+        {
+            await _askRepository.AddAsk(_userManager.GetUserId(Context.User), desiredPrice, desiredQuantity, productId);
+            await Clients.All.InvokeAsync("Poutsa");    
+        }
     }
 }
