@@ -143,6 +143,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Cancel()
         {
+          
             return View();
         }
     }
