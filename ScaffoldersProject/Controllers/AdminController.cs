@@ -40,7 +40,9 @@ namespace ScaffoldersProject.Controllers
         {
             //procedure to View the Image and convert the _repository.Product to View Model
             var viewImageList = new List<ViewImageViewModel>();
-            foreach (var product in _repository.Products)
+            //Show omly the approved Prducts
+            var productsListsApproved = _repository.Products.Where(x => x.AdminApproved == true).ToList();
+            foreach (var product in productsListsApproved)
             {
                 var viewImage = new ViewImageViewModel
                 {
@@ -65,7 +67,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult NewProducts()
         {
-        //    var productsUnverified = _repository.Products.Where(i => i.AdminApproved==false);
+
             return View(_repository.Products);
         }
 
@@ -103,9 +105,8 @@ namespace ScaffoldersProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveProducts(IEnumerable<SaveProductsViewModel> productList)
+        public IActionResult SaveProducts(IEnumerable<Products> productList)
         {
-            
             foreach (var item in productList)
             {
                 if (item.AdminApproved)
@@ -115,7 +116,6 @@ namespace ScaffoldersProject.Controllers
                     _repository.UpdateProduct(changedProduct);
                 }
             }
-
             return RedirectToAction(nameof(Index));
         }
 

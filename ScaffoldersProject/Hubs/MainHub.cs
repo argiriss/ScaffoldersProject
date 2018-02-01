@@ -51,7 +51,7 @@ namespace ScaffoldersProject.Hubs
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             var clientOrders = await _orderRepository.GetClientOrders(_userManager.GetUserId(Context.User));
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Balance", totalAmount.ToString("C"),clientOrders);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"),clientOrders);
         }
 
         //When we invoke from client with SendClient value
@@ -105,10 +105,10 @@ namespace ScaffoldersProject.Hubs
             await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
         }
 
-        public async Task Balance()
+        public async Task Wallet()
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Balance", totalAmount.ToString("C"));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"));
         }
        
         //when user place a bid and asks a price and a quanity for specific product

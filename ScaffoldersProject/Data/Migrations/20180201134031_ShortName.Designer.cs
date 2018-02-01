@@ -11,38 +11,15 @@ using System;
 namespace ScaffoldersProject.Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180201134031_ShortName")]
+    partial class ShortName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("ScaffoldersProject.Models.Ask", b =>
-                {
-                    b.Property<int>("AskId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateofAsk");
-
-                    b.Property<bool>("IsMatched");
-
-                    b.Property<decimal>("PriceAsk");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<double>("Quantity");
-
-                    b.Property<string>("UserAskId");
-
-                    b.HasKey("AskId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Ask");
-                });
 
             modelBuilder.Entity("ScaffoldersProject.Models.Cart", b =>
                 {
@@ -98,30 +75,6 @@ namespace ScaffoldersProject.Data.Migrations
                     b.ToTable("Deposit");
                 });
 
-            modelBuilder.Entity("ScaffoldersProject.Models.Offer", b =>
-                {
-                    b.Property<int>("OfferId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DateofOffer");
-
-                    b.Property<bool>("IsMatched");
-
-                    b.Property<decimal>("PriceOffer");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<double>("Quantity");
-
-                    b.Property<string>("UserOfferId");
-
-                    b.HasKey("OfferId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Offer");
-                });
-
             modelBuilder.Entity("ScaffoldersProject.Models.Order", b =>
                 {
                     b.Property<int>("OrderID")
@@ -169,14 +122,6 @@ namespace ScaffoldersProject.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("ScaffoldersProject.Models.Ask", b =>
-                {
-                    b.HasOne("ScaffoldersProject.Models.Products", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("ScaffoldersProject.Models.Cart", b =>
                 {
                     b.HasOne("ScaffoldersProject.Models.Products", "Product")
@@ -192,14 +137,6 @@ namespace ScaffoldersProject.Data.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ScaffoldersProject.Models.Products", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ScaffoldersProject.Models.Offer", b =>
-                {
                     b.HasOne("ScaffoldersProject.Models.Products", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")

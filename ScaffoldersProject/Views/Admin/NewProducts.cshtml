@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<form method="post" action="SaveProducts">
+<form method="post" asp-controller="Admin" asp-action="SaveProducts">
     <table class="table table-responsive table-striped table-bordered">
         <tr>
             <th>Id</th>
@@ -32,8 +32,8 @@
                         <label><input type="checkbox" name="[@i].AdminApproved" value="true"></label>
                     </td>
                 </tr>
+                i++;
             }
-            i++;
         }
     </table>
     <button class="btn btn-primary" type="submit">Save</button>
