@@ -45,7 +45,7 @@
         $value = (this).value.replace(',','.');
         $fee = ($value * 0.05).toFixed(2);
         $total = ($value - ($value * 0.05)).toFixed(2);
-        if ($value.match(/\d+.*\d*/)) {
+        if ($value.match(/\d+.*\d*/) && !isNaN($fee) && !isNaN($total)) {
             $('#deposit-amount').empty();
             $('#deposit-amount').append($value + '€');
             $('#fee-amount').empty();

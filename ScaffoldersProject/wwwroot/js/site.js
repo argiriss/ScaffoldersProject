@@ -2,7 +2,7 @@
 
 $("#scroll").click(function () {
     $('html, body').animate({
-        scrollTop: $("#myCarousel").offset().top
+        scrollTop: $("#perks").offset().top
     }, 1000);
 });
 
@@ -54,6 +54,12 @@ $(document).ready(function () {
             $('body').css('padding-bottom', '0');
             $('.full-screen').css('padding', '0');
         }
+    });
+
+    $(document).on("click", "a.dropdown-link", function () {
+        $linktext = $(this).text();
+        $('#dropdown-button-text').text($linktext);
+        $("#dropdown-option-text").text($linktext);
     });
 
     $(function () {
