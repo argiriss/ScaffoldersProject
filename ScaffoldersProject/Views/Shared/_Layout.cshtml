@@ -62,6 +62,8 @@
                 border: 2px solid transparent;
                 border-right: 1px solid #111;
             }
+
+            
     </style>
     <script>
         var connection = new signalR.HubConnection('/main');
@@ -97,10 +99,14 @@
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
+                                    <div><h2 style="color:white">Wallet</h2></div>
+                                    <div class="row" style="font-size:20px">
+                                        <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
+                                    </div>
                                     <div><h2 style="color:white">Balance</h2></div>
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-3">Euro</div>
-                                        <div id="balanceClientId" class="col-md-9 text-right"></div>
+                                        <div id="balanceClientId" class="col-md-9 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
@@ -149,13 +155,9 @@
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
-                                    <div><h2 style="color:white">Balance</h2></div>
+                                    <div><h2 style="color:white">Wallet</h2></div>
                                     <div class="row" style="font-size:20px">
-                                        <div class="col-md-3">Euro</div>
-                                        <div id="balanceClientId" class="col-md-9 text-right"></div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" style="margin-bottom:5px">Deposit</button>
+                                        <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -189,13 +191,9 @@
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
-                                    <div><h2 style="color:white">Balance</h2></div>
+                                    <div><h2 style="color:white">Wallet</h2></div>
                                     <div class="row" style="font-size:20px">
-                                        <div class="col-md-3">Euro</div>
-                                        <div class="col-md-9 text-right"></div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" data-toggle="modal" data-target=".bootstrapmodal" style="margin-bottom:5px">Deposit</button>
+                                        <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -248,9 +246,10 @@
     </environment>
     @RenderSection("Scripts", required: false)
     <script>
-        //connection.invoke('Balance');
-        connection.on('balance', function (walletTotal, clientOrders) {
-            document.getElementById('balanceClientId').innerHTML = walletTotal;
+        //Receive from server
+        connection.on('Wallet', function (walletTotal, clientOrders) {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById('walletId').innerHTML = walletTotal;
             dropClientsItems(clientOrders);
         })
 

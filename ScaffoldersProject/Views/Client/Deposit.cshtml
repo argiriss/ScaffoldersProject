@@ -110,7 +110,7 @@
     }, '#paypal-button-container');
 
     connection.on('Success', function (amount) {
-        document.getElementById('balanceClientId').innerHTML = amount;
+        document.getElementById('walletId').innerHTML = amount;
     });
 
     function Success(amount) {

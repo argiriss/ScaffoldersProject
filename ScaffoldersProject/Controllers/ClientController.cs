@@ -46,7 +46,9 @@ namespace ScaffoldersProject.Controllers
         {
             //Turn repo.Products into a List of View Model to return in the View
             var viewImageList = new List<ViewImageViewModel>();
-            foreach (var product in _repository.Products)
+            //Show omly the approved Prducts
+            var productsListsApproved = _repository.Products.Where(x => x.AdminApproved == true).ToList();
+            foreach (var product in productsListsApproved)
             {
                 var viewImage = new ViewImageViewModel
                 {
