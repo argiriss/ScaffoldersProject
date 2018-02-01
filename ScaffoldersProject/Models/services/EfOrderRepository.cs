@@ -12,6 +12,7 @@ namespace ScaffoldersProject.Models.services
         private MainDbContext db;
 
         public IQueryable<Order> Orders => db.Order;
+        
 
         //Depedency injection implemented on constructor.Instatiate db object
         public EfOrderRepository(MainDbContext db)
@@ -88,5 +89,49 @@ namespace ScaffoldersProject.Models.services
 
             return prodNames;
         }
+        //method for adding the offer to Offer table in database
+        //public void AddOffer(string userId, decimal price, double quantity , int productId)
+        //{
+        //    var sameOffer = db.Offer.Single(x => x.PriceOffer == price && x.ProductId == productId);
+        //    //if the product already exists with same price then increase the quanity
+        //    if (sameOffer != null)
+        //    {
+        //        sameOffer.Quantity += quantity;
+        //        db.Offer.Update(sameOffer);
+        //    }
+        //    //if not initialize a new offer and add to table Offer
+        //    else
+        //    {
+        //        var offer = new Offer
+        //        {
+        //            Quantity = quantity,
+        //            PriceOffer = price,
+        //            DateofOffer = DateTime.Now,
+        //            UserOfferId = userId,
+        //            ProductId=productId
+
+        //        };
+        //        db.Offer.Add(offer);
+        //    }
+        //    db.SaveChanges();
+        //}
+
+        ////method for adding an ask
+        //public void AddAsk(string userId, decimal price, double quantity, int productId)
+        //{
+        //    var Ask = new Ask
+        //    {
+        //        Quantity = quantity,
+        //        PriceAsk = price,
+        //        DateofAsk = DateTime.Now,
+        //        UserAskId = userId,
+        //        ProductId = productId
+        //    };
+        //    db.Ask.Add(Ask);
+        //    db.SaveChanges();
+        //}
+
+
+
     }
 }

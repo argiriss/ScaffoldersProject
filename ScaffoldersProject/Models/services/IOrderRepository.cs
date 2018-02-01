@@ -14,6 +14,8 @@ namespace ScaffoldersProject.Models.services
         Task AddNewOrder(Order orderDetails);
         Task<List<string>> GetClientOrders(string userId);
 
+        //methods for my order book 
+        
 
         //void SaveOrder(Order order);
 

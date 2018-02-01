@@ -2,7 +2,7 @@
 
 $("#scroll").click(function () {
     $('html, body').animate({
-        scrollTop: $("#myCarousel").offset().top
+        scrollTop: $("#perks").offset().top
     }, 1000);
 });
 
