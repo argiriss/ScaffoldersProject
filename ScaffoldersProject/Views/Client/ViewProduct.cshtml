@@ -52,9 +52,12 @@
             </form>
         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
+=======
+>>>>>>> Thodoris
         
         <div>
             @if (Model.Product.Stock > 0)
@@ -64,7 +67,14 @@
             <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
             <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
         </div>
+<<<<<<< HEAD
 
+=======
+
+
+
+@*>>>>>>> 598941ff308b16a727f249ba1ce2350601ae2fb9*@
+>>>>>>> Thodoris
     </div>
     <div class="col-md-3"></div>
 </div>
@@ -104,9 +114,11 @@
                     count += 1;
                 }
         }
+
      }
 </div>
     
+
 
 @*Modal*@
 <div class="modal fade" id="myModal" role="dialog">
@@ -144,6 +156,4 @@
         connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
     };
 </script>
-
-
 
