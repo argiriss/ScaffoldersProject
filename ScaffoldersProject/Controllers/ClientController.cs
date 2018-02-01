@@ -150,6 +150,13 @@ namespace ScaffoldersProject.Controllers
             return View();
         }
 
+        public IActionResult OrderBook()
+        {
+            var depositHistoryTable = _walletRepository.GetDepositHistory();
+            //depositHistoryTable.Sort();
+            return View(depositHistoryTable);
+        }
+
         public async Task<IActionResult> DepositHistory()
         {
             var userId =  _userManager.GetUserId(User);
