@@ -103,8 +103,8 @@ namespace ScaffoldersProject.Services
                 },
                 redirect_urls=new PaymentObj.Redirect_Urls
                 {
-                    return_url= "http://localhost:61971/Client/Success",
-                    cancel_url= "http://localhost:61971/Client/Cancel"
+                    return_url= "/Client/Success",
+                    cancel_url= "/Client/Cancel"
                 },
                 transactions=new PaymentObj.Transaction[]
                 {

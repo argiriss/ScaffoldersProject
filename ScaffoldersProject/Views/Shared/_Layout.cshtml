@@ -21,26 +21,14 @@
               asp-fallback-href="/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.css" />
-        <!--SignalR client-->
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <!--SignalR client-->
         <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
     </environment>
     <style>
         body {
             font-family: "Lato", sans-serif;
         }
-
-        /*.sidenav {
-            height: 100%;
-            width: 160px;
-            z-index: 1;
-            background-color: #111;
-            overflow-x: hidden;
-            height: 100vh;
-            padding-top: 20px;
-            padding: 20px 15px 0px 0px;
-            position: fixed;
-        }*/
 
         .sidenav a {
             padding: 6px 8px 6px 16px;
@@ -77,24 +65,11 @@
     </style>
     <script>
         var connection = new signalR.HubConnection('/main');
-        connection.start().then(function () {
-            $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
-            $('.status-glyph').text(" Status OK");
-            $('.status-glyph').css('color', 'lightgreen');
-            console.log("Started....");
-            //connection.invoke('Balance');
-        })
-            .catch(function (err) {
-                console.log("Error");
-                $('.status-glyph').text("Error");
-            })
     </script>
 </head>
 
-
 <body>
     @await Html.PartialAsync("_LoginPartial")
-
     <div class="container-fluid">
         @if (SignInManager.IsSignedIn(User))
         {
@@ -280,8 +255,7 @@
         })
 
         function dropClientsItems(clientOrders) {
-            var parent = document.getElementById('dropMenuId');
-           
+            var parent = document.getElementById('dropMenuId');         
             var i;
             for (i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
@@ -289,6 +263,18 @@
                 parent.appendChild(liCreate);
             }
         }
+
+        //Start signalR connection
+        connection.start().then(function () {
+            $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
+            $('.status-glyph').text(" Status OK");
+            $('.status-glyph').css('color', 'lightgreen');
+            console.log("Started....");
+        })
+            .catch(function (err) {
+                console.log("Error");
+                $('.status-glyph').text("Error");
+            })
     </script>
 </body>
 </html>
