@@ -1,10 +1,8 @@
 ﻿@model SameCategoryViewModel
-
 @{
     ViewData["Title"] = "ViewProduct";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <header class="bg-faded p-1">
     <h3 class="text-center" style="color:#d46d15">
         @Model.Product.Name
@@ -28,7 +26,6 @@
                 </div>
             </div>
         </section>
-        
 
     </div>
     <div class="col-md-3 product-info">
@@ -42,62 +39,73 @@
                 }
                 else
                 {
-                        <span style="font-size:23px">Quantity</span>
-                        <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
-                        <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
-
+                    <span style="font-size:23px">Quantity</span>
+                    <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
+                    <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
                 }
-
+                @if (Model.Product.Stock > 0)
+                {
+                    <button class="btn btn-primary" type="submit">Add To Cart</button>
+                }
+                <button class="btn btn-primary" type="submit">Add To Wish List</button>
+                <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
             </form>
         </div>
+<<<<<<< HEAD
         
         <div>
             @if (Model.Product.Stock > 0)
-        {
+            {
             <button class="btn btn-primary" type="submit">Add To Cart</button>
-    }
+            }
             <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
             <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
         </div>
+
+
+
+@*>>>>>>> 598941ff308b16a727f249ba1ce2350601ae2fb9*@
     </div>
     <div class="col-md-3"></div>
-    </div>
-    <br />
-    <div class="row">
-        @{ int count = 0;
-            @foreach (var product in Model.SimilarViewImage)
+</div>
+<br />
+<div class="row">
+    @{ int count = 0;
+        @foreach (var product in Model.SimilarViewImage)
             {
-                @if (count <= 2 && product.Name != Model.Product.Name)
+            @if (count <= 2 && product.Name != Model.Product.Name)
                 {
-                    <div class="col-md-2" style="margin-right:8%;">
+                <div class="col-md-2" style="margin-right:8%;">
+                    <section class="card m-1 p-1">
+                        <header class="bg-faded p-1">
+                            <h4>
+                                <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">@product.Name</a>
+                                <span class="badge" style="background-color:black">
+                                    <small><b style="color:orangered">@product.Price.ToString("c")</b></small>
+                                </span>
+                            </h4>
+                        </header>
                         <section class="card m-1 p-1">
-                            <header class="bg-faded p-1">
-                                <h4>
-                                    <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">@product.Name</a>
-                                        <span class="badge" style="background-color:black">
-                                            <small><b style="color:orangered">@product.Price.ToString("c")</b></small>
-                                        </span>
-                                </h4>
-                            </header>
-                            <section class="card m-1 p-1">
-                                @if (product.Image == null)
+                            @if (product.Image == null)
                             {
-                            <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
-                                <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                            </a>
+                                <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
+                                    <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                                </a>
                             }
                             else
                             {
-                            <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
-                                <img class="group list-group-image" src="data:@product.ContentType;base64,@product.Image" style="width: 200px;" alt="" /></a>
-                                }
-                            </section>
+                                <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
+                                    <img class="group list-group-image" src="data:@product.ContentType;base64,@product.Image" style="width: 200px;" alt="" />
+                                </a>
+                            }
                         </section>
-                    </div>
-                    count += 1;
-                }
+                    </section>
+                </div>
+                count += 1;
             }
         }
+        }
+
     </div>
 @*Modal*@
 <div class="modal fade" id="myModal" role="dialog">
@@ -135,6 +143,5 @@
         connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
     };
 </script>
-
 
 

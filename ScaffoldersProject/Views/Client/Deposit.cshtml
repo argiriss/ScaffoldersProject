@@ -45,7 +45,7 @@
         $value = (this).value.replace(',','.');
         $fee = ($value * 0.05).toFixed(2);
         $total = ($value - ($value * 0.05)).toFixed(2);
-        if ($value.match(/\d+.*\d*/)) {
+        if ($value.match(/\d+.*\d*/) && !isNaN($fee) && !isNaN($total)) {
             $('#deposit-amount').empty();
             $('#deposit-amount').append($value + '€');
             $('#fee-amount').empty();
@@ -61,10 +61,8 @@
             $('#total-amount').empty();
             $('#total-amount').append('Only number can be inserted');
         }
-        
     });
 </script>
-
 
 <script>
     var amount;
@@ -80,7 +78,7 @@
 
             // Set up a url on your server to create the payment
             amount = document.getElementById('amountId').value;
-            var CREATE_URL = 'http://localhost:61971/Client/CreatePayment?amt=' + amount ;
+            var CREATE_URL = '/Client/CreatePayment?amt=' + amount ;
             
             // Make a call to your server to set up the payment
             return paypal.request.post(CREATE_URL)
@@ -93,7 +91,7 @@
         onAuthorize: function (data, actions) {
 
             // Set up a url on your server to execute the payment
-            var EXECUTE_URL = 'http://localhost:61971/Client/ExecutePayment';
+            var EXECUTE_URL = '/Client/ExecutePayment';
 
             // Set up the data you need to pass to your server
             var data = {

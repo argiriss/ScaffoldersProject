@@ -6,6 +6,91 @@
     ViewData["Title"] = "Home Page";
 
 }
+<style>
+    #perks {
+        max-width: 1176px;
+        margin: 0 auto;
+        padding: 0px 0 0px 0;
+    }
+
+        #perks div {
+            letter-spacing: -4px;
+        }
+
+        #perks div {
+            vertical-align: top;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            letter-spacing: normal;
+            word-spacing: normal;
+            height: 156px;
+            width: 276px;
+        }
+
+            #perks div:not(:last-child) {
+                margin: 0 24px 0 0;
+            }
+
+            #perks div img {
+                padding: 30px 0;
+                margin: 0 auto;
+                display: block;
+            }
+
+            #perks div h3 {
+                color: #d46d15;
+                font-size: 13px;
+                text-align: center;
+                margin: 0 0 0 0;
+            }
+
+                #perks div h3 strong {
+                    font-weight: 900;
+                }
+
+            #perks div p {
+                margin: 10px 0 0 0;
+                padding: 0 0 20px 0;
+                color: rgba(140,140,140,1);
+                font-size: 13px;
+                text-align: center;
+                line-height: 20px;
+            }
+
+    #perks-1-logo {
+        display: inline-block;
+        background: left top no-repeat;
+        background-size: 100%;
+        background-position: center;
+        width: 50px;
+    }
+
+    #perks-2-logo {
+        display: inline-block;
+        background: left top no-repeat;
+        background-size: 100%;
+        background-position: center;
+        width: 50px;
+    }
+
+    #perks-3-logo {
+        display: inline-block;
+        background: left top no-repeat;
+        background-size: 100%;
+        width: 50px;
+    }
+
+    #perks-4-logo {
+        display: inline-block;
+        background: left top no-repeat;
+        background-size: 100%;
+        width: 50px;
+    }
+</style>
+
+
+
 <div class="video-screen">
     <div id="crypto-bar">
         <marquee style="font-family: Impact; font-size: 18pt">
@@ -28,5 +113,38 @@
         <a id="scroll"><img src="~/images/arrow.png" /></a>
     </div>
 </div>
+
+<div class="row" id="perks">
+    <div class="col-md-3 col-sm-6">
+        <img src="https://bedrockautomation.com/wp-content/themes/bedrock/images/icon-advantage-security.png" alt="Security" id="perks-1-logo">
+        <h3>
+            <strong>SECURITY FIRST</strong>
+        </h3>
+        <p>Security is our number one concern and priority. Our systems are constantly upgraded and tested to ensure a high level user experience. To protect users we provide two-factor authentication for all accounts and API usage. Our Trading platform is higly protected, so you can rest easy about the safety of your portofolio and personal information.</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <img src="https://i2.wp.com/www.indicrypto.com/main/wp-content/uploads/2017/09/bitcoin_circular_arrows.png?resize=150%2C150&ssl=1" alt="Trading" id="perks-2-logo">
+        <h3>
+            <strong>EASY AND INSTANT TRADING</strong>
+        </h3>
+        <p>A Trading platform for fast, efficient and easy trading in cryptocurrencies. We offer a highly skilled team of cryptocurrency savvies just for you.We will keep you updated of the latest trends of cryptocurrency market.</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqcHND1kDO4RH7ZiHlsdZpQIW9IhvDTGrK0VVQB0UwlfAGNoVL" alt="Deposit" id="perks-3-logo">
+        <h3>
+            <strong>QUICK DEPOSIT AND WITHDRAWAL</strong>
+        </h3>
+        <p>We cooperate with major payment processing systems and offer various payment options to our customers.Easy, secure, fast deposits and withdrawals give you more time to focus on your trading. No hidden fees.</p>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <img src="https://www.corelp.co.uk/wp-content/uploads/2017/02/Live-web-chat-icon.png" alt="Support" id="perks-4-logo">
+        <h3>
+            <strong>FAST CUSTOMER SUPPORT </strong>
+        </h3>
+        <p>We give our platform a voice and build meaningful relationships by talking to customers over live chat.Our support team is available to assist you with any issues you might encounter.</p>
+    </div>
+
+</div>
+
 
 

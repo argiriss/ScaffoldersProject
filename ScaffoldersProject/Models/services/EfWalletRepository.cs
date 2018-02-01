@@ -63,12 +63,19 @@ namespace ScaffoldersProject.Models.services
             return clientUser.Wallet;
         }
 
-        //pay from my wallet
-        public void PayFromWallet(decimal Amount , string UserId)
-        {
 
+        public List<Deposit> GetDepositHistory()
+        {
+            var deposits = db.Deposit.ToList();
+            return deposits;
         }
-        
+
+        public List<Deposit> GetDepositHistory(string userId)
+        {
+            var UserDeposits = db.Deposit.Where(x=>x.UserDepositId==userId).ToList();
+            return UserDeposits;
+        }
+
 
     }
 }

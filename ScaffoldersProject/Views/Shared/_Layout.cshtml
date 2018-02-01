@@ -20,27 +20,15 @@
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
-        <!--SignalR client-->
+        <link rel="stylesheet" href="~/css/site.css" />
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <!--SignalR client-->
         <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
     </environment>
     <style>
         body {
             font-family: "Lato", sans-serif;
         }
-
-        /*.sidenav {
-            height: 100%;
-            width: 160px;
-            z-index: 1;
-            background-color: #111;
-            overflow-x: hidden;
-            height: 100vh;
-            padding-top: 20px;
-            padding: 20px 15px 0px 0px;
-            position: fixed;
-        }*/
 
         .sidenav a {
             padding: 6px 8px 6px 16px;
@@ -77,24 +65,11 @@
     </style>
     <script>
         var connection = new signalR.HubConnection('/main');
-        connection.start().then(function () {
-            $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
-            $('.status-glyph').text(" Status OK");
-            $('.status-glyph').css('color', 'lightgreen');
-            console.log("Started....");
-            //connection.invoke('Balance');
-        })
-            .catch(function (err) {
-                console.log("Error");
-                $('.status-glyph').text("Error");
-            })
     </script>
 </head>
 
-
 <body>
     @await Html.PartialAsync("_LoginPartial")
-
     <div class="container-fluid">
         @if (SignInManager.IsSignedIn(User))
         {
@@ -103,21 +78,23 @@
                 <div class="row">
                     <div class="col-md-2 sidenav-col">
                         <div class="sidenav">
-                            <div class="dropdown">
-                                @*startof dropdown*@
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Select Product
-                                    <span class="caret"></span>
-                                </button>
-                                <ul id="dropMenuId" class="dropdown-menu">
-                                </ul>
-                            </div> @*end of dropdown*@
+                            <div class="row">
+                                <div class="dropdown">
+                                    @*startof dropdown*@
+                                    <button id="dropdown-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        <span id="dropdown-button-text">Select Product</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="dropMenuId" class="dropdown-menu"></ul>
+                                </div> @*end of dropdown*@
+                            </div>
+                            
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
-                            <a href="#services">Deposit History</a>
+                            <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
                             <a href="#clients">Buy History</a>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
-
+                            
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
@@ -126,6 +103,10 @@
                                     <div class="row" style="font-size:20px">
                                         <div class="col-md-3">Euro</div>
                                         <div id="balanceClientId" class="col-md-9 text-right"></div>
+                                    </div>
+                                    <div class="row" style="font-size:20px" id="dropdown-option-row">
+                                        <div id="dropdown-option-text" class="col-md-6">Your coin</div>
+                                        <div class="col-md-6 text-center"></div>
                                     </div>
                                     <div class="text-center">
                                         <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
@@ -161,7 +142,7 @@
             else if (User.IsInRole("Admin"))
             {
                 <div class="row">
-                    <div class="col-sm-2 sidenav-col">
+                    <div class="col-md-2 sidenav-col">
                         <div class="sidenav">
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a asp-area="" asp-controller="Admin" asp-action="Index">View Products</a>
@@ -196,7 +177,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-10 col-sm-offset-2 full-screen">
+                    <div class="col-md-10 col-md-offset-2 full-screen">
                         @RenderBody()
                     </div>
                 </div>
@@ -280,15 +261,30 @@
         })
 
         function dropClientsItems(clientOrders) {
-            var parent = document.getElementById('dropMenuId');
-           
+            var parent = document.getElementById('dropMenuId');         
             var i;
             for (i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
-                liCreate.innerHTML = clientOrders[i];
+                var aCreate = document.createElement('a');
+                aCreate.classList.add('dropdown-link');
+                liCreate.appendChild(aCreate);
+                aCreate.innerHTML = clientOrders[i];
                 parent.appendChild(liCreate);
             }
         }
+        
+
+        //Start signalR connection
+        connection.start().then(function () {
+            $('.status-glyph').removeClass('glyphicon-remove-circle').addClass('glyphicon-ok-circle');
+            $('.status-glyph').text(" Status OK");
+            $('.status-glyph').css('color', 'lightgreen');
+            console.log("Started....");
+        })
+            .catch(function (err) {
+                console.log("Error");
+                $('.status-glyph').text("Error");
+            })
     </script>
 </body>
 </html>

@@ -85,12 +85,10 @@ namespace ScaffoldersProject.Hubs
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
             await _orderRepository.AddNewOrder(orderObject);
-
-            //var orderPrice = _cartRepository.GetOrderCost(orderObject.OrderID, findClientCart.CartId);
-            //var orderPrice = 0;
             var totalCost = 0;
 
             await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok",totalCost.ToString("c"));
+            //await Clients.All.InvokeAsync("NewOrder", table);
         }
 
         public async Task Deposit(string amount)
@@ -102,6 +100,9 @@ namespace ScaffoldersProject.Hubs
             var totalAmount=await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             //Send to client balance area in left menu, the total amount 
             await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
+
+            var depositHistoryTable = _walletRepository.GetDepositHistory();
+            await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
         }
 
         public async Task Balance()
