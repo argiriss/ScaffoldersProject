@@ -17,6 +17,7 @@ namespace ScaffoldersProject.Data
         public DbSet<Deposit> Deposit { get; set; }
         public DbSet<Offer> Offer { get; set; }
         public DbSet<Ask> Ask { get; set; }
+        public DbSet<Settings> Settings { get; set; }
 
         //We can add other models ............
 

@@ -1,4 +1,4 @@
-﻿@model List<Deposit>
+﻿@model IOrderedEnumerable<Deposit>
 @{
     ViewData["Title"] = "OrderBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,11 +6,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="orderbook">
     <div class="col col-md-3">
-        <div id="Sell" class="half-page" style="background:#111; overflow-y:scroll;">
-
-        </div>
-        <div id="Buy" class="half-page" style="background:yellow; padding-left: 10px; overflow-y: scroll;">
-            <table id="depositId">
+        <div id="Buy" class="full-screen" style="background:#111; border:1px solid black; color:#d46d15; overflow-y: scroll;">
+            <table id="depositId" style="margin-left:10px;">
                 <thead>
                     <tr>
                         <th>Price</th>
@@ -58,36 +55,61 @@
     })
 
     //Chart area.....................................................................
+    function generateDataFromTable() {
+        var labels = [];
+
+        var rows = jQuery("tr");
+        rows.each(function (index) {
+            if (index != 0)  // we dont need first row of table
+            {
+                var cols = $(this).find("td");
+                var num = parseInt(cols.first().text());
+                labels.push(num);
+            }
+        });
+
+        return labels.reverse();
+    }
+
+
+    function generateLabelsFromTable() {
+        var labels = [];
+
+        var rows = jQuery("tr");
+        rows.each(function (index) {
+            if (index != 0)  // we dont need first row of table
+            {
+                var cols = $(this).find("td");
+                var lab = cols.last().text();
+                labels.push(lab);
+            }
+        });
+
+        var unique = $.uniqueSort(labels);
+        unique.reverse();
+        return unique;
+    }
+
 
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: generateLabelsFromTable(),
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                label: 'Deposit history',
+                data: generateDataFromTable(),
                 borderWidth: 1
             }]
         },
         options: {
             scales: {
+                
+                xAxes: [{
+                    time: {
+                        unit: 'day'
+                    }
+                }],
                 yAxes: [{
                     ticks: {
                         beginAtZero: true
@@ -97,11 +119,11 @@
         }
     });
     var i = myChart.data.datasets.length;
-    setInterval(function () {
-        myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
-        myChart.data.labels[i] = "test";
-        myChart.update();
-        i++;
-    }, 1000);
+    //setInterval(function () {
+    //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
+    //    myChart.data.labels[i] = "test";
+    //    myChart.update();
+    //    i++;
+    //}, 1000);
 
 </script>

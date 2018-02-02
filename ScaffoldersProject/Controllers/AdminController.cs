@@ -197,8 +197,7 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult OrderBook()
         {
-            var depositHistoryTable = _walletRepository.GetDepositHistory();
-            //depositHistoryTable.Sort();
+            var depositHistoryTable = _walletRepository.GetDepositHistory().OrderByDescending(i => i.DepositDate);
             return View(depositHistoryTable);
         }
     }
