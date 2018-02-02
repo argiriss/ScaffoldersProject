@@ -47,24 +47,13 @@
                 {
                     <button class="btn btn-primary" type="submit">Add To Cart</button>
                 }
-                <button class="btn btn-primary" type="submit">Add To Wish List</button>
-                <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
             </form>
-        </div>
-<<<<<<< HEAD
-        
-        <div>
-            @if (Model.Product.Stock > 0)
-            {
-            <button class="btn btn-primary" type="submit">Add To Cart</button>
-            }
-            <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
-            <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
+            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
+                <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
+            
         </div>
 
 
-
-@*>>>>>>> 598941ff308b16a727f249ba1ce2350601ae2fb9*@
     </div>
     <div class="col-md-3"></div>
 </div>
@@ -141,6 +130,7 @@
         var desiredQuantity = document.getElementById('quantity').value;
         console.log(productId);
         connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
+        location.href = "/Client/OrderBook"
     };
 </script>
 

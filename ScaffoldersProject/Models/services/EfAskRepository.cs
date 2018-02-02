@@ -15,7 +15,8 @@ namespace ScaffoldersProject.Models.services
         {
             this.db = db;
         }
-
+        
+        //this method saves the new ask(aka bid) into Ask table
         public async Task AskSave(Ask ask)
         {
             db.Ask.Add(ask);
@@ -36,9 +37,12 @@ namespace ScaffoldersProject.Models.services
            
         }
 
+
         public void RemoveAsk()
         {
-            
+
         }
+
+      
     }
 }

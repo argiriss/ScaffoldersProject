@@ -22,6 +22,7 @@ namespace ScaffoldersProject.Controllers
         private IProductRepository _repository;
         private ICartRepository _cartRepository;
         private IWalletRepository _walletRepository;
+        private IAskRepository _askRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebApiFetch _webApiFetch;
         private static string token;
@@ -33,13 +34,15 @@ namespace ScaffoldersProject.Controllers
             ICartRepository cartRepository,
             UserManager<ApplicationUser> userManager,
             IWebApiFetch webApiFetch,
-            IWalletRepository walletRepository)
+            IWalletRepository walletRepository,
+            IAskRepository askRepository)
         {
             _repository = repository;
             _cartRepository = cartRepository;
             _userManager = userManager;
             _webApiFetch = webApiFetch;
             _walletRepository = walletRepository;
+            _askRepository = askRepository;
         }
 
         public IActionResult Index()
@@ -152,9 +155,12 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult OrderBook()
         {
-            var depositHistoryTable = _walletRepository.GetDepositHistory();
-            //depositHistoryTable.Sort();
-            return View(depositHistoryTable);
+            var askTable = _askRepository.Asks.ToList();
+            return View(askTable);
+            //var depositHistoryTable = _walletRepository.GetDepositHistory();
+            ////depositHistoryTable.Sort();
+            //return View(depositHistoryTable);
+
         }
 
         public async Task<IActionResult> DepositHistory()
@@ -164,5 +170,7 @@ namespace ScaffoldersProject.Controllers
             //depositHistoryTable.Sort();
             return View(depositHistoryTable);
         }
+
+ 
     }
 }
