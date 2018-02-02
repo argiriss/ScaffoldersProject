@@ -65,6 +65,7 @@ namespace ScaffoldersProject.Controllers
                 {
                     ProductId = imageView.ProductId,
                     Name = imageView.Name,
+                    ShortName=imageView.ShortName,
                     Description = imageView.Description,
                     Category = imageView.Category,
                     Price = imageView.Price,
@@ -98,6 +99,7 @@ namespace ScaffoldersProject.Controllers
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
+                ShortName=product.ShortName,
                 Category = product.Category,
                 Description = product.Description,
                 Price = product.Price,
@@ -116,6 +118,7 @@ namespace ScaffoldersProject.Controllers
                 var product = _repository.Products.FirstOrDefault(i => i.ProductId == imageView.ProductId);
                 product.ProductId = imageView.ProductId;
                 product.Name = imageView.Name;
+                product.ShortName = imageView.ShortName;
                 product.Description = imageView.Description;
                 product.Category = imageView.Category;
                 product.Price = imageView.Price;
