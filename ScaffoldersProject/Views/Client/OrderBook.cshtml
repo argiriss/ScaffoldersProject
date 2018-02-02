@@ -1,4 +1,4 @@
-﻿@model List<Deposit>
+﻿@*@model List<Ask>*@
 @{
     ViewData["Title"] = "OrderBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,20 +10,20 @@
 
         </div>
         <div id="Buy" class="half-page" style="background:yellow; padding-left: 10px; overflow-y: scroll;">
-            <table id="depositId">
+            <table id="askId">
                 <thead>
                     <tr>
                         <th>Price</th>
                         <th>Time</th>
                     </tr>
                 </thead>
-                @foreach (var item in Model)
+                @*@foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.DepositAmount</td>
-                        <td>@item.DepositDate</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.PriceAsk</td>
                     </tr>
-                }
+                }*@
             </table>
         </div>
     </div>
@@ -44,7 +44,19 @@
     //    alert(message);
     //    document.getElementById('Buy').innerHTML += orderPrice;
     //})
-
+    connection.on('PlaceBid', function (asksTable) {
+        //depositHistoryTable.sort();
+        var parent = document.getElementById("askId");
+        parent.innerHTML = "";
+        for (var i = 0; i < asksTable.length; i++) {
+            if (@Model[0].ProductId==asksTable[i].ProductId)
+            {
+                var child = document.createElement("li");
+                child.innerHTML = asksTable[i].PriceAsk;
+                parent.appendChild(child);
+             }
+        }
+    })
 
     connection.on('NewOrder', function (depositHistoryTable) {
         //depositHistoryTable.sort();

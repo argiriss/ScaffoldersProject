@@ -113,9 +113,12 @@ namespace ScaffoldersProject.Hubs
        
         //when user place a bid and asks a price and a quanity for specific product
         public async Task PlaceBid(int productId , decimal desiredPrice, double desiredQuantity)
-        {
+        {   
+            //Add new bid to Ask table
             await _askRepository.AddAsk(_userManager.GetUserId(Context.User), desiredPrice, desiredQuantity, productId);
-            await Clients.All.InvokeAsync("Poutsa");    
+            //take the list of bids from Ask table
+            var asksTable = _askRepository.Asks.ToList();
+            await Clients.All.InvokeAsync("PlaceBid", asksTable);    
         }
     }
 }
