@@ -60,6 +60,7 @@ $(document).ready(function () {
         $linktext = $(this).text();
         $('#dropdown-button-text').text($linktext);
         $("#dropdown-option-text").text($linktext);
+        $("#TotalInSelectedCoin").text($linktext);
     });
 
     $(function () {

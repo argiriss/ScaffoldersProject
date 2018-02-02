@@ -63,7 +63,13 @@
                 border-right: 1px solid #111;
             }
 
-            
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            color: #555;
+            cursor: default;
+            background-color: transparent;
+            border: none;
+            border-bottom-color: transparent;
+        }
     </style>
     <script>
         var connection = new signalR.HubConnection('/main');
@@ -90,34 +96,47 @@
                                     <ul id="dropMenuId" class="dropdown-menu"></ul>
                                 </div> @*end of dropdown*@
                             </div>
-                            
+
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
                             <a href="#clients">Buy History</a>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
-                            
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
-                                    <div><h2 style="color:white">Wallet</h2></div>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <span><label style="color:white;margin-bottom:1px;margin-top:5px;font-size:20px">Wallet</label>                                            </span>
+                                            <div class="input-group-addon text-right" style="background-color:transparent;border:none">
+                                                <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row" style="font-size:20px">
-                                        <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
+                                        <div id="walletId" class="text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
-                                    <div><h2 style="color:white">Balance</h2></div>
-                                    <div class="row" style="font-size:20px">
-                                        <div class="col-md-3">Euro</div>
-                                        <div id="balanceClientId" class="col-md-9 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
+                                    <div class="row"><h3 style="color:white;margin-bottom:1px;margin-top:2px">Balance</h3></div>
+                                    <div class="row" style="font-size:18px">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" style="color:#333;background-color:transparent;border:none;font-size:16px;height:18px">Euro</span>
+                                            <div id="balanceClientId" class="form-control text-right" style="color:#333;background-color:transparent;border:none;box-shadow:none;font-size:14px;height:18px"><div id="loader" class="lds-ellipsis" style="margin-right:25%"><div></div><div></div><div></div><div></div></div></div>
+                                        </div>
                                     </div>
-                                    <div class="row" style="font-size:18px" id="dropdown-option-row">
-                                        <div id="dropdown-option-text" class="col-md-6">Your coin</div>
-                                        <div class="col-md-6 text-center"></div>
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary" style="margin-bottom:5px" onclick="window.location.href='@Url.Action("Deposit","Client")'">Deposit</button>
+                                    <div class="row" style="font-size:18px">
+                                        <div class="input-group">
+                                            <span id="dropdown-option-text" class="input-group-addon" style="color:#333;background-color:transparent;border:none;font-size:14px;height:18px;padding-bottom:12px">.........</span>
+                                            <div id="dropdown-option-text" class="form-control text-right" style="color:#333;background-color:transparent;border:none;box-shadow:none;font-size:16px;height:18px;padding-bottom:12px"><div id="loader" class="lds-ellipsis" style="margin-right:25%"><div></div><div></div><div></div><div></div></div></div>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#home">Market</a></li>
+                                    <li><a data-toggle="tab" href="#menu1">Limit</a></li>
+                                </ul>
                             </div>
                             <div class="row button-row">
                                 <div class="col col-xs-3 col-sm-6">
@@ -127,15 +146,16 @@
                                     <button class="sell-button btn-danger">Sell</button>
                                 </div>
                             </div>
-                            <div class="row search">
-                                <div class="col-xs-6 col-md-12">
-                                    <form asp-action="Search" asp-controller="Account">
-                                        <div class="form-group has-feedback">
-                                            <label for="search" class="sr-only">Search</label>
-                                            <input type="text" class="form-control" name="search" placeholder="Search">
-                                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                                        </div>
-                                    </form>
+                            <div class="row">
+                                <div class="input-group">
+                                    <input id="enterAmmount" type="text" class="form-control" placeholder="Enter Amount">
+                                    <span class="input-group-addon">EUR</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <label id="Total" type="text" class="form-control">Total:</label>
+                                    <span id="TotalInSelectedCoin" class="input-group-addon"></span>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +181,7 @@
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
-                                    <div><h2 style="color:white">Wallet</h2></div>
+                                    <div><h3 style="color:white">Wallet</h3></div>
                                     <div class="row" style="font-size:20px">
                                         <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
@@ -197,7 +217,7 @@
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
                                 <div class="col-md-12" style="background-color:orangered; padding-left:30px;">
-                                    <div><h2 style="color:white">Wallet</h2></div>
+                                    <div><h3 style="color:white">Wallet</h3></div>
                                     <div class="row" style="font-size:20px">
                                         <div id="walletId" class="col-md-12 text-center"><div id="loader" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>
                                     </div>
@@ -256,11 +276,13 @@
         connection.on('Wallet', function (walletTotal, clientOrders) {
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
+            document.getElementById('balanceClientId').innerHTML = walletTotal;
+
             dropClientsItems(clientOrders);
         })
 
         function dropClientsItems(clientOrders) {
-            var parent = document.getElementById('dropMenuId');         
+            var parent = document.getElementById('dropMenuId');
             var i;
             for (i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
@@ -271,7 +293,7 @@
                 parent.appendChild(liCreate);
             }
         }
-        
+
 
         //Start signalR connection
         connection.start().then(function () {

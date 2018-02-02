@@ -85,7 +85,7 @@ namespace ScaffoldersProject.Models.services
             var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
 
             var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
-            var prodNames = orderedProducts.Select(x => x.Name).ToList();
+            var prodNames = orderedProducts.Select(x => x.ShortName).ToList();
 
             return prodNames;
         }
