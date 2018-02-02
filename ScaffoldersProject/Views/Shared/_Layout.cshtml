@@ -275,7 +275,6 @@
         connection.on('Wallet', function (walletTotal, clientOrders) {
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
-            document.getElementById('balanceClientId').innerHTML = walletTotal;
             dropClientsItems(clientOrders);
         })
 
