@@ -77,17 +77,15 @@ namespace ScaffoldersProject.Models.services
             }//End of foreach loop in cart table
         }
 
-        public async Task<List<string>> GetClientOrders(string userId)
+        public async Task<List<Products>> GetClientOrders(string userId)
         {
             var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
             var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
             var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId)).ToList();
             var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
-
             var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
-            var prodNames = orderedProducts.Select(x => x.ShortName).ToList();
-
-            return prodNames;
+            //var prodNames = orderedProducts.Select(x => x.ShortName).ToList();
+            return orderedProducts;
         }
         //method for adding the offer to Offer table in database
         //public void AddOffer(string userId, decimal price, double quantity , int productId)
