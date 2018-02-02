@@ -52,6 +52,12 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             var clientOrders = await _orderRepository.GetClientOrders(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"),clientOrders);
+            //place a list of bids for a specific product in Order Book
+            var asksTable = _askRepository.Asks.Where(x=>x.ProductId==5).ToList();  
+            
+            await Clients.All.InvokeAsync("PlaceBid", asksTable);
+
+
         }
 
         //When we invoke from client with SendClient value
@@ -117,8 +123,16 @@ namespace ScaffoldersProject.Hubs
             //Add new bid to Ask table
             await _askRepository.AddAsk(_userManager.GetUserId(Context.User), desiredPrice, desiredQuantity, productId);
             //take the list of bids from Ask table
-            var asksTable = _askRepository.Asks.ToList();
+            var asksTable = _askRepository.Asks.Where(x=>x.ProductId== productId);
             await Clients.All.InvokeAsync("PlaceBid", asksTable);    
+        }
+
+        public async Task OrderBookCoinId(int productId)
+        {
+            var askList = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            var offerList = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+
+            await Clients.All.InvokeAsync("AskOffer" , askList , offerList);
         }
     }
 }

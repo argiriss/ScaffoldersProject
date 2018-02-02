@@ -8,7 +8,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ScaffoldersProject</title>
-
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -277,22 +276,29 @@
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
             document.getElementById('balanceClientId').innerHTML = walletTotal;
-
             dropClientsItems(clientOrders);
         })
 
         function dropClientsItems(clientOrders) {
             var parent = document.getElementById('dropMenuId');
+            console.log(clientOrders);
             var i;
             for (i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
                 var aCreate = document.createElement('a');
                 aCreate.classList.add('dropdown-link');
                 liCreate.appendChild(aCreate);
-                aCreate.innerHTML = clientOrders[i];
+                aCreate.innerHTML = clientOrders[i].shortName;
                 parent.appendChild(liCreate);
+                var label = document.createElement('span');
+                label.style.cssText = "display:none";
+                //label.attributes.display('none');
+                label.innerHTML = clientOrders[i].productId;
+                parent.appendChild(label);
             }
         }
+
+
 
 
         //Start signalR connection
