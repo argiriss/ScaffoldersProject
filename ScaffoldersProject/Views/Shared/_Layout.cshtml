@@ -360,6 +360,13 @@
                 liCreate.appendChild(aCreate);
                 aCreate.innerHTML = clientOrders[i].shortName;
                 parent.appendChild(liCreate);
+
+                 var label = document.createElement('span');;
+                label.style.cssText = "display:none";
+                //label.attributes.display('none');
+                label.innerHTML = clientOrders[i].productId;
+                parent.appendChild(label);
+
             }
         }
 
