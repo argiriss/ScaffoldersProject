@@ -193,11 +193,29 @@
                                 <div id="AskBid" class="tab-pane fade">
                                     <div class="row button-row">
                                         <div class="col col-xs-3 col-sm-6">
-                                            <button class="buy-button btn-success">Ask</button>
+                                            <button class="buy-button btn-success" onclick="setAsk()">Ask</button>
                                         </div>
                                         <div class="col col-xs-3 col-sm-6">
-                                            <button class="sell-button btn-danger">Bid</button>
+                                            <button class="sell-button btn-danger" onclick="setBid()">Bid</button>
                                         </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            @*Enter Coin Amount*@
+                                            <input id="enterAmmountAskOfferId" type="text" class="form-control" style="background-color:transparent;" placeholder="Enter Amount">
+                                            <span id="AskOfferCoinId" class="input-group-addon" style="background-color:transparent"></span>
+                                        </div>
+                                    </div>
+                                  
+                                    <div class="row">
+                                        <div class="input-group">
+                                            @*Enter Limit price Amount*@
+                                            <input id="enterLimitPriceId" type="text" class="form-control" style="background-color:transparent" placeholder="Enter Limit Price">
+                                            <span id="AskOfferEuroId" class="input-group-addon" style="background-color:transparent">EUR</span>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <button id="placeAskBidId" class="btn btn-success" onclick="placeAskBidOrder()" style="margin-top:5px">Place Ask</button>
                                     </div>
 
                                 </div>
@@ -316,6 +334,7 @@
         <script src="/js/vidbg.min.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("Scripts", required: false)
+
     <script>
         var currentCoinPrice;//from function setProductId()
         var currentProductId;//from function setProductId()
@@ -328,9 +347,10 @@
         })
 
         //Receive from server From Buy
-        connection.on('InstantBuy', function (walletTotal, totalFromThisProduct) {
+        connection.on('InstantBuy', function (walletTotal, totalFromThisProduct,totalInEuro) {
             document.getElementById('walletId').innerHTML = walletTotal;
-            document.getElementById('').innerHTML = totalFromThisProduct;
+            document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
+            document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
         })
 
         connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
@@ -398,11 +418,30 @@
             document.getElementById('selectedCoinId').innerHTML = 'EUR';
         }
 
+        function setAsk() {
+            document.getElementById('placeAskBidId').style.backgroundColor = '#5cb85c';
+            document.getElementById('placeAskBidId').innerHTML = 'Place Ask';
+        }
+
+        function setBid() {
+            document.getElementById('placeAskBidId').style.backgroundColor = '#c9302c';
+            document.getElementById('placeAskBidId').innerHTML = 'Place Bid';
+        }
+
         function placeBuyOrder() {
+            //prepei na parei timi apo ta offers
             let productId = currentProductId;
+            //mipos na peraso mono ta euro kai na kano upologismo server
             let euroSpend = document.getElementById('enterAmmountId').value;
             let quantity = document.getElementById('totalCoinSelectedId').innerHTML;
             connection.invoke('InstantBuy', productId, euroSpend, quantity);
+            document.getElementById('enterAmmountId').value= "";
+            document.getElementById('totalCoinSelectedId').innerHTML = "";
+        }
+
+        function placeAskBidOrder() {
+
+
         }
 
         //Start signalR connection
