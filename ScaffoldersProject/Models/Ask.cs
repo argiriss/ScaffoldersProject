@@ -10,7 +10,7 @@ namespace ScaffoldersProject.Models
     {
         [Key]
         public int AskId { get; set; }
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         public decimal PriceAsk { get; set; }
         public DateTime DateofAsk { get; set; } //date that seller enters his offer        
         public string UserAskId { get; set; } //the user's id who makes the offer (like foreign key)

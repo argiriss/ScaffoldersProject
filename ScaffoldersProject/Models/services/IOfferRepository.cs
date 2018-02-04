@@ -8,7 +8,7 @@ namespace ScaffoldersProject.Models.services
     public interface IOfferRepository
     {
         IQueryable<Offer> Offers { get; }
-        void AddOffer(string userId, decimal price, double quantity, int productId);
+        Task AddOffer(int productId, decimal bidAmount, decimal limitPrice, string userId);
         void RemoveOffer();
     }
 }

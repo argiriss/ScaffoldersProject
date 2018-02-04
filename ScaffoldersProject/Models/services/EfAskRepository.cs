@@ -23,7 +23,7 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
-        public async Task AddAsk(string userId, decimal price, double quantity, int productId)
+        public async Task AddAsk(string userId, decimal price, decimal quantity, int productId)
         {
             //find if a bid with the same product and the same price exists already in Ask table
             var askExist = db.Ask.SingleOrDefault(x => x.ProductId == productId && x.PriceAsk == price);
@@ -47,16 +47,11 @@ namespace ScaffoldersProject.Models.services
                 };
                 await AskSave(ask);
             }
-            
-           
         }
-
 
         public void RemoveAsk()
         {
 
         }
-
-      
     }
 }

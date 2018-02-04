@@ -12,7 +12,7 @@ namespace ScaffoldersProject.Models.services
         //Methods 
         //We can add more methods...........
         Task AddNewOrder(Order orderDetails);
-        Task InstantOrder(Order instantOrder, int productId, decimal euroSpend, decimal quantity);
+        Task InstantOrder(Order instantOrder, int productId, decimal euroSpend);
         Task<List<Products>> GetClientOrders(string userId);
          decimal ClientSpecificProductTotal(int productId, string userId);
         //methods for my order book 

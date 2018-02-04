@@ -115,7 +115,9 @@ namespace ScaffoldersProject.Hubs
         }
 
         //Instant buy from sidenav menu
-        public async Task InstantBuy(int productId,decimal euroSpend,decimal quantity)
+        //We have to inform Wallet ,new Balance Euro and selected coin,remove from orderbook
+        //bid view,and change product price if needed
+        public async Task InstantBuy(int productId,decimal euroSpend)
         {
             Order instantOrder = new Order { };
             //JObject Order = JObject.Parse(orderObject);
@@ -124,22 +126,33 @@ namespace ScaffoldersProject.Hubs
             instantOrder.OrderDay = DateTime.Now;
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
-            await _orderRepository.InstantOrder(instantOrder, productId,euroSpend,quantity);
+            await _orderRepository.InstantOrder(instantOrder,productId,euroSpend);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
+            //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
         }
-       
+
+        //The seller sets his price at $30. That’s his ask price.
+
+        //You are willing to pay $20 for the card.That your bid price
+
         //when user place a bid and asks a price and a quanity for specific product
-        public async Task PlaceBid(int productId , decimal desiredPrice, double desiredQuantity)
-        {   
+        public async Task PlaceBid(int productId,decimal bidAmount, decimal limitPrice)
+        {
             //Add new bid to Ask table
-            await _askRepository.AddAsk(_userManager.GetUserId(Context.User), desiredPrice, desiredQuantity, productId);
+            await _offerRepository.AddOffer(productId, bidAmount, limitPrice, _userManager.GetUserId(Context.User));
             //take the list of bids from Ask table
-            var asksTable = _askRepository.Asks.Where(x=>x.ProductId== productId);
+            var asksTable = _askRepository.Asks.Where(x=>x.ProductId== productId).ToList();
             await Clients.All.InvokeAsync("PlaceBid", asksTable);    
+        }
+
+        public async Task PlaceAsk(int productId,decimal askAmount,decimal limitPrice)
+        {
+            //Add new Ask to ask table
+            
         }
 
         //Pass ask offer lists on orderbook

@@ -156,7 +156,7 @@
                             <div class="row">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a data-toggle="tab" href="#BuySell">Buy/Sell</a></li>
-                                    <li><a data-toggle="tab" href="#AskBid">Ask/Bid</a></li>
+                                    <li><a data-toggle="tab" href="#AskBid">Bid/Ask</a></li>
                                 </ul>
                             </div>
                             <div class="tab-content">
@@ -193,10 +193,10 @@
                                 <div id="AskBid" class="tab-pane fade">
                                     <div class="row button-row">
                                         <div class="col col-xs-3 col-sm-6">
-                                            <button class="buy-button btn-success" onclick="setAsk()">Ask</button>
+                                            <button class="buy-button btn-success" onclick="setBid()">Bid</button>
                                         </div>
                                         <div class="col col-xs-3 col-sm-6">
-                                            <button class="sell-button btn-danger" onclick="setBid()">Bid</button>
+                                            <button class="sell-button btn-danger" onclick="setAsk()">Ask</button>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -215,7 +215,7 @@
                                         </div>
                                     </div>
                                     <div class="row text-center">
-                                        <button id="placeAskBidId" class="btn btn-success" onclick="placeAskBidOrder()" style="margin-top:5px">Place Ask</button>
+                                        <button id="placeAskBidId" class="btn btn-success" onclick="placeAskBidOrder()" style="margin-top:5px">Place Bid</button>
                                     </div>
 
                                 </div>
@@ -356,16 +356,7 @@
         connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
-
-            //var parent = document.getElementById("askId");
-            //parent.innerHTML = "";
-            //for (var i = 0; i < asksTable.length; i++) {
-            //    var child = document.createElement("li");
-            //    child.innerHTML = asksTable[i].priceAsk;
-            //    parent.appendChild(child);
-            //}
         })
-
 
         //Methods........................
         function dropClientsItems(clientOrders) {
@@ -429,30 +420,45 @@
             document.getElementById('selectedCoinId').innerHTML = 'EUR';
         }
 
-        function setAsk() {
-            document.getElementById('placeAskBidId').style.backgroundColor = '#5cb85c';
-            document.getElementById('placeAskBidId').innerHTML = 'Place Ask';
-        }
-
         function setBid() {
-            document.getElementById('placeAskBidId').style.backgroundColor = '#c9302c';
+            document.getElementById('placeAskBidId').style.backgroundColor = '#5cb85c';
             document.getElementById('placeAskBidId').innerHTML = 'Place Bid';
         }
 
+        function setAsk() {
+            document.getElementById('placeAskBidId').style.backgroundColor = '#c9302c';
+            document.getElementById('placeAskBidId').innerHTML = 'Place Ask';
+        }
+
         function placeBuyOrder() {
-            //prepei na parei timi apo ta offers
+            //prepei na parei timi apo ta Bids
             let productId = currentProductId;
-            //mipos na peraso mono ta euro kai na kano upologismo server
-            let euroSpend = document.getElementById('enterAmmountId').value;
-            let quantity = document.getElementById('totalCoinSelectedId').innerHTML;
-            connection.invoke('InstantBuy', productId, euroSpend, quantity);
-            document.getElementById('enterAmmountId').value= "";
-            document.getElementById('totalCoinSelectedId').innerHTML = "";
+            let check = document.getElementById('placeOrderId').innerHTML;
+            if (check === 'Place Buy Order') {      
+                let euroSpend = document.getElementById('enterAmmountId').value;
+                connection.invoke('InstantBuy', productId, euroSpend);
+                document.getElementById('enterAmmountId').value = "";
+                document.getElementById('totalCoinSelectedId').innerHTML = "";
+            } else {
+
+
+            }
         }
 
         function placeAskBidOrder() {
+            let check = document.getElementById('placeAskBidId').innerHTML;
+            if (check === 'Place Bid') {
+                //The seller sets his price at $30. That’s his ask price.
+                //Place Bid...You are willing to pay $20 for the coin.That your bid price
+                let bidAmount = document.getElementById('enterAmmountAskOfferId').value;
+                let limitPrice = document.getElementById('enterLimitPriceId').value;
+                alert(currentProductId + ' ' + bidAmount + ' ' + limitPrice);
+                connection.invoke('PlaceBid', currentProductId, bidAmount, limitPrice);
+            }
+            else {
 
 
+            }
         }
 
         //Start signalR connection

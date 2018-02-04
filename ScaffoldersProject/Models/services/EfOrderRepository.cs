@@ -79,17 +79,20 @@ namespace ScaffoldersProject.Models.services
             }//End of foreach loop in cart table
         }
 
-        public async Task InstantOrder(Order instantOrder,int productId,decimal euroSpend,decimal quantity)
+        public async Task InstantOrder(Order instantOrder,int productId,decimal euroSpend)
         {
             //Add the order to Order Table and save it
             await OrderSave(instantOrder);
+
+            //Find current product price
+            var product = await db.Products.FindAsync(productId);
            
             //Add to cartOrder table the new order
             CartOrder newCartOrder = new CartOrder
             {
                 OrderId = instantOrder.OrderID,
                 ProductId = productId,
-                Quantity = quantity
+                Quantity = euroSpend/product.Price
             };
 
             await CartOrderSave(newCartOrder);

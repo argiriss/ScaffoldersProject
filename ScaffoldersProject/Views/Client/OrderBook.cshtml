@@ -5,10 +5,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="orderbook">
     <div class="col col-md-3">
-        <div id="Sell" class="half-page" style="background:#111; overflow-y:scroll;">
-
-        </div>
-        <div id="askId" class="half-page" style="background:grey; color:green; padding-left: 10px; overflow-y: scroll;">
+        <div id="askId" class="half-page" style="background:#111; overflow-y:scroll;"></div>
+        <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px; overflow-y: scroll;">
             @*<table id="askId">
                 <thead>
                     <tr>
@@ -33,13 +31,13 @@
 
 <script>
     //Recieve data from server
-    connection.on('PlaceBid', function (asksTable) {
-        console.log(asksTable);
-        var parent = document.getElementById("askId");
+    connection.on('PlaceBid', function (offerTable) {
+        console.log(offerTable);
+        var parent = document.getElementById("bidId");
         parent.innerHTML = "";
-        for (var i = 0; i < asksTable.length; i++) {    
+        for (var i = 0; i < offerTable.length; i++) {    
                 var child = document.createElement("li");
-                child.innerHTML = asksTable[i].priceAsk;
+                child.innerHTML = offerTable[i].priceAsk;
                 parent.appendChild(child);    
         }
     })

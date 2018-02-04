@@ -18,13 +18,13 @@ namespace ScaffoldersProject.Models.services
             this.db = db;
         }
 
-        public void AddOffer(string userId, decimal price, double quantity, int productId)
+        public async Task AddOffer(int productId,decimal bidAmount, decimal limitPrice,string userId)
         {
-            var sameOffer = db.Offer.Single(x => x.PriceOffer == price && x.ProductId == productId);
+            var sameOffer = db.Offer.SingleOrDefault(x => x.PriceOffer == bidAmount && x.ProductId == productId);
             //if the product already exists with same price then increase the quanity
             if (sameOffer != null)
             {
-                sameOffer.Quantity += quantity;
+                sameOffer.Quantity += limitPrice;
                 db.Offer.Update(sameOffer);
             }
             //if not initialize a new offer and add to table Offer
@@ -32,16 +32,15 @@ namespace ScaffoldersProject.Models.services
             {
                 var offer = new Offer
                 {
-                    Quantity = quantity,
-                    PriceOffer = price,
+                    Quantity = limitPrice,
+                    PriceOffer = bidAmount,
                     DateofOffer = DateTime.Now,
                     UserOfferId = userId,
                     ProductId = productId
-
                 };
                 db.Offer.Add(offer);
             }
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
         public void RemoveOffer()
