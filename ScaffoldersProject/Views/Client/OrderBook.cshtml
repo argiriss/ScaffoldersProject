@@ -5,17 +5,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="orderbook">
     <div class="col col-md-3">
-        <div id="askId" class="half-page" style="background:#111; overflow-y:scroll;"></div>
-        <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px; overflow-y: scroll;">
-            @*<table id="askId">
+        <div id="askId" class="half-page" style="background:#111;color:orangered;overflow-y:scroll;">
+            <table>
                 <thead>
                     <tr>
-                        <th>Price</th>
-                        <th>Time</th>
+                        <th style="color:white">Market Size</th>
+                        <th style="color:white">Price</th>
                     </tr>
                 </thead>
-             
-            </table>*@
+            </table>
+            <table id="askTable"></table> 
+        </div>
+        <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px; overflow-y: scroll;">
+            <table id="bidTable"></table>
         </div>
     </div>
     <div class="col col-md-9">
@@ -32,13 +34,38 @@
 <script>
     //Recieve data from server
     connection.on('PlaceBid', function (offerTable) {
-        console.log(offerTable);
-        var parent = document.getElementById("bidId");
+        var parent = document.getElementById("bidTable");
+        var trElem;
+        var tdElem;
+        var tdSecElem;
         parent.innerHTML = "";
         for (var i = 0; i < offerTable.length; i++) {    
-                var child = document.createElement("li");
-                child.innerHTML = offerTable[i].priceAsk;
-                parent.appendChild(child);    
+            trElem = document.createElement("tr");
+            tdElem = document.createElement("td");
+            tdElem.innerHTML = offerTable[i].quantity;
+            tdSecElem = document.createElement("td");
+            tdSecElem.innerHTML = offerTable[i].priceOffer;
+            trElem.appendChild(tdElem);
+            trElem.appendChild(tdSecElem);
+            parent.appendChild(trElem);    
+        }
+    })
+
+    connection.on('PlaceAsk', function (askTable) {
+        var parent = document.getElementById("askTable");
+        var trElem;
+        var tdElem;
+        var tdSecElem;
+        parent.innerHTML = "";
+        for (var i = 0; i < askTable.length; i++) {
+            trElem = document.createElement("tr");
+            tdElem = document.createElement("td");
+            tdElem.innerHTML = askTable[i].quantity;
+            tdSecElem = document.createElement("td");
+            tdSecElem.innerHTML = askTable[i].priceAsk;
+            trElem.appendChild(tdElem);
+            trElem.appendChild(tdSecElem);
+            parent.appendChild(trElem);
         }
     })
 
@@ -46,49 +73,49 @@
 
     //Chart area.....................................................................
 
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-    var i = myChart.data.datasets.length;
-    setInterval(function () {
-        myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
-        myChart.data.labels[i] = "test";
-        myChart.update();
-        i++;
-    }, 1000);
+    //var ctx = document.getElementById("myChart").getContext('2d');
+    //var myChart = new Chart(ctx, {
+    //    type: 'line',
+    //    data: {
+    //        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    //        datasets: [{
+    //            label: '# of Votes',
+    //            data: [12, 19, 3, 5, 2, 3],
+    //            backgroundColor: [
+    //                'rgba(255, 99, 132, 0.2)',
+    //                'rgba(54, 162, 235, 0.2)',
+    //                'rgba(255, 206, 86, 0.2)',
+    //                'rgba(75, 192, 192, 0.2)',
+    //                'rgba(153, 102, 255, 0.2)',
+    //                'rgba(255, 159, 64, 0.2)'
+    //            ],
+    //            borderColor: [
+    //                'rgba(255,99,132,1)',
+    //                'rgba(54, 162, 235, 1)',
+    //                'rgba(255, 206, 86, 1)',
+    //                'rgba(75, 192, 192, 1)',
+    //                'rgba(153, 102, 255, 1)',
+    //                'rgba(255, 159, 64, 1)'
+    //            ],
+    //            borderWidth: 1
+    //        }]
+    //    },
+    //    options: {
+    //        scales: {
+    //            yAxes: [{
+    //                ticks: {
+    //                    beginAtZero: true
+    //                }
+    //            }]
+    //        }
+    //    }
+    //});
+    //var i = myChart.data.datasets.length;
+    //setInterval(function () {
+    //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
+    //    myChart.data.labels[i] = "test";
+    //    myChart.update();
+    //    i++;
+    //}, 1000);
 
 </script>

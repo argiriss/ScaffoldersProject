@@ -8,7 +8,7 @@ namespace ScaffoldersProject.Models.services
     public interface IAskRepository
     {
         IQueryable<Ask> Asks { get; }
-        Task AddAsk(string userId, decimal price, decimal quantity, int productId);
+        Task AddAsk(int productId, decimal askAmount, decimal limitPrice, string userId);
         void RemoveAsk();
     }
 }

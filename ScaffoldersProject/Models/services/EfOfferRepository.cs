@@ -20,11 +20,11 @@ namespace ScaffoldersProject.Models.services
 
         public async Task AddOffer(int productId,decimal bidAmount, decimal limitPrice,string userId)
         {
-            var sameOffer = db.Offer.SingleOrDefault(x => x.PriceOffer == bidAmount && x.ProductId == productId);
+            var sameOffer = db.Offer.SingleOrDefault(x => x.PriceOffer == limitPrice && x.ProductId == productId);
             //if the product already exists with same price then increase the quanity
             if (sameOffer != null)
             {
-                sameOffer.Quantity += limitPrice;
+                sameOffer.Quantity += bidAmount;
                 db.Offer.Update(sameOffer);
             }
             //if not initialize a new offer and add to table Offer
@@ -32,8 +32,8 @@ namespace ScaffoldersProject.Models.services
             {
                 var offer = new Offer
                 {
-                    Quantity = limitPrice,
-                    PriceOffer = bidAmount,
+                    Quantity = bidAmount,
+                    PriceOffer = limitPrice,
                     DateofOffer = DateTime.Now,
                     UserOfferId = userId,
                     ProductId = productId

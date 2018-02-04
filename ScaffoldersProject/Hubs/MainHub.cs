@@ -142,17 +142,20 @@ namespace ScaffoldersProject.Hubs
         //when user place a bid and asks a price and a quanity for specific product
         public async Task PlaceBid(int productId,decimal bidAmount, decimal limitPrice)
         {
-            //Add new bid to Ask table
+            //Add new bid to offer table
             await _offerRepository.AddOffer(productId, bidAmount, limitPrice, _userManager.GetUserId(Context.User));
-            //take the list of bids from Ask table
-            var asksTable = _askRepository.Asks.Where(x=>x.ProductId== productId).ToList();
-            await Clients.All.InvokeAsync("PlaceBid", asksTable);    
+            //take the list of bids from Offer table
+            var bidTable = _offerRepository.Offers.Where(x=>x.ProductId== productId).ToList();
+            await Clients.All.InvokeAsync("PlaceBid", bidTable);    
         }
 
         public async Task PlaceAsk(int productId,decimal askAmount,decimal limitPrice)
         {
             //Add new Ask to ask table
-            
+            await _askRepository.AddAsk(productId, askAmount, limitPrice, _userManager.GetUserId(Context.User));
+            //take the list of asks from ask table
+            var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            await Clients.All.InvokeAsync("PlaceAsk", askTable);
         }
 
         //Pass ask offer lists on orderbook
@@ -163,9 +166,11 @@ namespace ScaffoldersProject.Hubs
             var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             var totalInEuro = totalFromThisProduct * currentProductPrice;
-            await Clients.All.InvokeAsync("SelectedCoin", totalFromThisProduct, totalInEuro);
-
-            _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            //take the list of bids from Offer table
+            var bidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            //take the list of asks from ask table
+            var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct, totalInEuro,bidTable,askTable);
         }
     }
 }

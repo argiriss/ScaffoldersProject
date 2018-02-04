@@ -353,9 +353,40 @@
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
         })
 
-        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
+        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro,offerTable,askTable) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
+            var currentUrl = window.location.href;
+            if (currentUrl.includes('OrderBook')) {
+                //orderbook
+                var parent = document.getElementById("bidTable");
+                var trElem;
+                var tdElem;
+                var tdSecElem;
+                parent.innerHTML = "";
+                for (var i = 0; i < offerTable.length; i++) {
+                    trElem = document.createElement("tr");
+                    tdElem = document.createElement("td");
+                    tdElem.innerHTML = offerTable[i].quantity;
+                    tdSecElem = document.createElement("td");
+                    tdSecElem.innerHTML = offerTable[i].priceOffer;
+                    trElem.appendChild(tdElem);
+                    trElem.appendChild(tdSecElem);
+                    parent.appendChild(trElem);
+                }
+                //ask table
+                parent = document.getElementById("askTable");
+                for (var i = 0; i < askTable.length; i++) {
+                    trElem = document.createElement("tr");
+                    tdElem = document.createElement("td");
+                    tdElem.innerHTML = askTable[i].quantity;
+                    tdSecElem = document.createElement("td");
+                    tdSecElem.innerHTML = askTable[i].priceAsk;
+                    trElem.appendChild(tdElem);
+                    trElem.appendChild(tdSecElem);
+                    parent.appendChild(trElem);
+                }
+            }
         })
 
         //Methods........................
@@ -452,12 +483,13 @@
                 //Place Bid...You are willing to pay $20 for the coin.That your bid price
                 let bidAmount = document.getElementById('enterAmmountAskOfferId').value;
                 let limitPrice = document.getElementById('enterLimitPriceId').value;
-                alert(currentProductId + ' ' + bidAmount + ' ' + limitPrice);
                 connection.invoke('PlaceBid', currentProductId, bidAmount, limitPrice);
             }
             else {
-
-
+                let askAmount = document.getElementById('enterAmmountAskOfferId').value;
+                let limitPrice = document.getElementById('enterLimitPriceId').value;
+                alert(currentProductId + ' ' + askAmount + ' ' + limitPrice);
+                connection.invoke('PlaceAsk', currentProductId, askAmount, limitPrice);
             }
         }
 
