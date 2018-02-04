@@ -375,9 +375,13 @@
                 liCreate.setAttribute('onclick', 'setProductId(this)');
                 liCreate.setAttribute('data-value', clientOrders[i].productId);
                 liCreate.setAttribute('data-currentPrice', clientOrders[i].price);
+                var spanCreate = document.createElement('span');
+                spanCreate.innerHTML = clientOrders[i].price;
+                spanCreate.className ="select-product-price";
                 var aCreate = document.createElement('a');
                 aCreate.classList.add('dropdown-link');
                 liCreate.appendChild(aCreate);
+                liCreate.appendChild(spanCreate);
                 aCreate.innerHTML = clientOrders[i].shortName;
                 parent.appendChild(liCreate);
 

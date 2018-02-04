@@ -412,9 +412,20 @@ table#depositId {
     width: 100%;
 }
 
+a.dropdown-link{
+    position:relative;
+}
+
+ul#dropMenuId li * {
+    display: inline;
+}
+
+span.select-product-price {
+    font-size: 19px;
+    color: #d46d15;
+}
 
 /* Pacman */
-
 .lds-ellipsis {
     display: inline-block;
     position: relative;
