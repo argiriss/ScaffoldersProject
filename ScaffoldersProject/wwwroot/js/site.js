@@ -61,6 +61,7 @@ $(document).ready(function () {
         $linktext = $(this).text();
         $('#dropdown-button-text').text($linktext);
         $("#coinLabelId").text($linktext);
+        $("#AskOfferCoinId").text($linktext);
         $('#totalCoinSelectedId').text('0.00');
         document.getElementById('enterAmmountId').value = '';
         if (document.getElementById('selectedCoinId').innerHTML === "EUR") {

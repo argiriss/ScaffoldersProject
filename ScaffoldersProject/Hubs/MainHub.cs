@@ -126,8 +126,10 @@ namespace ScaffoldersProject.Hubs
             //the order Object with the above properties
             await _orderRepository.InstantOrder(instantOrder, productId,euroSpend,quantity);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, instantOrder.UserOrderId);
-            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct.ToString("C"));
+            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
+            var totalInEuro = totalFromThisProduct * currentProductPrice;
+            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
         }
        
         //when user place a bid and asks a price and a quanity for specific product
