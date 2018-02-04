@@ -10,7 +10,7 @@ namespace ScaffoldersProject.Models.services
         IQueryable<Cart> Cart { get; }
 
         Task CartSave(Cart cart);
-        Task AddItem(Products product, int quantity, string userId);
+        Task AddItem(Products product, decimal quantity, string userId);
         void RemoveItem(int productId,string userId);
         decimal ComputeTotalCost(string userId);
         Task Clear(string userId);

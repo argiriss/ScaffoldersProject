@@ -56,11 +56,19 @@ $(document).ready(function () {
         }
     });
 
+    //when we click select product button on sidenav 
     $(document).on("click", "a.dropdown-link", function () {
         $linktext = $(this).text();
         $('#dropdown-button-text').text($linktext);
-        $("#dropdown-option-text").text($linktext);
-        $("#TotalInSelectedCoin").text($linktext);
+        $("#coinLabelId").text($linktext);
+        $('#totalCoinSelectedId').text('0.00');
+        document.getElementById('enterAmmountId').value = '';
+        if (document.getElementById('selectedCoinId').innerHTML === "EUR") {
+            $("#enterAmmountIdCoin").text($linktext);         
+        } else {
+            $("#selectedCoinId").text($linktext);
+        }
+       
     });
 
     $(function () {
@@ -79,5 +87,22 @@ $(document).ready(function () {
             };
         }
     });
+
+    //Sidenav
+    /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    var i;
+
+    for (i = 0; i < dropdown.length; i++) {
+        dropdown[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
     
 });

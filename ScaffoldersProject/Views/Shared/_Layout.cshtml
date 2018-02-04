@@ -11,6 +11,7 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <!--SignalR client-->
         <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
@@ -20,6 +21,7 @@
               asp-fallback-href="/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <!--SignalR client-->
         <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
@@ -29,20 +31,26 @@
             font-family: "Lato", sans-serif;
         }
 
-        .sidenav a {
+        .sidenav a, .dropdown-btn {
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: white;
-            display: inline-block;
+            color: #818181;
+            display: block;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
         }
 
             .sidenav a:visited {
                 color: #818181;
             }
 
-            /* mouse over link */
-            .sidenav a:hover {
+            /* On mouse-over */
+            .sidenav a:hover, .dropdown-btn:hover {
                 color: #d46d15;
             }
 
@@ -69,7 +77,19 @@
             border: none;
             border-bottom-color: transparent;
         }
+
+        .dropdown-container {
+            display: none;
+            background-color: #262626;
+            padding-left: 8px;
+        }
+
+        /* Optional: Style the caret down icon */
+        .fa-caret-down {
+            float: right;
+        }
     </style>
+
     <script>
         var connection = new signalR.HubConnection('/main');
     </script>
@@ -90,16 +110,18 @@
                                     @*startof dropdown*@
                                     <button id="dropdown-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                                         <span id="dropdown-button-text">Select Product</span>
-                                        <span class="caret"></span>
+                                        <i class="fa fa-caret-down"></i>
                                     </button>
                                     <ul id="dropMenuId" class="dropdown-menu"></ul>
                                 </div> @*end of dropdown*@
                             </div>
-
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-                            <a href="/Client/Index">View Products</a>
-                            <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
-                            <a href="#clients">Buy History</a>
+                            <button class="dropdown-btn">Client Menu<i class="fa fa-caret-down"></i></button>
+                            <div class="dropdown-container">
+                                <a asp-controller="Client" asp-action="Index">View Products</a>
+                                <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
+                                <a href="#clients">Buy History</a>
+                            </div>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
 
                             <div class="row" style="background-color:orangered">
@@ -125,39 +147,62 @@
                                     </div>
                                     <div class="row" style="font-size:18px">
                                         <div class="input-group">
-                                            <span id="dropdown-option-text" class="input-group-addon" style="color:#333;background-color:transparent;border:none;font-size:14px;height:18px;padding-bottom:12px">.........</span>
-                                            <div id="dropdown-option-text" class="form-control text-right" style="color:#333;background-color:transparent;border:none;box-shadow:none;font-size:16px;height:18px;padding-bottom:12px"><div id="loader" class="lds-ellipsis" style="margin-right:25%"><div></div><div></div><div></div><div></div></div></div>
+                                            <span id="coinLabelId" class="input-group-addon" style="color:#333;background-color:transparent;border:none;font-size:14px;height:18px;padding-bottom:12px">.........</span>
+                                            <div id="totalCoinId" class="form-control text-right" style="color:#333;background-color:transparent;border:none;box-shadow:none;font-size:14px;height:18px;padding-bottom:12px"><div id="loader" class="lds-ellipsis" style="margin-right:25%"><div></div><div></div><div></div><div></div></div></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#home">Market</a></li>
-                                    <li><a data-toggle="tab" href="#menu1">Limit</a></li>
+                                    <li class="active"><a data-toggle="tab" href="#BuySell">Buy/Sell</a></li>
+                                    <li><a data-toggle="tab" href="#AskBid">Ask/Bid</a></li>
                                 </ul>
                             </div>
-                            <div class="row button-row">
-                                <div class="col col-xs-3 col-sm-6">
-                                    <button class="buy-button btn-success">Buy</button>
-                                </div>
-                                <div class="col col-xs-3 col-sm-6">
-                                    <button class="sell-button btn-danger">Sell</button>
+                            <div class="tab-content">
+                                @*Buy/Sell*@
+                                <div id="BuySell" class="tab-pane fade in active">
+                                    <div class="row button-row">
+                                        <div class="col col-xs-3 col-sm-6">
+                                            <button class="buy-button btn-success" onclick="setBuy()">Buy</button>
+                                        </div>
+                                        <div class="col col-xs-3 col-sm-6">
+                                            <button class="sell-button btn-danger" onclick="setSell()">Sell</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            @*Enter Euro Amount*@
+                                            <input id="enterAmmountId"  onchange="ConvertToSelectedCoin(this)" onkeyup="ConvertToSelectedCoin(this)" type="text" class="form-control" style="background-color:transparent" placeholder="Enter Amount">
+                                            <span id="enterAmmountIdCoin" class="input-group-addon" style="background-color:transparent;padding-bottom:8px">EUR</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-group">
+                                            <label type="text" class="form-control" style="background-color:transparent;border:none">Total:</label>
+                                            <span id="totalCoinSelectedId" class="input-group-addon" style="background-color:transparent;border:none"></span>
+                                            <span id="selectedCoinId" class="input-group-addon" style="background-color:transparent;border:none"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row text-center">
+                                        <button id="placeOrderId" class="btn btn-success" onclick="placeBuyOrder()">Place Buy Order</button>
+                                    </div>
+                                </div>@*End of Buy/Ask*@
+
+                                @*Ask/Bid*@
+                                <div id="AskBid" class="tab-pane fade">
+                                    <div class="row button-row">
+                                        <div class="col col-xs-3 col-sm-6">
+                                            <button class="buy-button btn-success">Ask</button>
+                                        </div>
+                                        <div class="col col-xs-3 col-sm-6">
+                                            <button class="sell-button btn-danger">Bid</button>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="input-group">
-                                    <input id="enterAmmount" type="text" class="form-control" placeholder="Enter Amount">
-                                    <span class="input-group-addon">EUR</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-group">
-                                    <label id="Total" type="text" class="form-control">Total:</label>
-                                    <span id="TotalInSelectedCoin" class="input-group-addon"></span>
-                                </div>
-                            </div>
-                        </div>
+                        </div>@*End of SideNav*@
                     </div>
                     <div class="col-md-10 col-md-offset-2">
                         @RenderBody()
@@ -248,6 +293,7 @@
         }
     </div>
 
+
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -271,34 +317,93 @@
     </environment>
     @RenderSection("Scripts", required: false)
     <script>
-        //Receive from server
+        var currentCoinPrice;//from function setProductId()
+        var currentProductId;//from function setProductId()
+
+        //Receive from server on refresh
         connection.on('Wallet', function (walletTotal, clientOrders) {
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
             dropClientsItems(clientOrders);
         })
 
+        //Receive from server From Buy
+        connection.on('InstantBuy', function (walletTotal, totalFromThisProduct) {
+            document.getElementById('walletId').innerHTML = walletTotal;
+            document.getElementById('').innerHTML = totalFromThisProduct;
+        })
+
+        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
+            document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
+            document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
+
+            //var parent = document.getElementById("askId");
+            //parent.innerHTML = "";
+            //for (var i = 0; i < asksTable.length; i++) {
+            //    var child = document.createElement("li");
+            //    child.innerHTML = asksTable[i].priceAsk;
+            //    parent.appendChild(child);
+            //}
+        })
+
+
+        //Methods........................
         function dropClientsItems(clientOrders) {
             var parent = document.getElementById('dropMenuId');
-            console.log(clientOrders);
-            var i;
-            for (i = 0; i < clientOrders.length; i++) {
+            for (var i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
+                liCreate.setAttribute('onclick', 'setProductId(this)');
+                liCreate.setAttribute('data-value', clientOrders[i].productId);
+                liCreate.setAttribute('data-currentPrice', clientOrders[i].price);
                 var aCreate = document.createElement('a');
                 aCreate.classList.add('dropdown-link');
                 liCreate.appendChild(aCreate);
                 aCreate.innerHTML = clientOrders[i].shortName;
                 parent.appendChild(liCreate);
-                var label = document.createElement('span');
-                label.style.cssText = "display:none";
-                //label.attributes.display('none');
-                label.innerHTML = clientOrders[i].productId;
-                parent.appendChild(label);
             }
         }
 
+        function setProductId(elem) {
+            currentProductId = elem.getAttribute('data-value');
+            connection.invoke('SelectedCoin', currentProductId);
+            currentCoinPrice = elem.getAttribute('data-currentPrice');
+        }
 
+        function ConvertToSelectedCoin(elem) {
+            if (document.getElementById('enterAmmountIdCoin').innerHTML === 'EUR') {
+                var TotalInSelectedCoin = document.getElementById('totalCoinSelectedId');
+                TotalInSelectedCoin.innerHTML = (elem.value / currentCoinPrice).toFixed(2);
+            }
+            else {
+                var TotalInSelectedCoin = document.getElementById('totalCoinSelectedId');
+                TotalInSelectedCoin.innerHTML = (elem.value *currentCoinPrice).toFixed(2);
+            }         
+        }
 
+        function setBuy() {
+            let temp = document.getElementById('dropdown-button-text').innerHTML;
+            document.getElementById('placeOrderId').innerHTML = 'Place Buy Order';
+            document.getElementById('placeOrderId').style.backgroundColor = '#5cb85c';
+            document.getElementById('enterAmmountId').value = '';
+            document.getElementById('enterAmmountIdCoin').innerHTML = 'EUR';
+            document.getElementById('selectedCoinId').innerHTML = temp;
+        }
+
+        function setSell() {
+            let temp = document.getElementById('dropdown-button-text').innerHTML;
+            document.getElementById('placeOrderId').innerHTML = 'Place Sell Order';
+            document.getElementById('placeOrderId').style.backgroundColor = '#c9302c';
+            document.getElementById('enterAmmountId').value = '';
+            document.getElementById('enterAmmountIdCoin').innerHTML = temp;
+            document.getElementById('selectedCoinId').innerHTML = 'EUR';
+        }
+
+        function placeBuyOrder() {
+            let productId = currentProductId;
+            let euroSpend = document.getElementById('enterAmmountId').value;
+            let quantity = document.getElementById('totalCoinSelectedId').innerHTML;
+            connection.invoke('InstantBuy', productId, euroSpend, quantity);
+        }
 
         //Start signalR connection
         connection.start().then(function () {

@@ -11,9 +11,10 @@ using System;
 namespace ScaffoldersProject.Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180202145348_SettingsAdded")]
+    partial class SettingsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +52,7 @@ namespace ScaffoldersProject.Data.Migrations
 
                     b.Property<int>("ProductId");
 
-                    b.Property<decimal>("Quantity");
+                    b.Property<int>("Quantity");
 
                     b.Property<string>("UserCartId");
 
@@ -71,7 +72,7 @@ namespace ScaffoldersProject.Data.Migrations
 
                     b.Property<int>("ProductId");
 
-                    b.Property<decimal>("Quantity");
+                    b.Property<int>("Quantity");
 
                     b.HasKey("CartOrderId");
 
@@ -162,7 +163,7 @@ namespace ScaffoldersProject.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(3);
 
-                    b.Property<decimal>("Stock");
+                    b.Property<int>("Stock");
 
                     b.HasKey("ProductId");
 

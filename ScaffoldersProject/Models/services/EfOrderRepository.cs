@@ -1,4 +1,5 @@
-﻿using ScaffoldersProject.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using ScaffoldersProject.Data;
 using ScaffoldersProject.Services;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,15 @@ namespace ScaffoldersProject.Models.services
     public class EfOrderRepository : IOrderRepository
     {
         private MainDbContext db;
-
+        private readonly UserManager<ApplicationUser> _userManager;
         public IQueryable<Order> Orders => db.Order;
         
 
         //Depedency injection implemented on constructor.Instatiate db object
-        public EfOrderRepository(MainDbContext db)
+        public EfOrderRepository(MainDbContext db, UserManager<ApplicationUser> userManager)
         {
             this.db = db;
+            _userManager = userManager;
         }
 
         //Save to Order Table
@@ -77,6 +79,30 @@ namespace ScaffoldersProject.Models.services
             }//End of foreach loop in cart table
         }
 
+        public async Task InstantOrder(Order instantOrder,int productId,decimal euroSpend,decimal quantity)
+        {
+            //Add the order to Order Table and save it
+            await OrderSave(instantOrder);
+           
+            //Add to cartOrder table the new order
+            CartOrder newCartOrder = new CartOrder
+            {
+                OrderId = instantOrder.OrderID,
+                ProductId = productId,
+                Quantity = quantity
+            };
+
+            await CartOrderSave(newCartOrder);
+
+            //Reduse the Wallet amount by euroSpend in parameters
+            //Find Client Wallet and reduse it
+            var clientUser = await _userManager.FindByIdAsync(instantOrder.UserOrderId);
+            clientUser.Wallet -= euroSpend;
+            //Save the changes
+            await _userManager.UpdateAsync(clientUser);
+
+        }
+
         public async Task<List<Products>> GetClientOrders(string userId)
         {
             var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
@@ -84,9 +110,21 @@ namespace ScaffoldersProject.Models.services
             var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId)).ToList();
             var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
             var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
-            //var prodNames = orderedProducts.Select(x => x.ShortName).ToList();
             return orderedProducts;
         }
+
+        public decimal ClientSpecificProductTotal(int productId,string userId)
+        {
+            //find all user orders in order table
+            var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
+            var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
+            var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId) && x.ProductId==productId);
+            var sum = orders.Select(x => x.Quantity).Sum();
+            return sum;
+        }
+
+
+
         //method for adding the offer to Offer table in database
         //public void AddOffer(string userId, decimal price, double quantity , int productId)
         //{

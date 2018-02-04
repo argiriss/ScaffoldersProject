@@ -1,5 +1,4 @@
-﻿@*@model List<Ask>*@
-@{
+﻿@{
     ViewData["Title"] = "OrderBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -34,34 +33,18 @@
 
 <script>
     //Recieve data from server
-    //connection.on('Buy', function (message, orderPrice) {
-    //    alert(message);
-    //    document.getElementById('Buy').innerHTML += orderPrice;
-    //})
     connection.on('PlaceBid', function (asksTable) {
-        //depositHistoryTable.sort();
         console.log(asksTable);
         var parent = document.getElementById("askId");
         parent.innerHTML = "";
-        for (var i = 0; i < asksTable.length; i++) {
-           
+        for (var i = 0; i < asksTable.length; i++) {    
                 var child = document.createElement("li");
                 child.innerHTML = asksTable[i].priceAsk;
-                parent.appendChild(child);
-             
+                parent.appendChild(child);    
         }
     })
 
-    connection.on('NewOrder', function (depositHistoryTable) {
-        //depositHistoryTable.sort();
-        var parent = document.getElementById("depositId");
-        parent.innerHTML = "";
-        for (var i = 0; i < depositHistoryTable.length; i++) {
-            var child = document.createElement("li");
-            child.innerHTML = depositHistoryTable[i].depositAmount;
-            parent.appendChild(child);
-        }
-    })
+
 
     //Chart area.....................................................................
 

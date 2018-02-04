@@ -39,7 +39,9 @@
                 }
                 else
                 {
-                    <span style="font-size:23px">Quantity</span>
+                    <span style="font-size:23px">EUR</span>
+                    <input type="number"/><br>
+                    <span style="font-size:23px">@Model.Product.ShortName</span>
                     <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
                     <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
                 }

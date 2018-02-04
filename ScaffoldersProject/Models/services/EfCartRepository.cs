@@ -24,7 +24,7 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
-        public async Task AddItem(Products product, int quantity, string userId)
+        public async Task AddItem(Products product, decimal quantity, string userId)
         {
             //Check If we find a cartId from this user
             Cart findProductInCart = db.Cart.FirstOrDefault(x => x.UserCartId == userId);
@@ -83,7 +83,7 @@ namespace ScaffoldersProject.Models.services
             foreach (var item in findListOfItems)
             {
                 decimal price = db.Products.First(x => x.ProductId == item.ProductId).Price;
-                totalCost += price * item.Quantity;
+                totalCost += item.Quantity;
             }
             return totalCost;
         }

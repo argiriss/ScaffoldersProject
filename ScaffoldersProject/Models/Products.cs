@@ -25,7 +25,7 @@ namespace ScaffoldersProject.Models
         public string Category { get; set; }
         public bool AdminApproved { get; set; }
         [Required(ErrorMessage = "Please specify the amount you wish to sell")]
-        public int Stock { get; set; }
+        public decimal Stock { get; set; }
         //Image properties
         public byte[] Image { get; set; }
         public string ContentType { get; set; }

@@ -31,11 +31,6 @@
                         @await Component.InvokeAsync("CartSummary")
                     </li>
                     <li>
-                        <a class="btn btn-sm btn-secondary" asp-route="Wish">
-                            Wish <span>(0)</span>
-                        </a>
-                    </li>
-                    <li>
                         <a asp-area="" asp-controller="Client" asp-action="Index">@UserManager.GetUserName(User) Platform</a>
                     </li>
                     <li>

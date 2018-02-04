@@ -22,7 +22,7 @@ namespace ScaffoldersProject.Models
         public decimal Price { get; set; }     
         public string Category { get; set; }
         [Required(ErrorMessage = "Please specify the amount you wish to sell")]
-        public int Stock { get; set; }
+        public decimal Stock { get; set; }
 
         public IFormFile Image { get; set; } 
       

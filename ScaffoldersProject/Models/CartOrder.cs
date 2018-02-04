@@ -16,6 +16,6 @@ namespace ScaffoldersProject.Models
         public int ProductId { get; set; }
         public Products Product { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
     }
 }

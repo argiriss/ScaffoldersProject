@@ -11,17 +11,16 @@ namespace ScaffoldersProject.Models.services
         //from another server.
 
         //Properties
-        IQueryable<Products> Products { get; }
-
-        
+        IQueryable<Products> Products { get; }       
 
         //Methods 
-        //We can add more methods...........
-        void SaveProduct(Products product);
+        Task SaveProduct(Products product);
 
-        void UpdateProduct(Products product);
+        Task UpdateProduct(Products product);
 
-        Products DeleteProduct(int productId);
+        Task<Products> DeleteProduct(int productId);
+
+        Task<decimal> GetCurrentPrice(int productId);
     }
 }
 

@@ -53,11 +53,28 @@ namespace ScaffoldersProject.Hubs
             var clientOrders = await _orderRepository.GetClientOrders(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"),clientOrders);
             //place a list of bids for a specific product in Order Book
-            var asksTable = _askRepository.Asks.Where(x=>x.ProductId==5).ToList();  
-            
-            await Clients.All.InvokeAsync("PlaceBid", asksTable);
+            //var asksTable = _askRepository.Asks.Where(x=>x.ProductId==5).ToList();  
+            //await Clients.All.InvokeAsync("PlaceBid", asksTable);
+        }
 
+        public async Task Deposit(string amount)
+        {
+            var desAmount = Convert.ToDecimal(amount);
+            //Make the deposit
+            await _walletRepository.Deposit(desAmount, _userManager.GetUserId(Context.User));
+            //Calculate total amount in my wallet
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            //Send to client balance area in left menu, the total amount 
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
 
+            var depositHistoryTable = _walletRepository.GetDepositHistory();
+            await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
+        }
+
+        public async Task Wallet()
+        {
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"));
         }
 
         //When we invoke from client with SendClient value
@@ -97,24 +114,20 @@ namespace ScaffoldersProject.Hubs
             //await Clients.All.InvokeAsync("NewOrder", table);
         }
 
-        public async Task Deposit(string amount)
+        //Instant buy from sidenav menu
+        public async Task InstantBuy(int productId,decimal euroSpend,decimal quantity)
         {
-            var desAmount = Convert.ToDecimal(amount);
-            //Make the deposit
-            await _walletRepository.Deposit(desAmount, _userManager.GetUserId(Context.User));
-            //Calculate total amount in my wallet
-            var totalAmount=await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            //Send to client balance area in left menu, the total amount 
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
-
-            var depositHistoryTable = _walletRepository.GetDepositHistory();
-            await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
-        }
-
-        public async Task Wallet()
-        {
+            Order instantOrder = new Order { };
+            //JObject Order = JObject.Parse(orderObject);
+            //set order userId to order table
+            instantOrder.UserOrderId = _userManager.GetUserId(Context.User);
+            instantOrder.OrderDay = DateTime.Now;
+            //Add order to database and save it with this method from EfOrderRepository passing
+            //the order Object with the above properties
+            await _orderRepository.InstantOrder(instantOrder, productId,euroSpend,quantity);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"));
+            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, instantOrder.UserOrderId);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct.ToString("C"));
         }
        
         //when user place a bid and asks a price and a quanity for specific product
@@ -127,12 +140,17 @@ namespace ScaffoldersProject.Hubs
             await Clients.All.InvokeAsync("PlaceBid", asksTable);    
         }
 
-        public async Task OrderBookCoinId(int productId)
+        //Pass ask offer lists on orderbook
+        public async Task SelectedCoin(int productId)
         {
             var askList = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
             var offerList = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
+            var totalInEuro = totalFromThisProduct * currentProductPrice;
+            await Clients.All.InvokeAsync("SelectedCoin", totalFromThisProduct, totalInEuro);
 
-            await Clients.All.InvokeAsync("AskOffer" , askList , offerList);
+            _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
         }
     }
 }

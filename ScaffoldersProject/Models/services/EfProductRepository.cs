@@ -26,7 +26,7 @@ namespace ScaffoldersProject.Models.services
             this.db = db;
         }
 
-        public Products DeleteProduct(int productId)
+        public async Task<Products> DeleteProduct(int productId)
         {
             //The following returns a products object if its exists
             Products prod = db.Products.FirstOrDefault(p => p.ProductId == productId);
@@ -34,21 +34,27 @@ namespace ScaffoldersProject.Models.services
             if (prod != null)
             {
                 db.Products.Remove(prod);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
             }
             return prod;
         }
 
-        public void SaveProduct(Products product)
+        public async Task SaveProduct(Products product)
         {
             db.Products.Add(product);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
 
-        public void UpdateProduct(Products product)
+        public async Task UpdateProduct(Products product)
         {
             db.Update(product);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<decimal> GetCurrentPrice(int productId)
+        {
+            var product = await db.Products.FindAsync(productId);
+            return product.Price;
         }
     }
 }

@@ -28,7 +28,6 @@ namespace ScaffoldersProject.Controllers
 
         public IActionResult Index()
         {
-
             var cartList = _cartRepository.Cart.Where(x => x.UserCartId == _userManager.GetUserId(User));
             var total = _cartRepository.ComputeTotalCost(_userManager.GetUserId(User));
             ViewBag.Total = total;
@@ -37,7 +36,7 @@ namespace ScaffoldersProject.Controllers
         }
 
 
-        public async Task<ActionResult> AddToCart(int productId, int quantity, string returnUrl)
+        public async Task<ActionResult> AddToCart(int productId, decimal quantity, string returnUrl)
         {
 
             //Find a product with the given Id from the parameters
