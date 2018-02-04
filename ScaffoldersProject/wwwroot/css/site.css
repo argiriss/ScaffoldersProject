@@ -218,7 +218,7 @@ span.crypto-divider {
 
 .list-group-wrapper{
     overflow:hidden;
-    max-width:408px;
+    width:408px;
     float:left;
 }
  
@@ -483,14 +483,109 @@ table#depositId {
     }
 }
 
+/*#perks {
+        max-width: 1176px;
+        margin: 0 auto;
+        padding: 0px 0 0px 0;
+    }*/
+
+#perks div {
+    letter-spacing: -4px;
+}
+
+#perks div {
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    letter-spacing: normal;
+    word-spacing: normal;
+    min-height: 350px;
+    /*width: 270px;
+            height: 350px;*/
+}
+
+    /*#perks div:not(:last-child) {
+                margin: 0 24px 0 0;
+            }*/
+
+    #perks div img {
+        padding: 30px 0;
+        margin: 0 auto;
+        display: block;
+    }
+
+    #perks div h3 {
+        color: #d46d15;
+        font-size: 17px;
+        text-align: center;
+        margin: 0 0 0 0;
+    }
+
+        #perks div h3 strong {
+            font-weight: 900;
+        }
+
+    #perks div p {
+        margin: 10px 0 0 0;
+        padding: 0px 40px;
+        color: rgba(140,140,140,1);
+        font-size: 13px;
+        text-align: center;
+        line-height: 20px;
+    }
+
+#perks-1-logo {
+    display: inline-block;
+    background: left top no-repeat;
+    background-size: 100%;
+    background-position: center;
+    width: 50px;
+}
+
+#perks-2-logo {
+    display: inline-block;
+    background: left top no-repeat;
+    background-size: 100%;
+    background-position: center;
+    width: 50px;
+}
+
+#perks-3-logo {
+    display: inline-block;
+    background: left top no-repeat;
+    background-size: 100%;
+    width: 50px;
+}
+
+#perks-4-logo {
+    display: inline-block;
+    background: left top no-repeat;
+    background-size: 100%;
+    width: 50px;
+}
+
+#news div {
+    border-color: #d46d15;
+    min-height: 550px;
+    padding: 20px;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+}
+
 
 @media screen and (max-width: 995px) {
     body {
         overflow-y: scroll !important;
     }
 
+    #news div{
+        min-height: initial;
+    }
+    
     #myNavbar {
-        display:none;
+        display: none;
         background-color: #101010;
     }
 
@@ -508,6 +603,7 @@ table#depositId {
     }
 
 }
+
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

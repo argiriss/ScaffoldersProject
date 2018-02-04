@@ -29,7 +29,7 @@
 
     </div>
     <div class="col-md-3 product-info">
-        <div><h3>Price:<span style="color:#d46d15; font-size: 31px;">@Model.Product.Price.ToString("C2")</span> </h3></div>
+        <div><h3>Price:<span id="product-view-price" style="color:#d46d15; font-size: 31px;">@Model.Product.Price.ToString("C2")</span> </h3></div>
         <div>
             <form asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
                 <input type="hidden" name="productId" value=@Model.Product.ProductId>
@@ -40,9 +40,9 @@
                 else
                 {
                     <span style="font-size:23px">EUR</span>
-                    <input type="number"/><br>
+                    <input id="product-view-number" type="number"/><br>
                     <span style="font-size:23px">@Model.Product.ShortName</span>
-                    <input type="number" name="quantity" min="1" max="@Model.Product.Stock" /><br>
+                    <input id="product-view-quantity" type="number" disabled name="quantity" min="1" max="@Model.Product.Stock" /><br>
                     <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
                 }
                 @if (Model.Product.Stock > 0)
@@ -139,5 +139,18 @@
         connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
         location.href = "/Client/OrderBook"
     };
+
+    $('input#product-view-number').on("change keyup paste", function () {
+        $value = (this).value.replace(',', '.');
+        $price = parseFloat($('span#product-view-price').text().replace(',','.'));
+        $total = parseFloat($value / $price).toFixed(2);
+        if ($value.match(/\d+.*\d*/) && !isNaN($total)) {
+            $('input#product-view-quantity').empty();
+            $('input#product-view-quantity').val($total);
+        }
+        else {
+            $('input#product-view-quantity').empty();
+        }
+    });
 </script>
 
