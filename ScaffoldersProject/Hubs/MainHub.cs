@@ -24,7 +24,7 @@ namespace ScaffoldersProject.Hubs
         private IWalletRepository _walletRepository;
         private IAskRepository _askRepository;
         private IOfferRepository _offerRepository;
-        private MainDbContext db;
+        private ISellRepository _sellRepository;
 
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
@@ -36,7 +36,8 @@ namespace ScaffoldersProject.Hubs
             IProductRepository productRepository,
             IWalletRepository walletRepository,
             IAskRepository askRepository,
-            IOfferRepository offerRepository
+            IOfferRepository offerRepository,
+            ISellRepository sellRepository
            )
         {
             _userManager = userManager;
@@ -46,6 +47,7 @@ namespace ScaffoldersProject.Hubs
             _walletRepository = walletRepository;
             _askRepository = askRepository;
             _offerRepository = offerRepository;
+            _sellRepository = sellRepository;
         }
 
         //This happens on connection
@@ -54,9 +56,6 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             var clientOrders = await _orderRepository.GetAllApprovedProducts();
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"),clientOrders);
-            //place a list of bids for a specific product in Order Book
-            //var asksTable = _askRepository.Asks.Where(x=>x.ProductId==5).ToList();  
-            //await Clients.All.InvokeAsync("PlaceBid", asksTable);
         }
 
         public async Task Deposit(string amount)
@@ -134,12 +133,26 @@ namespace ScaffoldersProject.Hubs
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
-            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
         }
 
         public async Task InstantSell(int productId, decimal coinSell)
         {
-
+            Sell newSell = new Sell
+            {
+                UserSellId = _userManager.GetUserId(Context.User),
+                SellDay = DateTime.Now
+            };
+            //Save new sell to database
+            await _sellRepository.InstantSell(newSell, productId, coinSell);
+            //Calculate new wallet
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            //Query in portofolio to find new total from this product
+            decimal totalFromThisProduct = _sellRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
+            //Our total coins in Euro 
+            var totalInEuro = totalFromThisProduct * currentProductPrice;
+            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
         }
 
         //The seller sets his price at $30. That’s his ask price.

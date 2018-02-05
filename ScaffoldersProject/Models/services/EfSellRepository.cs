@@ -43,7 +43,7 @@ namespace ScaffoldersProject.Models.services
             //Find current product price
             var product = await db.Products.FindAsync(productId);
 
-            //Add to cartSell table the new order
+            //Add to cartSell table the new sell
             CartSell newCartSell = new CartSell
             {
                 SellId = instantSell.SellId,
@@ -56,8 +56,10 @@ namespace ScaffoldersProject.Models.services
             //Reduse the quantity of this product from portfolio
             var productNewQuantity = db.PortFolio.FirstOrDefault(x => x.ProductId == productId);
             productNewQuantity.CoinsQuantity -= newCartSell.Quantity;
+            db.PortFolio.Update(productNewQuantity); //update the table
+            await db.SaveChangesAsync();
 
-            //Reduse the Wallet amount by euroSpend in parameters
+            //Reduse the Wallet amount by coinsell in parameters
             //Find Client Wallet and reduse it
             var clientUser = await _userManager.FindByIdAsync(instantSell.UserSellId);
             clientUser.Wallet += coinSell*product.Price;
@@ -65,24 +67,17 @@ namespace ScaffoldersProject.Models.services
             await _userManager.UpdateAsync(clientUser);
         }
 
-        public async Task<List<Products>> GetClientSells(string userId)
-        {
-            var clientSells = db.Sell.Where(x => x.UserSellId == userId).ToList();
-            var clientSellIds = clientSells.Select(x => x.SellId).ToList();
-            var sells = db.CartSell.Where(x => clientSellIds.Contains(x.SellId)).ToList();
-            var productsIds = sells.Select(x => x.ProductId).Distinct().ToList();
-            var soldProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
-            return soldProducts;
-        }
-
         public decimal ClientSpecificProductTotal(int productId, string userId)
         {
-            //find all user orders in order table
-            var clientSell = db.Sell.Where(x => x.UserSellId == userId).ToList();
-            var clientSellIds = clientSell.Select(x => x.SellId).ToList();
-            var sells = db.CartSell.Where(x => clientSellIds.Contains(x.SellId) && x.ProductId == productId);
-            var sum = sells.Select(x => x.Quantity).Sum();
-            return sum;
+            var product = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId == userId);
+            if (product != null)
+            {
+                return product.CoinsQuantity;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
