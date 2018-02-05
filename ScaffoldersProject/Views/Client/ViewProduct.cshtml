@@ -13,11 +13,11 @@
         <section class="card m-1 p-1 item-image">
             @if (Model.ViewImage.Image == null)
             {
-                <img class="group image list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
+                <img class="group image list-group-image" src="http://placehold.it/400x250/000/fff" alt="" width="408"/>
             }
             else
             {
-                <img class="image" src="data:@Model.ViewImage.ContentType;base64,@Model.ViewImage.Image" width="400px;">
+                <img class="image" src="data:@Model.ViewImage.ContentType;base64,@Model.ViewImage.Image" width="408">
             }
             <div class="item-overlay">
                 <div class="item-description">

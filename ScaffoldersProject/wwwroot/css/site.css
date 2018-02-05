@@ -218,8 +218,12 @@ span.crypto-divider {
 
 .list-group-wrapper{
     overflow:hidden;
-    width:408px;
+    max-width:408px;
     float:left;
+}
+
+.thumbnail{
+    overflow:hidden;
 }
  
  .confirm-modal {

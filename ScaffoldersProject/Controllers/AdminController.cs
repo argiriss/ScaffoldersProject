@@ -159,8 +159,7 @@ namespace ScaffoldersProject.Controllers
                     }
                 }
                 
-
-                _repository.UpdateProduct(product);
+                await _repository.UpdateProduct(product);
                 TempData["Message"] = $"{imageView.Name} has been updated.";
                 return RedirectToAction(nameof(Index));
             }
@@ -199,6 +198,31 @@ namespace ScaffoldersProject.Controllers
         {
             var depositHistoryTable = _walletRepository.GetDepositHistory().OrderByDescending(i => i.DepositDate);
             return View(depositHistoryTable);
+        }
+
+        public IActionResult SetFee()
+        {
+            var settings = _db.Settings.ToList()[0];
+            return View(settings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetFee(Settings Settings)
+        {
+            if (_db.Settings.Count() == 0)
+            {
+                _db.Settings.Add(Settings);
+                await _db.SaveChangesAsync();
+            }
+            else
+            {
+                var changedSetting = _db.Settings.FirstOrDefault(i => i.SettingsId == Settings.SettingsId);
+                changedSetting.AdminFee = Settings.AdminFee;
+                changedSetting.MemberFee = Settings.MemberFee;
+                _db.Settings.Update(changedSetting);
+                await _db.SaveChangesAsync();
+            }            
+            return RedirectToAction(nameof(Index));
         }
     }
 }
