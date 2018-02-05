@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using ScaffoldersProject.Data;
 using ScaffoldersProject.Models;
 using ScaffoldersProject.Models.services;
 using System;
@@ -23,7 +24,8 @@ namespace ScaffoldersProject.Hubs
         private IWalletRepository _walletRepository;
         private IAskRepository _askRepository;
         private IOfferRepository _offerRepository;
-        
+        private MainDbContext db;
+
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
         
@@ -50,7 +52,7 @@ namespace ScaffoldersProject.Hubs
         public async override Task OnConnectedAsync()
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            var clientOrders = await _orderRepository.GetClientOrders(_userManager.GetUserId(Context.User));
+            var clientOrders = await _orderRepository.GetAllApprovedProducts();
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"),clientOrders);
             //place a list of bids for a specific product in Order Book
             //var asksTable = _askRepository.Asks.Where(x=>x.ProductId==5).ToList();  
@@ -128,7 +130,7 @@ namespace ScaffoldersProject.Hubs
             //the order Object with the above properties
             await _orderRepository.InstantOrder(instantOrder,productId,euroSpend);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            decimal totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
@@ -175,7 +177,8 @@ namespace ScaffoldersProject.Hubs
             var bidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
             //take the list of asks from ask table
             var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
-            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct, totalInEuro,bidTable,askTable);
+         
+            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct,totalInEuro,bidTable,askTable);
         }
     }
 }

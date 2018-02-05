@@ -98,11 +98,13 @@ namespace ScaffoldersProject.Models.services
             await CartOrderSave(newCartOrder);
 
             //if product not exist in portfolio insert it
-            var check = db.PortFolio.FirstOrDefault(x => x.ProductId == productId);
+            var check = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId==instantOrder.UserOrderId);
             if (check != null)
             {
                 //if exists the raise its coin quantity
                 check.CoinsQuantity += newCartOrder.Quantity;
+                db.PortFolio.Update(check); //update the table
+                await db.SaveChangesAsync();
             }
             else
             {
@@ -110,8 +112,11 @@ namespace ScaffoldersProject.Models.services
                 Portfolio newproduct = new Portfolio
                 {
                     ProductId = productId,
-                    CoinsQuantity = newCartOrder.Quantity
+                    CoinsQuantity = newCartOrder.Quantity,
+                    UserPortofolioId=instantOrder.UserOrderId
                 };
+                db.PortFolio.Add(newproduct);
+                await db.SaveChangesAsync();
             }
 
             //Reduse the Wallet amount by euroSpend in parameters
@@ -123,71 +128,29 @@ namespace ScaffoldersProject.Models.services
 
         }
 
-        public async Task<List<Products>> GetClientOrders(string userId)
+        public async Task<List<Products>> GetAllApprovedProducts()
         {
-            var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
-            var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
-            var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId)).ToList();
-            var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
-            var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
-            return orderedProducts;
+            var getAllProducts = db.Products.Where(x => x.AdminApproved == true).ToList();
+            return getAllProducts;
+            //var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
+            //var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
+            //var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId)).ToList();
+            //var productsIds = orders.Select(x => x.ProductId).Distinct().ToList();
+            //var orderedProducts = db.Products.Where(x => productsIds.Contains(x.ProductId)).ToList();
+            //return orderedProducts;
         }
 
         public decimal ClientSpecificProductTotal(int productId,string userId)
         {
-            //find all user orders in order table
-            var clientOrders = db.Order.Where(x => x.UserOrderId == userId).ToList();
-            var clientOrdersIds = clientOrders.Select(x => x.OrderID).ToList();
-            var orders = db.CartOrder.Where(x => clientOrdersIds.Contains(x.OrderId) && x.ProductId==productId);
-            var sum = orders.Select(x => x.Quantity).Sum();
-            return sum;
+            var product = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId == userId);
+            if (product != null)
+            {
+                return product.CoinsQuantity;
+            }
+            else
+            {
+                return 0;
+            }
         }
-
-
-
-        //method for adding the offer to Offer table in database
-        //public void AddOffer(string userId, decimal price, double quantity , int productId)
-        //{
-        //    var sameOffer = db.Offer.Single(x => x.PriceOffer == price && x.ProductId == productId);
-        //    //if the product already exists with same price then increase the quanity
-        //    if (sameOffer != null)
-        //    {
-        //        sameOffer.Quantity += quantity;
-        //        db.Offer.Update(sameOffer);
-        //    }
-        //    //if not initialize a new offer and add to table Offer
-        //    else
-        //    {
-        //        var offer = new Offer
-        //        {
-        //            Quantity = quantity,
-        //            PriceOffer = price,
-        //            DateofOffer = DateTime.Now,
-        //            UserOfferId = userId,
-        //            ProductId=productId
-
-        //        };
-        //        db.Offer.Add(offer);
-        //    }
-        //    db.SaveChanges();
-        //}
-
-        ////method for adding an ask
-        //public void AddAsk(string userId, decimal price, double quantity, int productId)
-        //{
-        //    var Ask = new Ask
-        //    {
-        //        Quantity = quantity,
-        //        PriceAsk = price,
-        //        DateofAsk = DateTime.Now,
-        //        UserAskId = userId,
-        //        ProductId = productId
-        //    };
-        //    db.Ask.Add(Ask);
-        //    db.SaveChanges();
-        //}
-
-
-
     }
 }
