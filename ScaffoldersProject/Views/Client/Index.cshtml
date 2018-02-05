@@ -23,15 +23,14 @@
                 <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                     @if (prod.Image == null)
                     {
-                        <div class="list-group-wrapper">
+                        
                             <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                        </div>
-                    }
+                                            }
                     else
                     {
-                        <div class="list-group-wrapper">
-                            <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 100%; height:250px;" alt="" />
-                        </div>
+                        
+                            <img class="group list-group-image" src="data:@prod.ContentType;base64,@prod.Image" style="width: 400px; height:250px;" alt="" />
+                        
                     }
                 </a>
                 <div class="caption">

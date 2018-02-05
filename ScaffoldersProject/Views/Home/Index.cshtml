@@ -9,7 +9,7 @@
 
 
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="video-screen">
     <div id="crypto-bar">
         <marquee style="font-family: Impact; font-size: 18pt">
@@ -77,7 +77,7 @@
 
                 ConsenSys, a global "venture production studio" that develops software primarily for the ethereum blockchain, was founded by Joseph Lubin, whom CoinDesk profiled for its Most Influential in Blockchain 2017 series.
             </p>
-            <p style="text-align:right;">Posted by <a href="https://www.coindesk.com/">Coindesk</a></p>
+            <p style="text-align:right;">Posted by <a target="_blank" href="https://www.coindesk.com/">Coindesk</a></p>
         </div>
         <div class="col-md-4 col-sm-12 thumbnail">
             <h3 style="color:#d46d15"><strong>UPS Might Be Making a Locker That Accepts Bitcoin</strong></h3>
@@ -91,7 +91,7 @@
 
                 The filing is the latest example of a patent application that lists bitcoin as a possible payment method. While this isn't indicative that companies are moving en-masse to accept the cryptocurrency, its inclusion as an option highlights its profile as a digitized medium of exchange.
             </p>
-            <p style="text-align:right;">Posted by <a href="https://www.coindesk.com/">Coindesk</a></p>
+            <p style="text-align:right;">Posted by <a target="_blank" href="https://www.coindesk.com/">Coindesk</a></p>
         </div>
         <div class="col-md-4 col-sm-12 thumbnail">
             <h3 style="color:#d46d15"><strong>Samsung Confirms It's Now Making Crypto Mining Chips</strong></h3>
@@ -105,10 +105,80 @@
 
                 Samsung's move into the cryptocurrency mining space will undoubtedly bring serious competition to China-based Bitmain, which claims to hold over 70 percent of the market share and uses ASICS from Taiwanese manufacturer TSMC.
             </p>
-            <p style="text-align:right;">Posted by <a href="https://www.coindesk.com/">Coindesk</a></p>
+            <p style="text-align:right;">Posted by <a target="_blank" href="https://www.coindesk.com/">Coindesk</a></p>
         </div>
     </div>
 </div>
+<div class="half-page">
+    <canvas id="myChart"></canvas>
+</div>
+
+<script>
+    //Chart area
+    function generatePricesFromTable() {
+        var labels = [];
+
+        var rows = jQuery("tr");
+        rows.each(function (index) {
+            if (index != 0)  // we dont need first row of table
+            {
+                var cols = $(this).find("td");
+                var num = parseInt(cols.first().text());
+                labels.push(num);
+            }
+        });
+
+        return labels.reverse();
+    }
+
+
+    function generateDatesFromTable() {
+        var labels = [];
+
+        var rows = jQuery("tr");
+        rows.each(function (index) {
+            if (index != 0)  // we dont need first row of table
+            {
+                var cols = $(this).find("td");
+                var lab = cols.last().text();
+                labels.push(lab);
+            }
+        });
+
+        var unique = $.uniqueSort(labels);
+        unique.reverse();
+        return unique;
+    }
+
+
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: generateDatesFromTable(),
+            datasets: [{
+                label: 'Currency Value',
+                data: generatePricesFromTable(),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    time: {
+                        unit: 'day'
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    var i = myChart.data.datasets.length;
+</script>
 
 
 
