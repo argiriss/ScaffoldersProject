@@ -135,6 +135,11 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuy", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
         }
 
+        public async Task InstantSell(int productId, decimal coinSell)
+        {
+
+        }
+
         //The seller sets his price at $30. That’s his ask price.
 
         //You are willing to pay $20 for the card.That your bid price

@@ -69,6 +69,7 @@ namespace ScaffoldersProject
             services.AddTransient<IProductRepository, EfProductRepository>();
             services.AddTransient<ICartRepository, EfCartRepository>();
             services.AddTransient<IOrderRepository, EfOrderRepository>();
+            services.AddTransient<ISellRepository, EfSellRepository>();
             services.AddTransient<IWalletRepository, EfWalletRepository>();
             services.AddTransient<IOfferRepository, EfOfferRepository>();
             services.AddTransient<IAskRepository, EfAskRepository>();

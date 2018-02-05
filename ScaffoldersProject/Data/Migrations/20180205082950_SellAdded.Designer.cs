@@ -11,9 +11,10 @@ using System;
 namespace ScaffoldersProject.Data.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180205082950_SellAdded")]
+    partial class SellAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,22 +157,6 @@ namespace ScaffoldersProject.Data.Migrations
                     b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("ScaffoldersProject.Models.Portfolio", b =>
-                {
-                    b.Property<int>("PortfolioId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<decimal>("CoinsQuantity");
-
-                    b.Property<int>("ProductId");
-
-                    b.HasKey("PortfolioId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("PortFolio");
-                });
-
             modelBuilder.Entity("ScaffoldersProject.Models.Products", b =>
                 {
                     b.Property<int>("ProductId")
@@ -276,14 +261,6 @@ namespace ScaffoldersProject.Data.Migrations
                 });
 
             modelBuilder.Entity("ScaffoldersProject.Models.Offer", b =>
-                {
-                    b.HasOne("ScaffoldersProject.Models.Products", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ScaffoldersProject.Models.Portfolio", b =>
                 {
                     b.HasOne("ScaffoldersProject.Models.Products", "Product")
                         .WithMany()
