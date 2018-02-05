@@ -126,6 +126,21 @@ namespace ScaffoldersProject.Hubs
             instantOrder.OrderDay = DateTime.Now;
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
+            //////////////
+            var offersToBuy = _offerRepository.Offers.Where(x => x.ProductId == productId);
+            foreach (var item in offersToBuy)
+            {
+                if ((item.PriceOffer * item.Quantity) % euroSpend == euroSpend /*|| ==0*/)
+                {
+                    euroSpend -= item.PriceOffer * item.Quantity;
+                }
+                else
+                {
+                    decimal closedPrice = item.PriceOffer;
+                }
+                
+            }
+            /////////
             await _orderRepository.InstantOrder(instantOrder,productId,euroSpend);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
