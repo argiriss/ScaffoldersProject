@@ -16,8 +16,9 @@
 
     <script>
 
-        connection.on('BuyItem', function (message,totalCost) {
+        connection.on('BuyItem', function (message,totalCost,totalAmount) {
             document.getElementById('cartId').innerHTML = '(' + totalCost + ')';
+            document.getElementById('walletId').innerHTML = totalAmount;
             alert(message);
         });
 

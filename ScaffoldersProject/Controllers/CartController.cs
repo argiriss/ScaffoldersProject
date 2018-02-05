@@ -26,6 +26,7 @@ namespace ScaffoldersProject.Controllers
             _cartRepository = cartRepository;
         }
 
+
         public IActionResult Index()
         {
             var cartList = _cartRepository.Cart.Where(x => x.UserCartId == _userManager.GetUserId(User));
