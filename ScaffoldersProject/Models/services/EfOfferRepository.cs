@@ -45,7 +45,6 @@ namespace ScaffoldersProject.Models.services
 
         public void RemoveOffer()
         {
-            
             throw new NotImplementedException();
         }
     }
