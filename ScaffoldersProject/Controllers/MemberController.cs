@@ -141,19 +141,6 @@ namespace ScaffoldersProject.Controllers
             {
                 return View(imageView);
             }
-        }
-
-        //[HttpGet]
-        //public FileStreamResult ViewImage(int productId)
-        //{
-        //    Products product = _repository.Products.FirstOrDefault(m => m.ProductId == productId);
-        //    MemoryStream ms = new MemoryStream(product.Image);
-
-        //    return new FileStreamResult(ms, product.ContentType);
-
-        //}
-
-
-
+        }        
     }
 }
