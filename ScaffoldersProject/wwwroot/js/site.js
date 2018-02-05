@@ -59,7 +59,9 @@ $(document).ready(function () {
     //when we click select product button on sidenav 
     $(document).on("click", "a.dropdown-link", function () {
         $linktext = $(this).text();
-        $('#dropdown-button-text').text($linktext);
+        $pricetext = $(this).siblings('.select-product-price').text();
+        $totaltext = $linktext+ ' - ' + $pricetext;
+        $('#dropdown-button-text').text($totaltext);
         $("#coinLabelId").text($linktext);
         $("#AskOfferCoinId").text($linktext);
         $('#totalCoinSelectedId').text('0.00');

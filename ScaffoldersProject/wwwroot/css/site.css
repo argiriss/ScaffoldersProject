@@ -423,7 +423,10 @@ ul#dropMenuId li * {
 span.select-product-price {
     font-size: 19px;
     color: #d46d15;
+    position: absolute;
+    right: 7%;
 }
+
 
 div#bidId, div#askId, .tradehistory{
     border-left:1px solid black;
