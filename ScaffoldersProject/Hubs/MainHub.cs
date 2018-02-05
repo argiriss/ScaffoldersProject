@@ -131,13 +131,20 @@ namespace ScaffoldersProject.Hubs
             var offersToBuy = _offerRepository.Offers.Where(x => x.ProductId == productId);
             foreach (var item in offersToBuy)
             {
-                if ((item.PriceOffer * item.Quantity) % euroSpend == euroSpend /*|| ==0*/)
+                if (((item.PriceOffer * item.Quantity) % euroSpend == euroSpend) || ((item.PriceOffer * item.Quantity) % euroSpend == 0))
                 {
                     euroSpend -= item.PriceOffer * item.Quantity;
+                    await _offerRepository.RemoveOfferAsync(item);
                 }
                 else
                 {
-                    decimal closedPrice = item.PriceOffer;
+                    //reduce the quanity of offer 
+                    var itemForReduce = item;
+                    itemForReduce.Quantity -= euroSpend / item.PriceOffer;
+                    await _offerRepository.ReduceOfferAsync(itemForReduce); //update the offer table with the new quantity
+
+                    decimal closedPrice = item.PriceOffer; //the new official product price
+                    //TO DO: Update the price with the new official price
                 }
                 
             }
