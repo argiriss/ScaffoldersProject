@@ -3,13 +3,13 @@
     ViewData["Title"] = "ViewProduct";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<header class="bg-faded p-1">
+
     <h3 class="text-center" style="color:#d46d15">
         @Model.Product.Name
     </h3>
-</header>
+
 <div class="row" style="margin-top:20px;">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <section class="card m-1 p-1 item-image">
             @if (Model.ViewImage.Image == null)
             {
@@ -28,21 +28,22 @@
         </section>
 
     </div>
-    <div class="col-md-3 product-info">
-        <div><h3>Price:<span id="product-view-price" style="color:#d46d15; font-size: 31px;">@Model.Product.Price.ToString("C2")</span> </h3></div>
+    <div class="col-md-5">
+        <div><h3>Price: <span id="product-view-price" style="color:#d46d15; font-size: 31px;">@Model.Product.Price.ToString("C2")</span> </h3></div>
         <div>
-            <form asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
+            <form class="form-inline" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductId="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()" method="post">
                 <input type="hidden" name="productId" value=@Model.Product.ProductId>
+                <input id="priceId" type="hidden" value=@Model.Product.Price>
                 @if (Model.Product.Stock <= 0)
                 {
                     <h5 class="text-danger">Currently out of stock</h5>
                 }
                 else
                 {
-                    <span style="font-size:23px">EUR</span>
-                    <input id="product-view-number" type="number"/><br>
-                    <span style="font-size:23px">@Model.Product.ShortName</span>
-                    <input id="product-view-quantity" type="number" disabled name="quantity" min="1" max="@Model.Product.Stock" /><br>
+                    <div class="form-group">
+                        <label>EUR</label>
+                        <input id="quantity" type="number" class="form-control" name="quantity" onchange="convert(this)" onkeyup="convert(this)">
+                    </div>
                     <p style="color:darkgreen">Available: @Model.Product.Stock (items)</p>
                 }
                 @if (Model.Product.Stock > 0)
@@ -50,107 +51,24 @@
                     <button class="btn btn-primary" type="submit">Add To Cart</button>
                 }
             </form>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Add To Wish List</button>
-                <!--<a class="btn btn-success btn-sm" style="float:right" asp-controller="Cart" asp-action="AddToCart" asp-route-ProductID="@Model.Product.ProductId" asp-route-returnUrl="@ViewContext.HttpContext.Request.Path.ToString()">Add to cart</a>-->
+            
+                <h3 id="convertedId" style="color:blue"></h3>
             
         </div>
-
-
-
-
     </div>
     <div class="col-md-3"></div>
 </div>
-<br />
-<div class="row">
-    @{int count = 0;
-        @foreach (var product in Model.SimilarViewImage)
-        {
-                @if (count <= 2 && product.Name != Model.Product.Name)
-                    {
-                    <div class="col-md-2" style="margin-right:8%;">
-                        <section class="card m-1 p-1">
-                            <header class="bg-faded p-1">
-                                <h4>
-                                    <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">@product.Name</a>
-                                    <span class="badge" style="background-color:black">
-                                        <small><b style="color:orangered">@product.Price.ToString("c")</b></small>
-                                    </span>
-                                </h4>
-                            </header>
-                            <section class="card m-1 p-1">
-                                @if (product.Image == null)
-                                {
-                                    <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
-                                        <img class="group list-group-image" src="http://placehold.it/400x250/000/fff" alt="" />
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@product.ProductId">
-                                        <img class="group list-group-image" src="data:@product.ContentType;base64,@product.Image" style="width: 200px;" alt="" />
-                                    </a>
-                                }
-                            </section>
-                        </section>
-                    </div>
-                    count += 1;
-                }
-        }
-
-     }
-</div>
-    
 
 
-@*Modal*@
-<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Place your bid</h4>
-            </div>
-            <div class="modal-body">
-                
-                    <input type="hidden" id="productId" value="@Model.Product.ProductId"/>
-                    <span>@Model.Product.Name</span><br>
-                    <span>Quantity</span><input type="number" min="0" name="quantity" id="quantity"/>
-                    <span>Price</span><input type="text" min="0" max="@Model.Product.Price" name="price" id="price" />
-                    <button class="btn btn-primary" onclick="btnPlaceBid()">Bid</button>
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 <script>
-    function btnPlaceBid() { 
-        var productId = document.getElementById('productId').value; //take productId from user's bid
-        var desiredPrice = document.getElementById('price').value;
-        var desiredQuantity = document.getElementById('quantity').value;
-        console.log(productId);
-        connection.invoke('PlaceBid', productId, desiredPrice, desiredQuantity); 
-        location.href = "/Client/OrderBook"
-    };
 
-    $('input#product-view-number').on("change keyup paste", function () {
-        $value = (this).value.replace(',', '.');
-        $price = parseFloat($('span#product-view-price').text().replace(',','.'));
-        $total = parseFloat($value / $price).toFixed(2);
-        if ($value.match(/\d+.*\d*/) && !isNaN($total)) {
-            $('input#product-view-quantity').empty();
-            $('input#product-view-quantity').val($total);
-        }
-        else {
-            $('input#product-view-quantity').empty();
-        }
-    });
+    function convert(elem) {
+        var euroAmount = elem.value;
+        var currentCoinPrice = document.getElementById('priceId').value;
+        var converted = euroAmount / currentCoinPrice.replace(',', '.');
+        document.getElementById('convertedId').innerHTML = 'You are buying: ' + converted.toFixed(4) + ' @Model.Product.ShortName';
+    }
+
 </script>
 

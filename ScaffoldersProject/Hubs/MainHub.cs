@@ -110,9 +110,8 @@ namespace ScaffoldersProject.Hubs
             //the order Object with the above properties
             await _orderRepository.AddNewOrder(orderObject);
             var totalCost = 0;
-
-            await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok",totalCost.ToString("c"));
-            //await Clients.All.InvokeAsync("NewOrder", table);
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem","ok",totalCost.ToString("c"), totalAmount.ToString("c"));
         }
 
         //Instant buy from sidenav menu

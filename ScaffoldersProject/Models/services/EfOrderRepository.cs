@@ -56,7 +56,8 @@ namespace ScaffoldersProject.Models.services
             CartOrder cartOrderTable = new CartOrder();
             foreach (var item in CartItemsOrdered)
             {
-
+                //find Product price
+                var findProduct = await db.Products.FindAsync(item.ProductId);
                 //!!!!!!Inside foreach no Iquerable thats why i made CartItemsOrdered 
                 //To List!!!!!!!!.........Important...............
 
@@ -64,7 +65,7 @@ namespace ScaffoldersProject.Models.services
                 //to cartOrder so as to clear cart table
                 cartOrderTable.OrderId = orderDetails.OrderID;
                 cartOrderTable.ProductId = item.ProductId;
-                cartOrderTable.Quantity = item.Quantity;
+                cartOrderTable.Quantity = item.Quantity/findProduct.Price;
 
                 await CartOrderSave(cartOrderTable);
 
@@ -73,8 +74,37 @@ namespace ScaffoldersProject.Models.services
 
                 //for each item removing,  reduce its stock by the buying quantity
                 Products productReduseStock = db.Products.FirstOrDefault(p => p.ProductId == item.ProductId);
-                productReduseStock.Stock -= item.Quantity; //reduce the stock
+                productReduseStock.Stock -= item.Quantity/ findProduct.Price; //reduce the stock
                 await ProductReduseStock(productReduseStock);
+
+                //if product not exist in portfolio insert it
+                var check = db.PortFolio.FirstOrDefault(x => x.ProductId == item.ProductId && x.UserPortofolioId == orderDetails.UserOrderId);
+                if (check != null)
+                {
+                    //if exists the raise its coin quantity
+                    check.CoinsQuantity += item.Quantity / findProduct.Price;
+                    db.PortFolio.Update(check); //update the table
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    //insert new product to portfolio
+                    Portfolio newproduct = new Portfolio
+                    {
+                        ProductId = item.ProductId,
+                        CoinsQuantity = item.Quantity / findProduct.Price,
+                        UserPortofolioId = orderDetails.UserOrderId
+                    };
+                    db.PortFolio.Add(newproduct);
+                    await db.SaveChangesAsync();
+                }
+
+                //Reduse the Wallet amount by quantity which is the euro spend ,in parameters
+                //Find Client Wallet and reduse it
+                var clientUser = await _userManager.FindByIdAsync(orderDetails.UserOrderId);
+                clientUser.Wallet -= item.Quantity;
+                //Save the changes
+                await _userManager.UpdateAsync(clientUser);
 
             }//End of foreach loop in cart table
         }
