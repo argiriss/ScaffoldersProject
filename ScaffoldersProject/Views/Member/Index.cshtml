@@ -38,17 +38,14 @@
                         @prod.Description
                     </p>
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-9">
                             <p class="lead">
                                 @prod.Price.ToString("c")
                             </p>
                         </div>
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-3">
                             <a class="btn btn-warning" asp-action="Edit" asp-route-productId="@prod.ProductId">Edit</a>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="#">Add to cart</a>
-                        </div>
+                        </div>                      
                     </div>
                 </div>
             </div>
