@@ -21,6 +21,7 @@ namespace ScaffoldersProject.Data
         public DbSet<Ask> Ask { get; set; }
         public DbSet<Settings> Settings { get; set; }
         public DbSet<Portfolio> PortFolio { get; set; }
+        public DbSet<TradeHistory> TradeHistory { get; set; }
 
         //We can add other models ............
 
