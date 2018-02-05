@@ -338,6 +338,7 @@
     <script>
         var currentCoinPrice;//from function setProductId()
         var currentProductId;//from function setProductId()
+        var currentCoinShortName;//from function setProductId()
 
         //Receive from server on refresh
         connection.on('Wallet', function (walletTotal, clientOrders) {
@@ -346,13 +347,14 @@
             dropClientsItems(clientOrders);
         })
 
-        //Receive from server From Buy
-        connection.on('InstantBuy', function (walletTotal, totalFromThisProduct,totalInEuro) {
+        //Receive from server From Buy or Sell
+        connection.on('InstantBuySell', function (walletTotal, totalFromThisProduct,totalInEuro) {
             document.getElementById('walletId').innerHTML = walletTotal;
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
         })
 
+        //Receive from server while selecting coin from sidenav
         connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro,offerTable,askTable) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
@@ -399,6 +401,7 @@
                 liCreate.setAttribute('onclick', 'setProductId(this)');
                 liCreate.setAttribute('data-value', clientOrders[i].productId);
                 liCreate.setAttribute('data-currentPrice', clientOrders[i].price);
+                liCreate.setAttribute('data-shortName', clientOrders[i].shortName);
                 var spanCreate = document.createElement('span');
                 spanCreate.innerHTML = clientOrders[i].price;
                 spanCreate.className ="select-product-price";
@@ -422,6 +425,7 @@
             currentProductId = elem.getAttribute('data-value');
             connection.invoke('SelectedCoin', currentProductId);
             currentCoinPrice = elem.getAttribute('data-currentPrice');
+            currentCoinShortName = elem.getAttribute('data-shortname');
         }
 
         function ConvertToSelectedCoin(elem) {
@@ -436,7 +440,7 @@
         }
 
         function setBuy() {
-            let temp = document.getElementById('dropdown-button-text').innerHTML;
+            let temp = currentCoinShortName;
             document.getElementById('placeOrderId').innerHTML = 'Place Buy Order';
             document.getElementById('placeOrderId').style.backgroundColor = '#5cb85c';
             document.getElementById('enterAmmountId').value = '';
@@ -445,7 +449,7 @@
         }
 
         function setSell() {
-            let temp = document.getElementById('dropdown-button-text').innerHTML;
+            let temp = currentCoinShortName;
             document.getElementById('placeOrderId').innerHTML = 'Place Sell Order';
             document.getElementById('placeOrderId').style.backgroundColor = '#c9302c';
             document.getElementById('enterAmmountId').value = '';
@@ -473,8 +477,10 @@
                 document.getElementById('enterAmmountId').value = "";
                 document.getElementById('totalCoinSelectedId').innerHTML = "";
             } else {
-
-
+                let coinSell = document.getElementById('enterAmmountId').value;
+                connection.invoke('InstantSell', productId, coinSell);
+                document.getElementById('enterAmmountId').value = "";
+                document.getElementById('totalCoinSelectedId').innerHTML = "";
             }
         }
 
