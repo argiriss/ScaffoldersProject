@@ -97,6 +97,23 @@ namespace ScaffoldersProject.Models.services
 
             await CartOrderSave(newCartOrder);
 
+            //if product not exist in portfolio insert it
+            var check = db.PortFolio.FirstOrDefault(x => x.ProductId == productId);
+            if (check != null)
+            {
+                //if exists the raise its coin quantity
+                check.CoinsQuantity += newCartOrder.Quantity;
+            }
+            else
+            {
+                //insert new product to portfolio
+                Portfolio newproduct = new Portfolio
+                {
+                    ProductId = productId,
+                    CoinsQuantity = newCartOrder.Quantity
+                };
+            }
+
             //Reduse the Wallet amount by euroSpend in parameters
             //Find Client Wallet and reduse it
             var clientUser = await _userManager.FindByIdAsync(instantOrder.UserOrderId);

@@ -13,11 +13,14 @@ namespace ScaffoldersProject.Data
         public DbSet<Products> Products { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<Sell> Sell { get; set; }
         public DbSet<CartOrder> CartOrder { get; set; }
+        public DbSet<CartSell> CartSell { get; set; }
         public DbSet<Deposit> Deposit { get; set; }
         public DbSet<Offer> Offer { get; set; }
         public DbSet<Ask> Ask { get; set; }
         public DbSet<Settings> Settings { get; set; }
+        public DbSet<Portfolio> PortFolio { get; set; }
 
         //We can add other models ............
 
