@@ -43,9 +43,18 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
-        public void RemoveOffer()
+        public async Task RemoveOfferAsync(Offer itemForRemoval)
         {
-            throw new NotImplementedException();
+            db.Offer.Remove(itemForRemoval);
+            await db.SaveChangesAsync();
+            //TO DO: the offers which removed must increase the revenues of member
+        }
+
+        public async Task ReduceOfferAsync(Offer itemForReduce)
+        {
+            db.Offer.Update(itemForReduce);
+            await db.SaveChangesAsync();
+            //TO DO: the offers which removed must increase the revenues of member
         }
     }
 }
