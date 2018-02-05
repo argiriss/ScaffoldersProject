@@ -4,37 +4,75 @@
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="orderbook">
-    <div class="col col-md-3">
-        <div id="askId" class="half-page" style="background:#111;color:orangered;overflow-y:scroll;">
-            <table>
+    <div class="row">
+        <div class="col col-md-12" style="background:#ddd; height:34px;padding-top: 5px; padding-left: 25px;">
+            <span class="orderbook-butt">Orderbook</span> | <span class="tradehistory-butt">Trade History</span>
+        </div>
+        <div class="col col-md-3 tradehistory">
+            <table class="table table-responsive" id="tradeTable">
                 <thead>
                     <tr>
-                        <th style="color:white">Market Size</th>
-                        <th style="color:white">Price</th>
+                        <th class="text-center" style="color:rgb(212, 109, 21)">Trade Size</th>
+                        <th class="text-center" style="color:rgb(212, 109, 21)">Price(Euro)</th>
+                        <th class="text-center" style="color:rgb(212, 109, 21)">Time</th>
                     </tr>
                 </thead>
             </table>
-            <table id="askTable"></table> 
         </div>
-        <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px; overflow-y: scroll;">
-            <table id="bidTable"></table>
-        </div>
-    </div>
-    <div class="col col-md-9">
-        <div class="half-page">
-            <canvas id="myChart"></canvas>
-        </div>
-        <div class="half-page" style="background:purple;">
+        
+        <div class="col col-md-3 orders">
+            <div id="askId" class="half-page" style="background:#111;color:orangered; overflow-y:hidden">
+                <div class="table-container" style="max-height: 50vh; overflow:hidden;">
+                    <table class="table table-responsive" id="askTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="color:rgb(212, 109, 21)">Market Size</th>
+                                <th class="text-center" style="color:rgb(212, 109, 21)">Price</th>
+                                <th class="text-center" style="color:rgb(212, 109, 21)">My Size</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+            </div>
 
+
+
+            <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px;">
+                <div class="table-container" style="max-height: 50vh; overflow:hidden;">
+                    <table class="table table-responsive" id="bidTable">
+                        <tbody id="tbodybid"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-9">
+            <div class="half-page">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="half-page" style="background:purple;">
+
+            </div>
         </div>
     </div>
+
 </div>
 
 
 <script>
+
+    $('.orderbook-butt').click(function () {
+        $('.tradehistory').hide();
+        $('.orders').show();
+    });
+
+    $('.tradehistory-butt').click(function () {
+        $('.tradehistory').show();
+        $('.orders').hide();
+    });
     //Recieve data from server
     connection.on('PlaceBid', function (offerTable) {
-        var parent = document.getElementById("bidTable");
+        var parent = document.getElementById("tbodybid");
         var trElem;
         var tdElem;
         var tdSecElem;
@@ -52,7 +90,7 @@
     })
 
     connection.on('PlaceAsk', function (askTable) {
-        var parent = document.getElementById("askTable");
+        var parent = document.getElementById("tbody");
         var trElem;
         var tdElem;
         var tdSecElem;
@@ -66,6 +104,7 @@
             trElem.appendChild(tdElem);
             trElem.appendChild(tdSecElem);
             parent.appendChild(trElem);
+            $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
         }
     })
 
@@ -73,43 +112,43 @@
 
     //Chart area.....................................................................
 
-    //var ctx = document.getElementById("myChart").getContext('2d');
-    //var myChart = new Chart(ctx, {
-    //    type: 'line',
-    //    data: {
-    //        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    //        datasets: [{
-    //            label: '# of Votes',
-    //            data: [12, 19, 3, 5, 2, 3],
-    //            backgroundColor: [
-    //                'rgba(255, 99, 132, 0.2)',
-    //                'rgba(54, 162, 235, 0.2)',
-    //                'rgba(255, 206, 86, 0.2)',
-    //                'rgba(75, 192, 192, 0.2)',
-    //                'rgba(153, 102, 255, 0.2)',
-    //                'rgba(255, 159, 64, 0.2)'
-    //            ],
-    //            borderColor: [
-    //                'rgba(255,99,132,1)',
-    //                'rgba(54, 162, 235, 1)',
-    //                'rgba(255, 206, 86, 1)',
-    //                'rgba(75, 192, 192, 1)',
-    //                'rgba(153, 102, 255, 1)',
-    //                'rgba(255, 159, 64, 1)'
-    //            ],
-    //            borderWidth: 1
-    //        }]
-    //    },
-    //    options: {
-    //        scales: {
-    //            yAxes: [{
-    //                ticks: {
-    //                    beginAtZero: true
-    //                }
-    //            }]
-    //        }
-    //    }
-    //});
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [{
+                label: 'Coin Price',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
     //var i = myChart.data.datasets.length;
     //setInterval(function () {
     //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);

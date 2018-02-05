@@ -359,7 +359,7 @@
             var currentUrl = window.location.href;
             if (currentUrl.includes('OrderBook')) {
                 //orderbook
-                var parent = document.getElementById("bidTable");
+                var parent = document.getElementById("tbodybid");
                 var trElem;
                 var tdElem;
                 var tdSecElem;
@@ -375,7 +375,7 @@
                     parent.appendChild(trElem);
                 }
                 //ask table
-                parent = document.getElementById("askTable");
+                parent = document.getElementById("tbody");
                 for (var i = 0; i < askTable.length; i++) {
                     trElem = document.createElement("tr");
                     tdElem = document.createElement("td");
@@ -385,6 +385,7 @@
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
                     parent.appendChild(trElem);
+                    $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
                 }
             }
         })
