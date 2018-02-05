@@ -15,5 +15,7 @@ namespace ScaffoldersProject.Models
         public Products Product { get; set; }
 
         public decimal CoinsQuantity { get; set; }
+
+        public string UserPortofolioId { get; set; } //similar to foreign key
     }
 }
