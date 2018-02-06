@@ -392,6 +392,10 @@
             }
         })
 
+        connection.on('Errors', function (message) {
+            alert(message);
+        });
+
         //Methods........................
         function dropClientsItems(clientOrders) {
             var parent = document.getElementById('dropMenuId');
