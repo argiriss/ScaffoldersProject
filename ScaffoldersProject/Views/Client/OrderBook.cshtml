@@ -17,6 +17,7 @@
                         <th class="text-center" style="color:rgb(212, 109, 21)">Time</th>
                     </tr>
                 </thead>
+                <tbody id="tradeHistory"></tbody>
             </table>
         </div>
 
@@ -98,6 +99,27 @@
             trElem.appendChild(tdSecElem);
             parent.appendChild(trElem);
             $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
+        }
+    })
+    connection.on('DisplayHistory', function (tradeHistoryTable) {
+        var parent = document.getElementById("tradeHistory");
+        var trElem;
+        var tdElem;
+        var tdSecElem;
+        var tdThrElem;
+        parent.innerHTML = "";
+        for (var i = 0; i < tradeHistoryTable.length; i++) {
+            trElem = document.createElement("tr");
+            tdElem = document.createElement("td");
+            tdElem.innerHTML = tradeHistoryTable[i].quantity;
+            tdSecElem = document.createElement("td");
+            tdSecElem.innerHTML = tradeHistoryTable[i].price;
+            tdThrElem = document.createElement("td");
+            tdTrdElem.innerHTML = tradeHistoryTable[i].dateOfTransaction;
+            trElem.appendChild(tdElem);
+            trElem.appendChild(tdSecElem);
+            trElem.appendChild(tdThrElem);
+            parent.appendChild(trElem);
         }
     })
     //Chart area.....................................................................

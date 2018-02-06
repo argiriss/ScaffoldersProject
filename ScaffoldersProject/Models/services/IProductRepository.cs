@@ -21,6 +21,8 @@ namespace ScaffoldersProject.Models.services
         Task<Products> DeleteProduct(int productId);
 
         Task<decimal> GetCurrentPrice(int productId);
+
+        Task SetCurrentPrice(int productId , decimal closedPrice);
     }
 }
 

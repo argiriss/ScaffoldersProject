@@ -43,17 +43,17 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
-        public async Task RemoveOfferAsync(Offer itemForRemoval)
+        public void RemoveOfferAsync(Ask itemForRemoval)
         {
-            db.Offer.Remove(itemForRemoval);
-            await db.SaveChangesAsync();
+            db.Ask.Remove(itemForRemoval);
+            db.SaveChanges();
             //TO DO: the offers which removed must increase the revenues of member
         }
 
-        public async Task ReduceOfferAsync(Offer itemForReduce)
+        public void ReduceOfferAsync(Ask itemForReduce)
         {
-            db.Offer.Update(itemForReduce);
-            await db.SaveChangesAsync();
+            db.Ask.Update(itemForReduce);
+            db.SaveChanges();
             //TO DO: the offers which removed must increase the revenues of member
         }
     }

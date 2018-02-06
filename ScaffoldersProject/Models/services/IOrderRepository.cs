@@ -15,6 +15,11 @@ namespace ScaffoldersProject.Models.services
         Task InstantOrder(Order instantOrder, int productId, decimal euroSpend);
         Task<List<Products>> GetAllApprovedProducts();
          decimal ClientSpecificProductTotal(int productId, string userId);
+        Task UpdateTradeHistory(TradeHistory trade);
+        List<TradeHistory> GetTradeHistory(int productId);
+        Task SetCurrentPrice(int productId, decimal closedPrice);
+        Task<decimal> RealTimePrice(int productId, decimal eurospend);
+        Task<decimal> GetProductCuurentPrice(int productId);
         //methods for my order book 
 
 

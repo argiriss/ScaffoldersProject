@@ -126,35 +126,16 @@ namespace ScaffoldersProject.Hubs
             instantOrder.OrderDay = DateTime.Now;
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
-            //////////////
-            var offersToBuy = _offerRepository.Offers.Where(x => x.ProductId == productId);
-            foreach (var item in offersToBuy)
-            {
-                if (((item.PriceOffer * item.Quantity) % euroSpend == euroSpend) || ((item.PriceOffer * item.Quantity) % euroSpend == 0))
-                {
-                    euroSpend -= item.PriceOffer * item.Quantity;
-                    await _offerRepository.RemoveOfferAsync(item);
-                }
-                else
-                {
-                    //reduce the quanity of offer 
-                    var itemForReduce = item;
-                    itemForReduce.Quantity -= euroSpend / item.PriceOffer;
-                    await _offerRepository.ReduceOfferAsync(itemForReduce); //update the offer table with the new quantity
-
-                    decimal closedPrice = item.PriceOffer; //the new official product price
-                    //TO DO: Update the price with the new official price
-                }
-                
-            }
-            /////////
+            
             await _orderRepository.InstantOrder(instantOrder,productId,euroSpend);
+
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             decimal totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
+            await SelectedCoin(productId);
         }
 
         public async Task InstantSell(int productId, decimal coinSell)
@@ -174,6 +155,7 @@ namespace ScaffoldersProject.Hubs
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
+            await SelectedCoin(productId);
         }
 
         //The seller sets his price at $30. That’s his ask price.
@@ -211,8 +193,9 @@ namespace ScaffoldersProject.Hubs
             var bidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
             //take the list of asks from ask table
             var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
-         
-            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct,totalInEuro,bidTable,askTable);
+            var currentPrice = await _orderRepository.GetProductCuurentPrice(productId);
+           
+            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct,totalInEuro,bidTable,askTable, currentPrice);
         }
     }
 }
