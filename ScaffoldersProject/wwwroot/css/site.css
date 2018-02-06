@@ -415,6 +415,10 @@ canvas#myChart {
     height:50vh !important;
 }
 
+canvas#BTCchart, canvas#ETHchart, canvas#XRPchart, canvas#LTCchart {
+    height: 80vh !important;
+}
+
 table#depositId {
     width: 100%;
 }
@@ -562,9 +566,6 @@ table#askTable td, table#bidTable td, table#tradeTable td{
         padding: 0px 0 0px 0;
     }*/
 
-#perks div {
-    letter-spacing: -4px;
-}
 
 #perks div {
     vertical-align: top;
@@ -646,6 +647,25 @@ table#askTable td, table#bidTable td, table#tradeTable td{
     line-height: 20px;
     text-align: center;
 }
+
+div#cryptosbtn {
+
+    margin-bottom:30px;
+}
+#cryptosbtn span {
+    margin: 25px;
+    cursor: pointer;
+    color: #d46d15;
+    text-align: center;
+}
+
+#cryptosbtn span:hover {
+    text-decoration: underline;
+    font-weight:700;
+}
+
+
+
 
 
 @media screen and (max-width: 995px) {

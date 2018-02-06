@@ -63,6 +63,33 @@
         <p>We give our platform a voice and build meaningful relationships by talking to customers over live chat.Our support team is available to assist you with any issues you might encounter.</p>
     </div>
 </div>
+
+<h1 id="cryptosbtn" style="color:#d46d15;" class="col-sm-12 text-center"><strong>Overview</strong></h1>
+
+<div class="col-md-4"></div>
+
+<div class="col-md-4 col-sm-12 text-center" id="cryptosbtn">
+    <span id="BTCbtn">BITCOIN</span>
+    <span id="ETHbtn">ETHEREUM</span>
+    <span id="XRPbtn">RIPPLE</span>
+    <span id="LTCbtn">LITECOIN</span>
+
+</div>
+
+<div>
+    <canvas id="BTCchart"></canvas>
+</div>
+<div>
+    <canvas id="ETHchart"></canvas>
+</div>
+<div>
+    <canvas id="XRPchart"></canvas>
+</div>
+<div>
+    <canvas id="LTCchart"></canvas>
+</div>
+
+
 <div class="row list-group" id="news">
     <div class="col-sm-12">
         <h1 style="color:#d46d15 "><strong>News & Updates</strong></h1>
@@ -109,12 +136,45 @@
         </div>
     </div>
 </div>
-<div class="half-page">
-    <canvas id="homechart"></canvas>
-</div>
+
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
+
+    $('canvas#BTCchart').show();
+    $('canvas#ETHchart').hide();
+    $('canvas#XRPchart').hide();
+    $('canvas#LTCchart').hide();
+
+    $('#BTCbtn').click(function () {
+        $('canvas#BTCchart').show();
+        $('canvas#ETHchart').hide();
+        $('canvas#XRPchart').hide();
+        $('canvas#LTCchart').hide();
+    });
+
+    $('#ETHbtn').click(function () {
+        $('canvas#BTCchart').hide();
+        $('canvas#ETHchart').show();
+        $('canvas#XRPchart').hide();
+        $('canvas#LTCchart').hide();
+    });
+
+    $('#XRPbtn').click(function () {
+        $('canvas#BTCchart').hide();
+        $('canvas#ETHchart').hide();
+        $('canvas#XRPchart').show();
+        $('canvas#LTCchart').hide();
+    });
+
+    $('#LTCbtn').click(function () {
+        $('canvas#BTCchart').hide();
+        $('canvas#ETHchart').hide();
+        $('canvas#XRPchart').hide();
+        $('canvas#LTCchart').show();
+    });
+
 
     function formatDate(date) {
         var monthNames = [
@@ -128,13 +188,13 @@
         var monthIndex = date.getMonth();
         var year = date.getFullYear();
 
-        return monthNames[monthIndex] + ' ' + year;
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
 
-    //Chart area from API
+    //Chart area from BTC API
     var apifetch = $.ajax({
         dataType: "json",
-        url: "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=250&aggregate=3&e=CCCAGG",
+        url: "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=130&aggregate=3&e=CCCAGG",
         success: function (json) {
             var pricedata = [];
             var closedata = [];
@@ -155,8 +215,8 @@
                 pricedata.push(open);
                 timedata.push(formatDate(epochtodate));
             })
-                        
-            var ctx = document.getElementById("homechart").getContext('2d');
+
+            var ctx = document.getElementById("BTCchart").getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -164,22 +224,239 @@
                     datasets: [{
                         label: 'BTC/USD',
                         data: pricedata,
-                        borderWidth: 1
+                        borderWidth: 2,
+                        backgroundColor: ['rgba(212,109,21, 0.7)'],
+                        borderColor: ['rgba(212,109,21,1)'],
                     }]
                 },
-                //options: {
-                //    scales: {
-                //        xAxes: [{
-                //            time: {
-                //                unit: 'day'
-                //            }
-                //        }],
-                //    }
-                //}
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21,1)",
+                            fontSize: 18
+
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21)"
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+
+                                fontColor: "rgba(212,109,21)",
+                                fontSize: 15
+
+                            }
+                        }],
+                    }
+                }
             });
         }
     });
-  
+
+
+    //Chart area from ETH API
+    var apifetch = $.ajax({
+        dataType: "json",
+        url: "https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=130&aggregate=3&e=CCCAGG",
+        success: function (json) {
+            var pricedata = [];
+            var closedata = [];
+            var timedata = [];
+            json["Data"].forEach(function (data) {
+
+                var time = data.time;
+                var epochtodate = new Date(0);
+                epochtodate.setUTCSeconds(time);
+                console.log(epochtodate);
+
+                var open = data.open;
+                //var close = data.close;
+                //var high = data.high;
+                //var low = data.low;
+                //var priceobject = {open: open, close: close, high: high, low: low };
+                //var timeobject = {time: time}
+                pricedata.push(open);
+                timedata.push(formatDate(epochtodate));
+            })
+
+            var ctx = document.getElementById("ETHchart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timedata,
+                    datasets: [{
+                        label: 'ETH/USD',
+                        data: pricedata,
+                        borderWidth: 2,
+                        backgroundColor: ['rgba(212,109,21, 0.7)'],
+                        borderColor: ['rgba(212,109,21,1)'],
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21,1)",
+                            fontSize: 18
+
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21)"
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+
+                                fontColor: "rgba(212,109,21)",
+                                fontSize: 15
+
+                            }
+                        }],
+                    }
+                }
+            });
+        }
+    });
+
+
+    //Chart area from XRP API
+    var apifetch = $.ajax({
+        dataType: "json",
+        url: "https://min-api.cryptocompare.com/data/histoday?fsym=XRP&tsym=USD&limit=130&aggregate=3&e=CCCAGG",
+        success: function (json) {
+            var pricedata = [];
+            var closedata = [];
+            var timedata = [];
+            json["Data"].forEach(function (data) {
+
+                var time = data.time;
+                var epochtodate = new Date(0);
+                epochtodate.setUTCSeconds(time);
+                console.log(epochtodate);
+
+                var open = data.open;
+                //var close = data.close;
+                //var high = data.high;
+                //var low = data.low;
+                //var priceobject = {open: open, close: close, high: high, low: low };
+                //var timeobject = {time: time}
+                pricedata.push(open);
+                timedata.push(formatDate(epochtodate));
+            })
+
+            var ctx = document.getElementById("XRPchart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timedata,
+                    datasets: [{
+                        label: 'XRP/USD',
+                        data: pricedata,
+                        borderWidth: 2,
+                        backgroundColor: ['rgba(212,109,21, 0.7)'],
+                        borderColor: ['rgba(212,109,21,1)'],
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21,1)",
+                            fontSize: 18
+
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21)"
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+
+                                fontColor: "rgba(212,109,21)",
+                                fontSize: 15
+
+                            }
+                        }],
+                    }
+                }
+            });
+        }
+    });
+
+    //Chart area from LTC API
+    var apifetch = $.ajax({
+        dataType: "json",
+        url: "https://min-api.cryptocompare.com/data/histoday?fsym=LTC&tsym=USD&limit=130&aggregate=3&e=CCCAGG",
+        success: function (json) {
+            var pricedata = [];
+            var closedata = [];
+            var timedata = [];
+            json["Data"].forEach(function (data) {
+
+                var time = data.time;
+                var epochtodate = new Date(0);
+                epochtodate.setUTCSeconds(time);
+                console.log(epochtodate);
+
+                var open = data.open;
+                //var close = data.close;
+                //var high = data.high;
+                //var low = data.low;
+                //var priceobject = {open: open, close: close, high: high, low: low };
+                //var timeobject = {time: time}
+                pricedata.push(open);
+                timedata.push(formatDate(epochtodate));
+            })
+
+            var ctx = document.getElementById("LTCchart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timedata,
+                    datasets: [{
+                        label: 'LTC/USD',
+                        data: pricedata,
+                        borderWidth: 2,
+                        backgroundColor: ['rgba(212,109,21, 0.7)'],
+                        borderColor: ['rgba(212,109,21,1)'],
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21,1)",
+                            fontSize: 18
+
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21)"
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+
+                                fontColor: "rgba(212,109,21)",
+                                fontSize: 15
+
+                            }
+                        }],
+                    }
+                }
+            });
+        }
+    });
+
 </script>
 
 
