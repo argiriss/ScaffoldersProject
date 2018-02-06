@@ -81,7 +81,7 @@ namespace ScaffoldersProject.Controllers
                         product.ContentType = imageView.Image.ContentType;
                     }
                 }
-                _repository.SaveProduct(product);
+                await _repository.SaveProduct(product);
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -133,7 +133,7 @@ namespace ScaffoldersProject.Controllers
                         product.ContentType = imageView.Image.ContentType;
                     }                    
                 }
-                _repository.UpdateProduct(product);
+                await _repository.UpdateProduct(product);
                 TempData["Message"] = $"{imageView.Name} has been updated.";
                 return RedirectToAction(nameof(Index));
             }

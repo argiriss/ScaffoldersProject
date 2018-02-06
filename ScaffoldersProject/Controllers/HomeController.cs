@@ -23,8 +23,9 @@ namespace ScaffoldersProject.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var send = await _webApiFetch.WebApiFetchAsync("https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=30");
-            List<Crypto> cryptos = JsonConvert.DeserializeObject<List<Crypto>>(send);      
+            var sendmarquee = await _webApiFetch.WebApiFetchAsync("https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=30");
+            List<Crypto> cryptos = JsonConvert.DeserializeObject<List<Crypto>>(sendmarquee);
+        
             return View(cryptos);
         }
 
