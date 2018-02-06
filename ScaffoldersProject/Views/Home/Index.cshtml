@@ -110,74 +110,76 @@
     </div>
 </div>
 <div class="half-page">
-    <canvas id="myChart"></canvas>
+    <canvas id="homechart"></canvas>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
-    //Chart area
-    function generatePricesFromTable() {
-        var labels = [];
 
-        var rows = jQuery("tr");
-        rows.each(function (index) {
-            if (index != 0)  // we dont need first row of table
-            {
-                var cols = $(this).find("td");
-                var num = parseInt(cols.first().text());
-                labels.push(num);
-            }
-        });
+    function formatDate(date) {
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sept", "Oct",
+            "Nov", "Dec"
+        ];
 
-        return labels.reverse();
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return monthNames[monthIndex] + ' ' + year;
     }
 
+    //Chart area from API
+    var apifetch = $.ajax({
+        dataType: "json",
+        url: "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=250&aggregate=3&e=CCCAGG",
+        success: function (json) {
+            var pricedata = [];
+            var closedata = [];
+            var timedata = [];
+            json["Data"].forEach(function (data) {
 
-    function generateDatesFromTable() {
-        var labels = [];
+                var time = data.time;
+                var epochtodate = new Date(0);
+                epochtodate.setUTCSeconds(time);
+                console.log(epochtodate);
 
-        var rows = jQuery("tr");
-        rows.each(function (index) {
-            if (index != 0)  // we dont need first row of table
-            {
-                var cols = $(this).find("td");
-                var lab = cols.last().text();
-                labels.push(lab);
-            }
-        });
-
-        var unique = $.uniqueSort(labels);
-        unique.reverse();
-        return unique;
-    }
-
-
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: generateDatesFromTable(),
-            datasets: [{
-                label: 'Currency Value',
-                data: generatePricesFromTable(),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                xAxes: [{
-                    time: {
-                        unit: 'day'
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
+                var open = data.open;
+                //var close = data.close;
+                //var high = data.high;
+                //var low = data.low;
+                //var priceobject = {open: open, close: close, high: high, low: low };
+                //var timeobject = {time: time}
+                pricedata.push(open);
+                timedata.push(formatDate(epochtodate));
+            })
+                        
+            var ctx = document.getElementById("homechart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timedata,
+                    datasets: [{
+                        label: 'BTC/USD',
+                        data: pricedata,
+                        borderWidth: 1
+                    }]
+                },
+                //options: {
+                //    scales: {
+                //        xAxes: [{
+                //            time: {
+                //                unit: 'day'
+                //            }
+                //        }],
+                //    }
+                //}
+            });
         }
     });
-    var i = myChart.data.datasets.length;
+  
 </script>
 
 
