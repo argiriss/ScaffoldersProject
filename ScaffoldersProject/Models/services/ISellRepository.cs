@@ -14,5 +14,7 @@ namespace ScaffoldersProject.Models.services
         //Task AddNewSell(Sell sellDetails);
         Task InstantSell(Sell instantSell, int productId, decimal coinSell);
         decimal ClientSpecificProductTotal(int productId, string userId);
+        Task<decimal> RealTimePrice(int productId, decimal coinSell);
+
     }
 }

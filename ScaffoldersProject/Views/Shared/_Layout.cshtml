@@ -355,9 +355,10 @@
         })
 
         //Receive from server while selecting coin from sidenav
-        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro,offerTable,askTable) {
+        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro,offerTable,askTable,currentPrice) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
+            document.getElementById('dropdown-button').innerHTML = currentCoinShortName + '-' + currentPrice.toFixed(2);
             var currentUrl = window.location.href;
             if (currentUrl.includes('OrderBook')) {
                 //orderbook

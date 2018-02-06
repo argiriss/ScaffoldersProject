@@ -56,5 +56,13 @@ namespace ScaffoldersProject.Models.services
             var product = await db.Products.FindAsync(productId);
             return product.Price;
         }
+        //method for setting the new price which comes from a instant buy or an instant sell
+        public async Task SetCurrentPrice(int productId , decimal closedPrice)
+        {
+            var product = await db.Products.FindAsync(productId);
+            product.Price = closedPrice;
+            db.Products.Update(product);
+            await db.SaveChangesAsync();
+        }
     }
 }

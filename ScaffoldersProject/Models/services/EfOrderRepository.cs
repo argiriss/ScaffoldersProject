@@ -84,6 +84,9 @@ namespace ScaffoldersProject.Models.services
             //Add the order to Order Table and save it
             await OrderSave(instantOrder);
 
+            //Calculate realtime from ask table
+            var quantityToBeOrdered=await RealTimePrice(productId,euroSpend);
+           
             //Find current product price
             var product = await db.Products.FindAsync(productId);
            
@@ -92,11 +95,12 @@ namespace ScaffoldersProject.Models.services
             {
                 OrderId = instantOrder.OrderID,
                 ProductId = productId,
-                Quantity = euroSpend/product.Price
+                Quantity = quantityToBeOrdered
             };
 
             await CartOrderSave(newCartOrder);
 
+          
             //if product not exist in portfolio insert it
             var check = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId==instantOrder.UserOrderId);
             if (check != null)
@@ -125,7 +129,6 @@ namespace ScaffoldersProject.Models.services
             clientUser.Wallet -= euroSpend;
             //Save the changes
             await _userManager.UpdateAsync(clientUser);
-
         }
 
         public async Task<List<Products>> GetAllApprovedProducts()
@@ -151,6 +154,107 @@ namespace ScaffoldersProject.Models.services
             {
                 return 0;
             }
+        }
+
+        public async Task<decimal> GetProductCuurentPrice(int productId)
+        {
+            var productFind = await db.Products.FindAsync(productId);
+            return productFind.Price;
+        }
+
+        public async Task UpdateTradeHistory(TradeHistory trade)
+        {
+            db.TradeHistory.Add(trade);
+            await db.SaveChangesAsync();
+        }
+
+        public List<TradeHistory> GetTradeHistory(int productId)
+        {
+            return db.TradeHistory.Where(x => x.ProductId == productId).ToList();
+
+        }
+
+        public async Task SetCurrentPrice(int productId, decimal closedPrice)
+        {
+            var productFind = await db.Products.FindAsync(productId);
+            productFind.Price = closedPrice;
+            db.Products.Update(productFind);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<decimal> RealTimePrice(int productId, decimal euroSpend)
+        {
+            //List from the ask table sorted ascending
+            var offersToBuy = db.Ask.Where(x => x.ProductId == productId).OrderBy(x => x.PriceAsk).ToList();
+            decimal quantityToBeOrdered = 0; //the quantity that users can buy with his euroSpend
+            foreach (var item in offersToBuy)
+            {
+                if ((item.PriceAsk * item.Quantity) % euroSpend == item.PriceAsk * item.Quantity)
+                {
+                    euroSpend -= item.PriceAsk * item.Quantity;
+                    db.Ask.Remove(item);
+
+                    quantityToBeOrdered += item.Quantity; //increase the quantity of user's order
+
+                    TradeHistory trade = new TradeHistory //initiate a new trade
+                    {
+                        Quantity = item.Quantity,
+                        Price = item.PriceAsk,
+                        Status = "Buy",
+                        DateofTransaction = DateTime.Now,
+                        ProductId = item.ProductId
+                    };
+                    await UpdateTradeHistory(trade);
+                }
+                else if (item.PriceAsk * item.Quantity == euroSpend)
+                {
+                    euroSpend -= item.PriceAsk * item.Quantity;
+                    db.Ask.Remove(item);
+
+                    quantityToBeOrdered += item.Quantity; //increase the quantity of user's order
+
+                    decimal closedPrice = item.PriceAsk; //the new current product price
+
+                    //Find current product price
+                    await SetCurrentPrice(productId, closedPrice);
+
+                    TradeHistory trade = new TradeHistory //initiate a new trade
+                    {
+                        Quantity = item.Quantity,
+                        Price = item.PriceAsk,
+                        Status = "Buy",
+                        DateofTransaction = DateTime.Now,
+                        ProductId = item.ProductId
+                    };
+                    await UpdateTradeHistory(trade);
+                    break;
+                }
+                else
+                {
+                    //reduce the quanity of ask
+                    var itemForReduce = item;
+                    itemForReduce.Quantity -= euroSpend / item.PriceAsk;
+                    db.Ask.Update(itemForReduce);
+                    await db.SaveChangesAsync();
+
+                    quantityToBeOrdered += euroSpend / item.PriceAsk; //increase the quantity of user's order
+
+                    decimal closedPrice = item.PriceAsk; //the new current product price
+                    await SetCurrentPrice(productId, closedPrice);
+
+                    TradeHistory trade = new TradeHistory //initiate a new trade
+                    {
+                        Quantity = euroSpend / item.PriceAsk,
+                        Price = item.PriceAsk,
+                        Status = "Buy",
+                        DateofTransaction = DateTime.Now,
+                        ProductId = item.ProductId
+                    };
+                    await UpdateTradeHistory(trade);
+                    break;
+                }
+            }
+            return quantityToBeOrdered;
         }
     }
 }

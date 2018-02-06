@@ -9,7 +9,7 @@ namespace ScaffoldersProject.Models.services
     {
         IQueryable<Offer> Offers { get; }
         Task AddOffer(int productId, decimal bidAmount, decimal limitPrice, string userId);
-        Task RemoveOfferAsync(Offer itemForRemoval);
-        Task ReduceOfferAsync(Offer itemForReduce);
+        void RemoveOfferAsync(Ask itemForRemoval);
+        void ReduceOfferAsync(Ask itemForReduce);
     }
 }
