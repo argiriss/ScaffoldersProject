@@ -232,17 +232,20 @@ span.crypto-divider {
         margin: 0 auto !important;
     }
 
-.modal-body button, .modal-footer button {
+.modal-body button, .modal-footer button, .modal-body button:active, .modal-footer button:active, .modal-body button:focus, .modal-footer button:focus {
     background: #111;
     border: 2px solid #d46d15;
     color: #d46d15;
 }
+
 
 .modal-body button:hover, .modal-footer button:hover {
     background: #d46d15;
     border: 2px solid #111;
     color: #111;
 }
+
+
 
 .modal-header, .modal-body, .modal-footer {
     background: #4f8cb3;
@@ -472,6 +475,16 @@ table#askTable td, table#bidTable td, table#tradeTable td{
     background:#111;
     border:1px solid black;
     display:none;
+}
+
+.fa-caret-down {
+    position: absolute;
+    right: 5%;
+}
+
+.orderbook ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
 }
 
 /* Pacman */

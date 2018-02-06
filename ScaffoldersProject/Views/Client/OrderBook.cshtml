@@ -21,10 +21,11 @@
         </div>
 
         <div class="col col-md-3 orders">
-            <div id="askId" class="half-page" style="background:#111;color:orangered; overflow-y:hidden">
+            <div id="askId" class="half-page" style="background:#111;color:orangered; overflow-y:hidden; display: flex;
+  flex-direction: column-reverse;">
                 <div class="table-container" style="max-height: 50vh; overflow:hidden;">
                     <table class="table table-responsive" id="askTable">
-                        <thead>
+                        <thead style="position:absolute; top:0; left:0;">
                             <tr>
                                 <th class="text-center" style="color:rgb(212, 109, 21)">Market Size</th>
                                 <th class="text-center" style="color:rgb(212, 109, 21)">Price</th>
@@ -35,6 +36,7 @@
                     </table>
                 </div>
             </div>
+            <div id="middle-layer" style="background:orangered;color:white;height: 5vh; margin-top: -2.5vh; padding:3%;">Eurospread <span style="float:right">ΕΔΩ</span></div>
             <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px;">
                 <div class="table-container" style="max-height: 50vh; overflow:hidden;">
                     <table class="table table-responsive" id="bidTable">
