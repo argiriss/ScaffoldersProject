@@ -20,7 +20,7 @@
     {
         <div class="item  col-xs-6 col-lg-4">
             <div class="thumbnail">
-                <div style="overflow:hidden">
+                <div class="image-container" style="overflow:hidden; border-bottom:1px solid #ddd">
                     <a asp-area="" asp-controller="Client" asp-action="ViewProduct" asp-route-productId="@prod.ProductId">
                         @if (prod.Image == null)
                             {
