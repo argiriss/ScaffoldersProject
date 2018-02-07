@@ -35,6 +35,13 @@ namespace ScaffoldersProject.Models.services
                     ProductId = productId
                 };
                 await AskSave(ask);
+
+            //Reduse the quantity of this product in our portfolio
+            var coinSelect = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId == userId);
+            coinSelect.CoinsQuantity -= askAmount;
+            db.PortFolio.Update(coinSelect);
+            //Save all changes to database
+            await db.SaveChangesAsync();
         }
 
         public void RemoveAsk()

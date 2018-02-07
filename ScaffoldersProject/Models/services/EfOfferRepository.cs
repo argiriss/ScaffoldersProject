@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScaffoldersProject.Models.services
 {
-    public class EfOfferRepository:IOfferRepository
+    public class EfOfferRepository : IOfferRepository
     {
         private MainDbContext db;
 
@@ -18,29 +18,20 @@ namespace ScaffoldersProject.Models.services
             this.db = db;
         }
 
-        public async Task AddOffer(int productId,decimal bidAmount, decimal limitPrice,string userId)
+        public async Task AddOffer(int productId, decimal bidAmount, decimal limitPrice, string userId)
         {
-            var sameOffer = db.Offer.SingleOrDefault(x => x.PriceOffer == limitPrice && x.ProductId == productId);
-            //if the product already exists with same price then increase the quanity
-            if (sameOffer != null)
+            //Create new offer in Database
+            var offer = new Offer
             {
-                sameOffer.Quantity += bidAmount;
-                db.Offer.Update(sameOffer);
-            }
-            //if not initialize a new offer and add to table Offer
-            else
-            {
-                var offer = new Offer
-                {
-                    Quantity = bidAmount,
-                    PriceOffer = limitPrice,
-                    DateofOffer = DateTime.Now,
-                    UserOfferId = userId,
-                    ProductId = productId
-                };
-                db.Offer.Add(offer);
-            }
+                Quantity = bidAmount,
+                PriceOffer = limitPrice,
+                DateofOffer = DateTime.Now,
+                UserOfferId = userId,
+                ProductId = productId
+            };
+            db.Offer.Add(offer);
             await db.SaveChangesAsync();
+
         }
 
         public void RemoveOfferAsync(Ask itemForRemoval)
