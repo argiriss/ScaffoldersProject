@@ -368,10 +368,10 @@
 
         //Receive from server while selecting coin from sidenav notifications for all clients
 
-        connection.on('SelectedCoinAll', function (offerTable,askTable,currentPrice,tradeHistory) {
+        connection.on('SelectedCoinAll', function (offerTable, askTable, currentPrice, tradeHistory) {
             document.getElementById('dropdown-button-coin').innerHTML = currentPrice.toFixed(2);
             currentCoinPrice = currentPrice;
-            var currentUrl = window.location.href;        
+            var currentUrl = window.location.href;
             if (currentUrl.includes('OrderBook')) {
                 //orderbook
                 var parent = document.getElementById("tbodybid");
@@ -396,9 +396,9 @@
                     trElem = document.createElement("tr");
                     tdElem = document.createElement("td");
                     tdElem.innerHTML = askTable[i].quantity.toFixed(4);
-                    tdSecElem = document.createElement("td");
+                    tdSecElem= document.createElement("td");
                     tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
-                    tdThirdElem = document.createElement("td");   
+                    tdThirdElem = document.createElement("td");
                     if (askTable[i].userAskId === '@UserManager.GetUserId(User)') {
                         tdThirdElem.innerHTML = askTable[i].quantity.toFixed(2);
                     }
@@ -408,6 +408,7 @@
                     parent.appendChild(trElem);
                     $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
                 }
+
                 //tradehistory
                 var hoursSet;
                 var minSet;
@@ -452,90 +453,12 @@
                     trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
                 }
-               
-                var ctx = document.getElementById("firstChart").getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels.reverse(),
-                        datasets: [{
-                            label: 'Coin price',
-                            data: data.reverse(),
-                            borderWidth: 2,
-                            backgroundColor: ['rgba(212,109,21, 0.7)'],
-                            borderColor: ['rgba(212,109,21,1)'],
-                        }]
-                    },
-                    options: {
-                        legend: {
-                            labels: {
-                                fontColor: "rgba(212,109,21, 1)",
-                                fontSize: 18
-                            }
-                        },
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(212,109,21, 1)",
-                                    fontSize: 18,
-                                    stacked: true
-                                }
-                            }],
-                            xAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(212,109,21, 1)",
-                                    fontSize: 14,
-                                    stepSize: 1,
-                                    stacked: true
-                                }
-                            }]
-                        }
-                    }
-                });
-
-                var ctxx = document.getElementById("secondChart").getContext('2d');
-                var stackedBar = new Chart(ctxx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels.reverse(),
-                        datasets: [{
-                            label: 'Coin quantity',
-                            data: quantity.reverse(),
-                            borderWidth: 2,
-                            backgroundColor: colors,
-                        }]
-                    },
-                    options: {
-                        legend: {
-                            labels: {
-                                fontColor: "rgba(212,109,21, 1)",
-                                fontSize: 18
-                            }
-                        },
-
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(212,109,21, 1)",
-                                    fontSize: 18,
-                                    stacked: true
-                                }
-                            }],
-                            xAxes: [{
-                                ticks: {
-                                    fontColor: "rgba(212,109,21, 1)",
-                                    fontSize: 14,
-                                    stepSize: 1,
-                                    stacked: true
-                                }
-                            }]
-                        }
-                    }
-                });
-                
+                //Chart area
+                getChartLine(labels,data);
+                getChartBar(labels, colors, quantity);
             }
-            connection.invoke("ResetWallet");
-        })
+            //connection.invoke("ResetWallet");
+        });
 
         connection.on('Errors', function (message) {
             alert(message);
@@ -565,14 +488,12 @@
                 //label.attributes.display('none');
                 label.innerHTML = clientOrders[i].productId;
                 parent.appendChild(label);
-
             }
         }
 
         function setProductId(elem) {
             currentProductId = elem.getAttribute('data-value');
             connection.invoke('SelectedCoin', currentProductId);
-            //currentCoinPrice = elem.getAttribute('data-currentPrice');
             currentCoinShortName = elem.getAttribute('data-shortname');
         }
 
@@ -587,20 +508,90 @@
             }
         }
 
-        function getLabelFromTable() {
-            var labels = [];
-            $('.td.td-date').each(function (index, obj) {
-                labels.push($(this).text());
+        function getChartLine(labels,data) {
+            var ctx = document.getElementById("firstChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.reverse(),
+                    datasets: [{
+                        label: 'Coin price',
+                        data: data.reverse(),
+                        borderWidth: 2,
+                        backgroundColor: ['rgba(212,109,21, 0.7)'],
+                        borderColor: ['rgba(212,109,21,1)'],
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21, 1)",
+                            fontSize: 18
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21, 1)",
+                                fontSize: 18,
+                                stacked: true
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21, 1)",
+                                fontSize: 14,
+                                stepSize: 1,
+                                stacked: true
+                            }
+                        }]
+                    }
+                }
             });
-            return labels;
         }
 
-        function getDataFromTable() {
-            var labels = [];
-            $('.td.td-price').each(function (index, obj) {
-                labels.push($(this).text());
+        function getChartBar(labels,colors,quantity) {
+
+            var ctxx = document.getElementById("secondChart").getContext('2d');
+            var stackedBar = new Chart(ctxx, {
+                type: 'bar',
+                data: {
+                    labels: labels.reverse(),
+                    datasets: [{
+                        label: 'Coin quantity',
+                        data: quantity.reverse(),
+                        borderWidth: 2,
+                        backgroundColor: colors,
+                    }]
+                },
+                options: {
+                    legend: {
+                        labels: {
+                            fontColor: "rgba(212,109,21, 1)",
+                            fontSize: 18
+                        }
+                    },
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21, 1)",
+                                fontSize: 18,
+                                stacked: true
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgba(212,109,21, 1)",
+                                fontSize: 14,
+                                stepSize: 1,
+                                stacked: true
+                            }
+                        }]
+                    }
+                }
             });
-            return labels;
+
         }
 
         function setBuy() {

@@ -54,6 +54,7 @@ namespace ScaffoldersProject.Hubs
             var getAllApprovedProducts = await _orderRepository.GetAllApprovedProducts();
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"), getAllApprovedProducts);
         }
+
         public async Task Deposit(string amount)
         {
             var desAmount = Convert.ToDecimal(amount);
@@ -66,11 +67,13 @@ namespace ScaffoldersProject.Hubs
             var depositHistoryTable = _walletRepository.GetDepositHistory();
             await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
         }
+
         public async Task Wallet()
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"));
         }
+
         //When we invoke from client with SendClient value
         public async Task RemoveItem(int productId)
         {
@@ -83,6 +86,7 @@ namespace ScaffoldersProject.Hubs
             var totalCost = _cartRepository.ComputeTotalCost(findClientCart.UserCartId);
             await Clients.Client(Context.ConnectionId).InvokeAsync("Remove", $"Product {productName} was successfully removed from your cart!", totalCost.ToString("C"));
         }
+
         //Clear cart from all products items
         public async Task ClearCart()
         {
@@ -90,6 +94,7 @@ namespace ScaffoldersProject.Hubs
             var totalCost = 0;
             await Clients.Client(Context.ConnectionId).InvokeAsync("Clear", totalCost.ToString("c"));
         }
+
         public async Task Buy(string text)
         {
             Order orderObject = new Order { };
@@ -104,6 +109,7 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem", "ok", totalCost.ToString("c"), totalAmount.ToString("c"));
         }
+
         //Instant buy from sidenav menu
         //We have to inform Wallet ,new Balance Euro and selected coin,remove from orderbook
         //bid view,and change product price if needed
@@ -127,6 +133,7 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
             await SelectedCoin(productId);
         }
+
         public async Task InstantSell(int productId, decimal coinSell)
         {
             Sell newSell = new Sell
@@ -146,6 +153,7 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
             await SelectedCoin(productId);
         }
+
         //The seller sets his price at $30. That’s his ask price.
         //You are willing to pay $20 for the card.That your bid price
         //when user place a bid and asks a price and a quanity for specific product
@@ -159,6 +167,7 @@ namespace ScaffoldersProject.Hubs
 
             await Clients.All.InvokeAsync("PlaceBid", bidTable);
         }
+
         public async Task PlaceAsk(int productId, decimal askAmount, decimal limitPrice)
         {
             //Add new Ask to ask table
@@ -166,7 +175,6 @@ namespace ScaffoldersProject.Hubs
             //take the list of asks from ask table
             var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
             var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity),UserAskId=y.First().UserAskId}).OrderByDescending(t => t.PriceAsk);
-
             await Clients.All.InvokeAsync("PlaceAsk", askTable);
         }
 
@@ -174,8 +182,6 @@ namespace ScaffoldersProject.Hubs
         public async Task SelectedCoin(int productId)
         {
             //.....................Notifications for all users..................................
-            //List with all products for select products menu
-            var getAllApprovedProducts = await _orderRepository.GetAllApprovedProducts();
             //Current product price
             var currentPrice = await _productRepository.GetCurrentPrice(productId);
             //take the list of bids from Offer table
@@ -190,6 +196,8 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoinAll", bidTable, askTable, currentPrice, tradeHistory);
 
             //..............Notify for specific client.................................
+            //List with all products for select products menu
+            var getAllApprovedProducts = await _orderRepository.GetAllApprovedProducts();
             //Quantity of selected product and total price in euro
             var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var totalInEuro = totalFromThisProduct * currentPrice;
