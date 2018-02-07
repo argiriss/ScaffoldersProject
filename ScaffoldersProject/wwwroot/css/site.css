@@ -513,11 +513,11 @@ table#askTable td, table#bidTable td, table#tradeTable td{
 
 .orderbook ::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent 
-}*/
+    background: transparent; 
+}
 
 /* Pacman */
-.lds-ellipsis {
+.lds-ellipsis{
     display: inline-block;
     position: relative;
     width: 20px;
