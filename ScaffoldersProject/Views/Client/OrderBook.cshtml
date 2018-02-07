@@ -2,6 +2,8 @@
     ViewData["Title"] = "OrderBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <div class="orderbook">
     <div class="row">
@@ -102,12 +104,19 @@
             tdElem.innerHTML = askTable[i].quantity.toFixed(4);
             tdSecElem = document.createElement("td");
             tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
+            tdThirdElem = document.createElement("td");
+            if (askTable[i].userAskId === '@UserManager.GetUserId(User)') {
+                tdThirdElem.innerHTML = askTable[i].quantity.toFixed(2);
+            }
             trElem.appendChild(tdElem);
             trElem.appendChild(tdSecElem);
+            trElem.appendChild(tdThirdElem);
             parent.appendChild(trElem);
             $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
         }
     })
+
+
     connection.on('DisplayHistory', function (tradeHistoryTable) {
         var parent = document.getElementById("tradeHistory");
         var trElem;
@@ -129,17 +138,5 @@
             parent.appendChild(trElem);
         }
     })
-    //Chart area.....................................................................
-
-    
-
-
-    //var i = myChart.data.datasets.length;
-    //setInterval(function () {
-    //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
-    //    myChart.data.labels[i] = "test";
-    //    myChart.update();
-    //    i++;
-    //}, 1000);
 
 </script>
