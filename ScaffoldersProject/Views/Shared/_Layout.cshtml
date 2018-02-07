@@ -107,7 +107,8 @@
                                 <div class="dropdown">
                                     @*startof dropdown*@
                                     <button id="dropdown-button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                        <span id="dropdown-button-text">Select Product</span>
+                                        <span id="dropdown-button-text">Select Product </span>
+                                        <span id="dropdown-button-coin" style="padding-left:5px"></span>
                                         <i class="fa fa-caret-down"></i>
                                     </button>
                                     <ul id="dropMenuId" class="dropdown-menu"></ul>
@@ -339,10 +340,10 @@
         var currentCoinShortName;//from function setProductId()
 
         //Receive from server on refresh
-        connection.on('Wallet', function (walletTotal, clientOrders) {
+        connection.on('Wallet', function (walletTotal, getAllApprovedProducts) {
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
-            dropClientsItems(clientOrders);
+            dropClientsItems(getAllApprovedProducts);
         })
 
         //Receive from server From Buy or Sell
@@ -352,12 +353,19 @@
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
         })
 
-        //Receive from server while selecting coin from sidenav
-        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro,offerTable,askTable,currentPrice) {
+        //Receive from server ,notification for the login user about his amount 
+        //in selected product
+        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
-            document.getElementById('dropdown-button').innerHTML = currentCoinShortName + '-' + currentPrice.toFixed(2);
-            var currentUrl = window.location.href;
+        });
+
+        //Receive from server while selecting coin from sidenav notifications for all clients
+        connection.on('SelectedCoinAll', function (getAllApprovedProducts,offerTable,askTable,currentPrice,tradeHistory) {
+            document.getElementById('dropdown-button-coin').innerHTML = currentPrice.toFixed(2);
+            currentCoinPrice = currentPrice;
+            dropClientsItems(getAllApprovedProducts);
+            var currentUrl = window.location.href;        
             if (currentUrl.includes('OrderBook')) {
                 //orderbook
                 var parent = document.getElementById("tbodybid");
@@ -368,9 +376,9 @@
                 for (var i = 0; i < offerTable.length; i++) {
                     trElem = document.createElement("tr");
                     tdElem = document.createElement("td");
-                    tdElem.innerHTML = offerTable[i].quantity;
+                    tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
-                    tdSecElem.innerHTML = offerTable[i].priceOffer;
+                    tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
                     parent.appendChild(trElem);
@@ -381,13 +389,45 @@
                 for (var i = 0; i < askTable.length; i++) {
                     trElem = document.createElement("tr");
                     tdElem = document.createElement("td");
-                    tdElem.innerHTML = askTable[i].quantity;
+                    tdElem.innerHTML = askTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
-                    tdSecElem.innerHTML = askTable[i].priceAsk;
+                    tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
+                    tdThirdElem = document.createElement("td");
+                    tdThirdElem.innerHTML = askTable[i].priceAsk.toFixed(2);
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
+                    trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
                     $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
+                }
+                //tradehistory
+                var hoursSet;
+                var minSet;
+                var secSet;
+                parent = document.getElementById("tradeHistory");
+                parent.innerHTML = "";
+                for (var i = 0; i < tradeHistory.length; i++) {
+                    trElem = document.createElement("tr");
+                    if (tradeHistory[i].status === 'Sell') {
+                        trElem.style.color = "red";
+                    }
+                    else {
+                        trElem.style.color = "green";
+                    }
+                    tdElem = document.createElement("td");
+                    tdElem.innerHTML = tradeHistory[i].quantity;
+                    tdSecElem = document.createElement("td");
+                    tdSecElem.innerHTML = tradeHistory[i].price;
+                    tdThirdElem = document.createElement("td");
+                    var timeSet = new Date(tradeHistory[i].dateofTransaction)
+                    hoursSet = timeSet.getHours();
+                    minSet = timeSet.getMinutes();
+                    secSet = timeSet.getSeconds();
+                    tdThirdElem.innerHTML = hoursSet + ':' + minSet + ':' + secSet;
+                    trElem.appendChild(tdElem);
+                    trElem.appendChild(tdSecElem);
+                    trElem.appendChild(tdThirdElem);
+                    parent.appendChild(trElem);
                 }
             }
         })
@@ -399,14 +439,15 @@
         //Methods........................
         function dropClientsItems(clientOrders) {
             var parent = document.getElementById('dropMenuId');
+            parent.innerHTML = '';
             for (var i = 0; i < clientOrders.length; i++) {
                 var liCreate = document.createElement('li');
                 liCreate.setAttribute('onclick', 'setProductId(this)');
                 liCreate.setAttribute('data-value', clientOrders[i].productId);
-                liCreate.setAttribute('data-currentPrice', clientOrders[i].price);
+                liCreate.setAttribute('data-currentPrice', clientOrders[i].price.toFixed(2));
                 liCreate.setAttribute('data-shortName', clientOrders[i].shortName);
                 var spanCreate = document.createElement('span');
-                spanCreate.innerHTML = clientOrders[i].price;
+                spanCreate.innerHTML = clientOrders[i].price.toFixed(2);
                 spanCreate.className ="select-product-price";
                 var aCreate = document.createElement('a');
                 aCreate.classList.add('dropdown-link');
@@ -414,7 +455,6 @@
                 liCreate.appendChild(spanCreate);
                 aCreate.innerHTML = clientOrders[i].shortName;
                 parent.appendChild(liCreate);
-
                  var label = document.createElement('span');;
                 label.style.cssText = "display:none";
                 //label.attributes.display('none');
@@ -427,7 +467,7 @@
         function setProductId(elem) {
             currentProductId = elem.getAttribute('data-value');
             connection.invoke('SelectedCoin', currentProductId);
-            currentCoinPrice = elem.getAttribute('data-currentPrice');
+            //currentCoinPrice = elem.getAttribute('data-currentPrice');
             currentCoinShortName = elem.getAttribute('data-shortname');
         }
 
@@ -463,11 +503,15 @@
         function setBid() {
             document.getElementById('placeAskBidId').style.backgroundColor = '#5cb85c';
             document.getElementById('placeAskBidId').innerHTML = 'Place Bid';
+            document.getElementById('enterAmmountAskOfferId').value = '';
+            document.getElementById('enterLimitPriceId').value = '';   
         }
 
         function setAsk() {
             document.getElementById('placeAskBidId').style.backgroundColor = '#c9302c';
             document.getElementById('placeAskBidId').innerHTML = 'Place Ask';
+            document.getElementById('enterAmmountAskOfferId').value = '';
+            document.getElementById('enterLimitPriceId').value = ''; 
         }
 
         function placeBuyOrder() {
@@ -494,12 +538,15 @@
                 //Place Bid...You are willing to pay $20 for the coin.That your bid price
                 let bidAmount = document.getElementById('enterAmmountAskOfferId').value;
                 let limitPrice = document.getElementById('enterLimitPriceId').value;
+                document.getElementById('enterAmmountAskOfferId').value = '';
+                document.getElementById('enterLimitPriceId').value = ''; 
                 connection.invoke('PlaceBid', currentProductId, bidAmount, limitPrice);
             }
             else {
                 let askAmount = document.getElementById('enterAmmountAskOfferId').value;
                 let limitPrice = document.getElementById('enterLimitPriceId').value;
-                alert(currentProductId + ' ' + askAmount + ' ' + limitPrice);
+                document.getElementById('enterAmmountAskOfferId').value = '';
+                document.getElementById('enterLimitPriceId').value = ''; 
                 connection.invoke('PlaceAsk', currentProductId, askAmount, limitPrice);
             }
         }
