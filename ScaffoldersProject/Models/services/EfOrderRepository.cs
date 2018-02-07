@@ -12,12 +12,14 @@ namespace ScaffoldersProject.Models.services
         private MainDbContext db;
         private readonly UserManager<ApplicationUser> _userManager;
         public IQueryable<Order> Orders => db.Order;
+        public IWalletRepository _walletRepository;
 
         //Depedency injection implemented on constructor.Instatiate db object
-        public EfOrderRepository(MainDbContext db, UserManager<ApplicationUser> userManager)
+        public EfOrderRepository(MainDbContext db, UserManager<ApplicationUser> userManager , IWalletRepository walletRepository)
         {
             this.db = db;
             _userManager = userManager;
+            _walletRepository = walletRepository;
         }
         //Save to Order Table
         public async Task OrderSave(Order order)
@@ -195,6 +197,8 @@ namespace ScaffoldersProject.Models.services
                 {
                     euroSpend -= item.PriceAsk * item.Quantity;
                     db.Ask.Remove(item);
+                    //increase wallet that belongs to user who had placed the ask
+                    await _walletRepository.IncreaseWallet(item.PriceAsk * item.Quantity, item.UserAskId);
                     quantityToBeOrdered += item.Quantity; //increase the quantity of user's order
                     TradeHistory trade = new TradeHistory //initiate a new trade
                     {
@@ -210,6 +214,8 @@ namespace ScaffoldersProject.Models.services
                 {
                     euroSpend -= item.PriceAsk * item.Quantity;
                     db.Ask.Remove(item);
+                    //increase wallet that belongs to user who had placed the ask
+                    await _walletRepository.IncreaseWallet(item.PriceAsk * item.Quantity, item.UserAskId);
                     quantityToBeOrdered += item.Quantity; //increase the quantity of user's order
                     decimal closedPrice = item.PriceAsk; //the new current product price
                     //Find current product price
@@ -232,6 +238,9 @@ namespace ScaffoldersProject.Models.services
                     itemForReduce.Quantity -= euroSpend / item.PriceAsk;
                     db.Ask.Update(itemForReduce);
                     await db.SaveChangesAsync();
+                    //increase wallet that belongs to user who had placed the ask
+                    await _walletRepository.IncreaseWallet(euroSpend, item.UserAskId);
+
                     quantityToBeOrdered += euroSpend / item.PriceAsk; //increase the quantity of user's order
                     decimal closedPrice = item.PriceAsk; //the new current product price
                     await SetCurrentPrice(productId, closedPrice);
@@ -249,5 +258,6 @@ namespace ScaffoldersProject.Models.services
             }
             return quantityToBeOrdered;
         }
+
     }
 }

@@ -76,6 +76,15 @@ namespace ScaffoldersProject.Models.services
             return UserDeposits;
         }
 
+        public async Task IncreaseWallet(decimal amount, string userId)
+        {
+            var clientUser = await _userManager.FindByIdAsync(userId);
+            clientUser.Wallet += amount;
+            //Save the changes
+            await _userManager.UpdateAsync(clientUser);
+            await db.SaveChangesAsync();
+        }
+
 
     }
 }

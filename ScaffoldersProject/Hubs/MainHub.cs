@@ -117,9 +117,9 @@ namespace ScaffoldersProject.Hubs
             instantOrder.OrderDay = DateTime.Now;
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
-
             await _orderRepository.InstantOrder(instantOrder, productId, euroSpend);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+
             decimal totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             //Our total coins in Euro 
@@ -169,6 +169,7 @@ namespace ScaffoldersProject.Hubs
 
             await Clients.All.InvokeAsync("PlaceAsk", askTable);
         }
+
         //Pass ask offer lists on orderbook
         public async Task SelectedCoin(int productId)
         {
@@ -186,13 +187,21 @@ namespace ScaffoldersProject.Hubs
             var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceAsk);
             //Send tradeHistory to orderbook descending
             var tradeHistory = _orderRepository.GetTradeHistory(productId);
-            await Clients.All.InvokeAsync("SelectedCoinAll", getAllApprovedProducts, bidTable, askTable, currentPrice, tradeHistory);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoinAll", bidTable, askTable, currentPrice, tradeHistory);
+
             //..............Notify for specific client.................................
             //Quantity of selected product and total price in euro
             var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var totalInEuro = totalFromThisProduct * currentPrice;
-            await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoin", totalFromThisProduct, totalInEuro);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoin", getAllApprovedProducts,totalFromThisProduct, totalInEuro);
         }
+
+        public async Task ResetWallet() {
+            var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
+            //list with all products for select products menu
+            await Clients.Client(Context.ConnectionId).InvokeAsync("ResetWallet", totalAmount.ToString("C"));
+        }
+
         public async Task<bool> CheckWallet(decimal euros)
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));

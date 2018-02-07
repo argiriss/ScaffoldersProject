@@ -346,6 +346,11 @@
             dropClientsItems(getAllApprovedProducts);
         })
 
+        connection.on('ResetWallet', function (newWallet) {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById('walletId').innerHTML = walletTotal;
+         })
+
         //Receive from server From Buy or Sell
         connection.on('InstantBuySell', function (walletTotal, totalFromThisProduct,totalInEuro) {
             document.getElementById('walletId').innerHTML = walletTotal;
@@ -355,16 +360,18 @@
 
         //Receive from server ,notification for the login user about his amount 
         //in selected product
-        connection.on('SelectedCoin', function (totalFromThisProduct, totalInEuro) {
+        connection.on('SelectedCoin', function (getAllApprovedProducts,totalFromThisProduct, totalInEuro) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
             document.getElementById('balanceClientId').innerHTML = totalInEuro.toFixed(2);
+            dropClientsItems(getAllApprovedProducts);
         });
 
         //Receive from server while selecting coin from sidenav notifications for all clients
-        connection.on('SelectedCoinAll', function (getAllApprovedProducts, offerTable, askTable, currentPrice, tradeHistory) {
+
+        connection.on('SelectedCoinAll', function (offerTable,askTable,currentPrice,tradeHistory) {
+
             document.getElementById('dropdown-button-coin').innerHTML = currentPrice.toFixed(2);
             currentCoinPrice = currentPrice;
-            dropClientsItems(getAllApprovedProducts);
             var currentUrl = window.location.href;        
             if (currentUrl.includes('OrderBook')) {
                 //orderbook
@@ -526,6 +533,7 @@
                 });
                 
             }
+            connection.invoke("ResetWallet");
         })
 
         connection.on('Errors', function (message) {
