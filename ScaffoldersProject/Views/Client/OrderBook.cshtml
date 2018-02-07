@@ -8,20 +8,25 @@
         <div class="col col-md-12" style="background:#ddd; height:34px;padding-top: 5px; padding-left: 25px;">
             <span class="orderbook-butt">Orderbook</span> | <span class="tradehistory-butt">Trade History</span>
         </div>
-        <div class="col col-md-3 tradehistory">
-            <table class="table table-responsive" id="tradeTable">
-                <thead>
-                    <tr>
-                        <th class="text-center" style="color:rgb(212, 109, 21)">Trade Size</th>
-                        <th class="text-center" style="color:rgb(212, 109, 21)">Price(Euro)</th>
-                        <th class="text-center" style="color:rgb(212, 109, 21)">Time</th>
-                    </tr>
-                </thead>
-                <tbody id="tradeHistory"></tbody>
-            </table>
+        <div class="col col-md-3 tradehistory" style="border-right:1px solid black; overflow-y: scroll;">
+
+            <div style="overflow:hidden;">
+                <table class="table table-responsive" id="tradeTable">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="color:rgb(212, 109, 21)">Trade Size</th>
+                            <th class="text-center" style="color:rgb(212, 109, 21)">Price(Euro)</th>
+                            <th class="text-center" style="color:rgb(212, 109, 21)">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tradeHistory"></tbody>
+                </table>
+            </div>
+
+            
         </div>
 
-        <div class="col col-md-3 orders">
+        <div class="col col-md-3 orders" style="border-right:1px solid black;">
             <div id="askId" class="half-page" style="background:#111;color:orangered; overflow-y:hidden; display: flex;
   flex-direction: column-reverse;">
                 <div class="table-container" style="max-height: 50vh; overflow:hidden;">
@@ -47,10 +52,12 @@
             </div>
         </div>
         <div class="col col-md-9">
-            <div class="half-page">
-                <canvas id="myChart"></canvas>
+            <div class="half-page" style="background:#111; border-bottom:1px solid black;">
+                <div id="selectprompt">PLEASE SELECT A COIN TO VIEW CHARTS AND PRICE VARIATIONS</div>
+                <canvas id="firstChart"></canvas>
             </div>
-            <div class="half-page" style="background:purple;">
+            <div class="half-page"  style="background:#111;">
+                <canvas id="secondChart"></canvas>
             </div>
         </div>
     </div>
@@ -123,43 +130,10 @@
         }
     })
     //Chart area.....................................................................
-    var ctx = document.getElementById("myChart").getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: 'Coin Price',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+
+    
+
+
     //var i = myChart.data.datasets.length;
     //setInterval(function () {
     //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
@@ -167,4 +141,5 @@
     //    myChart.update();
     //    i++;
     //}, 1000);
+
 </script>

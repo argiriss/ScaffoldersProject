@@ -412,7 +412,26 @@ td.deposit-amount {
 }
 
 canvas#myChart {
-    height:50vh !important;
+    height: 50vh !important;
+}
+
+#selectprompt {
+    position: absolute;
+    top: 15%;
+    color: #d46d15;
+    font-weight: bold;
+    left: 0;
+    right: 0;
+    font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 auto;
+    width: 85%;
+    text-align: center;
+}
+
+canvas#secondChart, canvas#firstChart {
+    height: 40vh !important;
 }
 
 canvas#BTCchart, canvas#ETHchart, canvas#XRPchart, canvas#LTCchart {
@@ -446,7 +465,7 @@ div#bidId, div#askId, .tradehistory{
     padding-right:15px;
 }
 
-table#askTable tbody, table#bidTable tbody,{
+table#askTable tbody, table#bidTable tbody{
     display: block;
     max-height: 43vh;
     overflow-y: scroll;
@@ -494,8 +513,8 @@ table#askTable td, table#bidTable td, table#tradeTable td{
 
 .orderbook ::-webkit-scrollbar {
     width: 0px;
-    background: transparent; /* make scrollbar transparent */
-}
+    background: transparent; /* make scrollbar transparent 
+}*/
 
 /* Pacman */
 .lds-ellipsis {
