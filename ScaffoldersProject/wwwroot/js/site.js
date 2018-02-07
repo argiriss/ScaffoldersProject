@@ -11,12 +11,14 @@ $(document).ready(function () {
         event.preventDefault();
         $('#products .item').addClass('list-group-item');
         $('.list-group-wrapper').css('margin-right', '10px');
+        $('.image-container').css('float','left');
     });
     $('#grid').click(function (event) {
         event.preventDefault();
         $('#products .item').removeClass('list-group-item');
         $('#products .item').addClass('grid-group-item');
         $('.list-group-wrapper').css('margin-right', '0');
+        $('.image-container').css('float','none');
     });
 
     $('a[data-confirm]').click(function (ev) {
@@ -53,6 +55,12 @@ $(document).ready(function () {
             $('body').css('overflow-y', 'hidden');
             $('body').css('padding-bottom', '0');
             $('.full-screen').css('padding', '0');
+        }
+    });
+
+    $(function () {
+        if ($(".chat").length) {
+            $('body').css('overflow', 'hidden');
         }
     });
 

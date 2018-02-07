@@ -3,7 +3,6 @@
     ViewData["Title"] = "Chat";
 }
 
-<h2>Chat</h2>
 <!--SignalR client-->
 <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
 
@@ -48,15 +47,37 @@
     });
 </script>
 
-<p>Extra message :<span id="extra"></span></p>
-<p>Number Of Users Online :<span id="numberOfUsers"></span></p>
+<div class="row chat" style="overflow:hidden">
+    <div class="col-md-3" style="height:100vh; background:#111; color:#d46d15;">
+        <h5>Number Of Users Online:<span style="padding-left:15px;" id="numberOfUsers"></span></h5>
+        <h3 class="text-center" style="text-decoration:underline;">EVENTS</h3>
 
-<div id="chat-text" style="width:200px; height:100px; overflow-y:scroll"></div>
+    </div>
+    <div class="col-md-9" style="background:#ddd; height:100vh;">
+        <div class="col-md-12">
+            <h2 class="text-center" style="color:#d46d15;">Welcome to Scaffolders Chat</h2>
+        </div>
+        <div class="col-md-12">
+            <div id="chat-text" style="overflow-y:scroll; height: 75vh;border: 2px solid rgba(212,109,21, 0.7); outline:3px solid rgba(212,109,21, 1);">
+                <ul id="messages" style="overflow:hidden; list-style:none"></ul>
+            </div>
 
-<form id="sendmessage">
-    <input type="text" id="data" />
-    <input type="submit" value="Send" />
-</form>
+            <form id="sendmessage" style="margin-top:5px;">
+                <div class="input-group" style="width:100%;">
+                    <input style="width:100%; height:40px" type="text" id="data" />
+                    <span class="input-group-btn">
+                        <input type="image" src="~/images/send.png" alt="Submit" width="40" height="40" style="cursor:pointer">
+                    </span>
+                </div>
+                
+            </form>
 
-<ul id="messages"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
