@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 //using Newtonsoft.Json.Linq;
-
 namespace ScaffoldersProject.Hubs
 {
     public class MainHub : Hub
@@ -25,10 +24,8 @@ namespace ScaffoldersProject.Hubs
         private IAskRepository _askRepository;
         private IOfferRepository _offerRepository;
         private ISellRepository _sellRepository;
-
         //Dioctionary with Key=userId and Value=connectionId
         private ConcurrentDictionary<string, string> OnlineUser { get; set; }
-
         //Depedency injection
         public MainHub(UserManager<ApplicationUser> userManager,
             ICartRepository cartRepository,
@@ -49,15 +46,14 @@ namespace ScaffoldersProject.Hubs
             _offerRepository = offerRepository;
             _sellRepository = sellRepository;
         }
-
         //This happens on connection
         public async override Task OnConnectedAsync()
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
-            var clientOrders = await _orderRepository.GetAllApprovedProducts();
-            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"), clientOrders);
+            //list with all products for select products menu
+            var getAllApprovedProducts = await _orderRepository.GetAllApprovedProducts();
+            await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"), getAllApprovedProducts);
         }
-
         public async Task Deposit(string amount)
         {
             var desAmount = Convert.ToDecimal(amount);
@@ -67,17 +63,14 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             //Send to client balance area in left menu, the total amount 
             await Clients.Client(Context.ConnectionId).InvokeAsync("Success", totalAmount.ToString("C"));
-
             var depositHistoryTable = _walletRepository.GetDepositHistory();
             await Clients.All.InvokeAsync("NewOrder", depositHistoryTable);
         }
-
         public async Task Wallet()
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("Wallet", totalAmount.ToString("C"));
         }
-
         //When we invoke from client with SendClient value
         public async Task RemoveItem(int productId)
         {
@@ -90,7 +83,6 @@ namespace ScaffoldersProject.Hubs
             var totalCost = _cartRepository.ComputeTotalCost(findClientCart.UserCartId);
             await Clients.Client(Context.ConnectionId).InvokeAsync("Remove", $"Product {productName} was successfully removed from your cart!", totalCost.ToString("C"));
         }
-
         //Clear cart from all products items
         public async Task ClearCart()
         {
@@ -98,7 +90,6 @@ namespace ScaffoldersProject.Hubs
             var totalCost = 0;
             await Clients.Client(Context.ConnectionId).InvokeAsync("Clear", totalCost.ToString("c"));
         }
-
         public async Task Buy(string text)
         {
             Order orderObject = new Order { };
@@ -113,7 +104,6 @@ namespace ScaffoldersProject.Hubs
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem", "ok", totalCost.ToString("c"), totalAmount.ToString("c"));
         }
-
         //Instant buy from sidenav menu
         //We have to inform Wallet ,new Balance Euro and selected coin,remove from orderbook
         //bid view,and change product price if needed
@@ -125,22 +115,18 @@ namespace ScaffoldersProject.Hubs
             //set order userId to order table
             instantOrder.UserOrderId = _userManager.GetUserId(Context.User);
             instantOrder.OrderDay = DateTime.Now;
-
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
-            
-            await _orderRepository.InstantOrder(instantOrder,productId,euroSpend);
 
+            await _orderRepository.InstantOrder(instantOrder, productId, euroSpend);
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             decimal totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
             var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
-
-            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct,totalInEuro);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
             await SelectedCoin(productId);
         }
-
         public async Task InstantSell(int productId, decimal coinSell)
         {
             Sell newSell = new Sell
@@ -160,48 +146,51 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
             await SelectedCoin(productId);
         }
-
         //The seller sets his price at $30. That’s his ask price.
-
         //You are willing to pay $20 for the card.That your bid price
-
         //when user place a bid and asks a price and a quanity for specific product
         public async Task PlaceBid(int productId, decimal bidAmount, decimal limitPrice)
         {
             //Add new bid to offer table
             await _offerRepository.AddOffer(productId, bidAmount, limitPrice, _userManager.GetUserId(Context.User));
             //take the list of bids from Offer table
-            var bidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            var tempbidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            var bidTable = tempbidTable.GroupBy(x => x.PriceOffer).Select(y => new { PriceOffer = y.First().PriceOffer, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceOffer);
             await Clients.All.InvokeAsync("PlaceBid", bidTable);
         }
-
         public async Task PlaceAsk(int productId, decimal askAmount, decimal limitPrice)
         {
             //Add new Ask to ask table
             await _askRepository.AddAsk(productId, askAmount, limitPrice, _userManager.GetUserId(Context.User));
             //take the list of asks from ask table
-            var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceAsk);
             await Clients.All.InvokeAsync("PlaceAsk", askTable);
         }
-
         //Pass ask offer lists on orderbook
         public async Task SelectedCoin(int productId)
         {
-            var askList = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
-            var offerList = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
-            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
-            var currentProductPrice = await _productRepository.GetCurrentPrice(productId);
-            var totalInEuro = totalFromThisProduct * currentProductPrice;
+            //.....................Notifications for all users..................................
+            //List with all products for select products menu
+            var getAllApprovedProducts = await _orderRepository.GetAllApprovedProducts();
+            //Current product price
+            var currentPrice = await _productRepository.GetCurrentPrice(productId);
             //take the list of bids from Offer table
-            var bidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            var tempbidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
+            var bidTable = tempbidTable.GroupBy(x => x.PriceOffer).Select(y => new { PriceOffer = y.First().PriceOffer, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceOffer);
             //take the list of asks from ask table
-            var askTable = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
+            var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceAsk);
 
-            var currentPrice = await _orderRepository.GetProductCuurentPrice(productId);
-           
-            await Clients.All.InvokeAsync("SelectedCoin",totalFromThisProduct,totalInEuro,bidTable,askTable, currentPrice);
+            //Send tradeHistory to orderbook descending
+            var tradeHistory = _orderRepository.GetTradeHistory(productId);
+            await Clients.All.InvokeAsync("SelectedCoinAll", getAllApprovedProducts, bidTable, askTable, currentPrice, tradeHistory);
+            //..............Notify for specific client.................................
+            //Quantity of selected product and total price in euro
+            var totalFromThisProduct = _orderRepository.ClientSpecificProductTotal(productId, _userManager.GetUserId(Context.User));
+            var totalInEuro = totalFromThisProduct * currentPrice;
+            await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoin", totalFromThisProduct, totalInEuro);
         }
-
         public async Task<bool> CheckWallet(decimal euros)
         {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));

@@ -200,7 +200,7 @@ namespace ScaffoldersProject.Models.services
 
         public List<TradeHistory> GetTradeHistory(int productId)
         {
-            return db.TradeHistory.Where(x => x.ProductId == productId).ToList();
+            return db.TradeHistory.Where(x => x.ProductId == productId).OrderByDescending(x=>x.DateofTransaction).ToList();
 
         }
 
