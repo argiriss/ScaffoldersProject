@@ -154,7 +154,6 @@ namespace ScaffoldersProject.Hubs
             //Add new bid to offer table
             await _offerRepository.AddOffer(productId, bidAmount, limitPrice, _userManager.GetUserId(Context.User));
             //take the list of bids from Offer table
-
             var tempbidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
             var bidTable = tempbidTable.GroupBy(x => x.PriceOffer).Select(y => new { PriceOffer = y.First().PriceOffer, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceOffer);
 
@@ -165,7 +164,6 @@ namespace ScaffoldersProject.Hubs
             //Add new Ask to ask table
             await _askRepository.AddAsk(productId, askAmount, limitPrice, _userManager.GetUserId(Context.User));
             //take the list of asks from ask table
-
             var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
             var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceAsk);
 
@@ -182,6 +180,7 @@ namespace ScaffoldersProject.Hubs
             //take the list of bids from Offer table
             var tempbidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
             var bidTable = tempbidTable.GroupBy(x => x.PriceOffer).Select(y => new { PriceOffer = y.First().PriceOffer, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceOffer);
+
             //take the list of asks from ask table
             var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
             var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity) }).OrderByDescending(t => t.PriceAsk);

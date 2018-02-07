@@ -24,15 +24,16 @@ namespace ScaffoldersProject.Models.services
         public async Task AddAsk(int productId, decimal askAmount, decimal limitPrice, string userId)
         {
             //create new ask
-            var ask = new Ask
-            {
-                Quantity = askAmount,
-                PriceAsk = limitPrice,
-                DateofAsk = DateTime.Now,
-                UserAskId = userId,
-                ProductId = productId
-            };
-            await AskSave(ask);
+                var ask = new Ask
+                {
+                    Quantity = askAmount,
+                    PriceAsk = limitPrice,
+                    DateofAsk = DateTime.Now,
+                    UserAskId = userId,
+                    ProductId = productId
+                };
+                await AskSave(ask);
+
             //Reduse the quantity of this product in our portfolio
             var coinSelect = db.PortFolio.FirstOrDefault(x => x.ProductId == productId && x.UserPortofolioId == userId);
             coinSelect.CoinsQuantity -= askAmount;

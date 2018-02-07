@@ -29,6 +29,7 @@ namespace ScaffoldersProject.Models
         //Image properties
         public byte[] Image { get; set; }
         public string ContentType { get; set; }
+        public string MemberProductId { get; set; } //similar to foreign Key
 
     }
 }
