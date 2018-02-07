@@ -358,7 +358,7 @@
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
         })
 
-        //Receive from server ,notification for the login user about his amount 
+        //Receive from server ,notification for the login user about his amount
         //in selected product
         connection.on('SelectedCoin', function (getAllApprovedProducts,totalFromThisProduct, totalInEuro) {
             document.getElementById('totalCoinId').innerHTML = totalFromThisProduct.toFixed(4);
@@ -369,7 +369,6 @@
         //Receive from server while selecting coin from sidenav notifications for all clients
 
         connection.on('SelectedCoinAll', function (offerTable,askTable,currentPrice,tradeHistory) {
-
             document.getElementById('dropdown-button-coin').innerHTML = currentPrice.toFixed(2);
             currentCoinPrice = currentPrice;
             var currentUrl = window.location.href;        
@@ -399,8 +398,10 @@
                     tdElem.innerHTML = askTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
                     tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
-                    tdThirdElem = document.createElement("td");
-                    tdThirdElem.innerHTML = askTable[i].priceAsk.toFixed(2);
+                    tdThirdElem = document.createElement("td");   
+                    if (askTable[i].userAskId === '@UserManager.GetUserId(User)') {
+                        tdThirdElem.innerHTML = askTable[i].quantity.toFixed(2);
+                    }
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
                     trElem.appendChild(tdThirdElem);
@@ -552,7 +553,7 @@
                 liCreate.setAttribute('data-shortName', clientOrders[i].shortName);
                 var spanCreate = document.createElement('span');
                 spanCreate.innerHTML = clientOrders[i].price.toFixed(2);
-                spanCreate.className ="select-product-price";
+                spanCreate.className = "select-product-price";
                 var aCreate = document.createElement('a');
                 aCreate.classList.add('dropdown-link');
                 liCreate.appendChild(aCreate);
@@ -582,8 +583,8 @@
             }
             else {
                 var TotalInSelectedCoin = document.getElementById('totalCoinSelectedId');
-                TotalInSelectedCoin.innerHTML = (elem.value *currentCoinPrice).toFixed(2);
-            }         
+                TotalInSelectedCoin.innerHTML = (elem.value * currentCoinPrice).toFixed(2);
+            }
         }
 
         function getLabelFromTable() {
@@ -624,21 +625,21 @@
             document.getElementById('placeAskBidId').style.backgroundColor = '#5cb85c';
             document.getElementById('placeAskBidId').innerHTML = 'Place Bid';
             document.getElementById('enterAmmountAskOfferId').value = '';
-            document.getElementById('enterLimitPriceId').value = '';   
+            document.getElementById('enterLimitPriceId').value = '';
         }
 
         function setAsk() {
             document.getElementById('placeAskBidId').style.backgroundColor = '#c9302c';
             document.getElementById('placeAskBidId').innerHTML = 'Place Ask';
             document.getElementById('enterAmmountAskOfferId').value = '';
-            document.getElementById('enterLimitPriceId').value = ''; 
+            document.getElementById('enterLimitPriceId').value = '';
         }
 
         function placeBuyOrder() {
             //prepei na parei timi apo ta Bids
             let productId = currentProductId;
             let check = document.getElementById('placeOrderId').innerHTML;
-            if (check === 'Place Buy Order') {      
+            if (check === 'Place Buy Order') {
                 let euroSpend = document.getElementById('enterAmmountId').value;
                 connection.invoke('InstantBuy', productId, euroSpend);
                 document.getElementById('enterAmmountId').value = "";
@@ -659,14 +660,14 @@
                 let bidAmount = document.getElementById('enterAmmountAskOfferId').value;
                 let limitPrice = document.getElementById('enterLimitPriceId').value;
                 document.getElementById('enterAmmountAskOfferId').value = '';
-                document.getElementById('enterLimitPriceId').value = ''; 
+                document.getElementById('enterLimitPriceId').value = '';
                 connection.invoke('PlaceBid', currentProductId, bidAmount, limitPrice);
             }
             else {
                 let askAmount = document.getElementById('enterAmmountAskOfferId').value;
                 let limitPrice = document.getElementById('enterLimitPriceId').value;
                 document.getElementById('enterAmmountAskOfferId').value = '';
-                document.getElementById('enterLimitPriceId').value = ''; 
+                document.getElementById('enterLimitPriceId').value = '';
                 connection.invoke('PlaceAsk', currentProductId, askAmount, limitPrice);
             }
         }
