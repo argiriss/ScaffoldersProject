@@ -446,17 +446,23 @@ div#bidId, div#askId, .tradehistory{
     padding-right:15px;
 }
 
-table#askTable tbody, table#bidTable tbody, table#tradeTable tbody{
+table#askTable tbody, table#bidTable tbody,{
     display: block;
     max-height: 43vh;
     overflow-y: scroll;
 }
 
-table#askTable thead, table#tradeTable thead, table#bidTable thead, table#askTable tbody tr, table#bidTable tbody tr, table#tradeTable tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
+table#tradeTable tbody {
+    display: block;
+    overflow-y: scroll;
 }
+    
+    
+    table#askTable thead, table#tradeTable thead, table#bidTable thead, table#askTable tbody tr, table#bidTable tbody tr, table#tradeTable tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
 
 table#askTable td, table#bidTable td, table#tradeTable td{
     border: none;

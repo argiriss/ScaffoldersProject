@@ -75,9 +75,9 @@
         for (var i = 0; i < offerTable.length; i++) {
             trElem = document.createElement("tr");
             tdElem = document.createElement("td");
-            tdElem.innerHTML = offerTable[i].quantity;
+            tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
             tdSecElem = document.createElement("td");
-            tdSecElem.innerHTML = offerTable[i].priceOffer;
+            tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
             trElem.appendChild(tdElem);
             trElem.appendChild(tdSecElem);
             parent.appendChild(trElem);
@@ -92,9 +92,9 @@
         for (var i = 0; i < askTable.length; i++) {
             trElem = document.createElement("tr");
             tdElem = document.createElement("td");
-            tdElem.innerHTML = askTable[i].quantity;
+            tdElem.innerHTML = askTable[i].quantity.toFixed(4);
             tdSecElem = document.createElement("td");
-            tdSecElem.innerHTML = askTable[i].priceAsk;
+            tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
             trElem.appendChild(tdElem);
             trElem.appendChild(tdSecElem);
             parent.appendChild(trElem);

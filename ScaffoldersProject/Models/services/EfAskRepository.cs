@@ -25,18 +25,7 @@ namespace ScaffoldersProject.Models.services
 
         public async Task AddAsk(int productId, decimal askAmount, decimal limitPrice,string userId)
         {
-            //find if a bid with the same product and the same price exists already in Ask table
-            var askExist = db.Ask.SingleOrDefault(x => x.ProductId == productId && x.PriceAsk == limitPrice);
-            //if exists increase the quantity
-            if (askExist != null)
-            {
-                askExist.Quantity += askAmount;
-                db.Ask.Update(askExist);
-                await db.SaveChangesAsync();
-            }
-            //else initiate a new Ask object and add it to Ask table
-            else
-            {
+            //create new ask
                 var ask = new Ask
                 {
                     Quantity = askAmount,
@@ -46,7 +35,6 @@ namespace ScaffoldersProject.Models.services
                     ProductId = productId
                 };
                 await AskSave(ask);
-            }
         }
 
         public void RemoveAsk()

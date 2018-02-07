@@ -60,8 +60,9 @@ $(document).ready(function () {
     $(document).on("click", "a.dropdown-link", function () {
         $linktext = $(this).text();
         $pricetext = $(this).siblings('.select-product-price').text();
-        $totaltext = $linktext+ ' - ' + $pricetext;
-        $('#dropdown-button-text').text($totaltext);
+        //$totaltext = $linktext+ ' - ' + $pricetext;
+        $('#dropdown-button-text').text($linktext);
+        $('#dropdown-button-coin').text($pricetext);
         $("#coinLabelId").text($linktext);
         $("#AskOfferCoinId").text($linktext);
         $('#totalCoinSelectedId').text('0.00');
@@ -70,8 +71,7 @@ $(document).ready(function () {
             $("#enterAmmountIdCoin").text($linktext);         
         } else {
             $("#selectedCoinId").text($linktext);
-        }
-       
+        }  
     });
 
     $(function () {
