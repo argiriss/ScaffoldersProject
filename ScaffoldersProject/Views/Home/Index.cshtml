@@ -17,7 +17,7 @@
             {
                 <span class="crypto-divider">|</span>
                 <span class="crypto-symbol"> @item.symbol:</span>
-                <span class="crypto-price"> @item.price_eur.ToString("C4")</span>
+                <span class="crypto-price"> @item.price_usd.ToString("C4")</span>
             }
         </marquee>
     </div>
@@ -49,7 +49,7 @@
         <p>A Trading platform for fast, efficient and easy trading in cryptocurrencies. We offer a highly skilled team of cryptocurrency savvies just for you.We will keep you updated of the latest trends of cryptocurrency market.</p>
     </div>
     <div class="col-md-3 col-sm-6">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqcHND1kDO4RH7ZiHlsdZpQIW9IhvDTGrK0VVQB0UwlfAGNoVL" alt="Deposit" id="perks-3-logo">
+        <img src="~/images/dollar.png" alt="Deposit" id="perks-3-logo">
         <h3>
             <strong>QUICK DEPOSIT AND WITHDRAWAL</strong>
         </h3>
@@ -143,11 +143,16 @@
 <script>
 
     $('canvas#BTCchart').show();
+    $('#BTCbtn').css('font-weight', 'bold');
     $('canvas#ETHchart').hide();
     $('canvas#XRPchart').hide();
     $('canvas#LTCchart').hide();
 
     $('#BTCbtn').click(function () {
+        $(this).css('font-weight', 'bold');
+        $('#ETHbtn').css('font-weight', 'normal');
+        $('#XRPbtn').css('font-weight', 'normal');
+        $('#LTCbtn').css('font-weight', 'normal');
         $('canvas#BTCchart').show();
         $('canvas#ETHchart').hide();
         $('canvas#XRPchart').hide();
@@ -155,6 +160,10 @@
     });
 
     $('#ETHbtn').click(function () {
+        $(this).css('font-weight', 'bold');
+        $('#BTCbtn').css('font-weight', 'normal');
+        $('#XRPbtn').css('font-weight', 'normal');
+        $('#LTCbtn').css('font-weight', 'normal');
         $('canvas#BTCchart').hide();
         $('canvas#ETHchart').show();
         $('canvas#XRPchart').hide();
@@ -162,6 +171,10 @@
     });
 
     $('#XRPbtn').click(function () {
+        $(this).css('font-weight', 'bold');
+        $('#ETHbtn').css('font-weight', 'normal');
+        $('#BTCbtn').css('font-weight', 'normal');
+        $('#LTCbtn').css('font-weight', 'normal');
         $('canvas#BTCchart').hide();
         $('canvas#ETHchart').hide();
         $('canvas#XRPchart').show();
@@ -169,6 +182,10 @@
     });
 
     $('#LTCbtn').click(function () {
+        $(this).css('font-weight', 'bold');
+        $('#ETHbtn').css('font-weight', 'normal');
+        $('#XRPbtn').css('font-weight', 'normal');
+        $('#BTCbtn').css('font-weight', 'normal');
         $('canvas#BTCchart').hide();
         $('canvas#ETHchart').hide();
         $('canvas#XRPchart').hide();
