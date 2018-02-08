@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ScaffoldersProject</title>
+    <title>@ViewData["Title"] - Scaffolders</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -118,7 +118,7 @@
                             <div class="dropdown-container">
                                 <a asp-controller="Client" asp-action="Index">View Products</a>
                                 <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
-                                <a asp-controller="Order" asp-action="">Buy History</a>
+                                <a asp-controller="Order" asp-action="BuyHistory">Buy History</a>
                             </div>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
 
@@ -272,7 +272,7 @@
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a asp-area="" asp-controller="member" asp-action="Create">Create Product</a>
-                            <a href="#clients">Buy History</a>
+                            <a >Buy History</a>
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
@@ -334,6 +334,8 @@
     @RenderSection("Scripts", required: false)
 
     <script>
+        var myChart;
+        var stackedBar
         var currentCoinPrice;//from function setProductId()
         var currentProductId;//from function setProductId()
         var currentCoinShortName;//from function setProductId()
@@ -406,10 +408,14 @@
                     tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
                     tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
+<<<<<<< HEAD
                     tdThirdElem = document.createElement("td");
                     if (offerTable[i].userOfferId === userId) {
                         tdThirdElem.innerHTML = offerTable[i].quantity.toFixed(2);
                     }
+=======
+                    tdSecElem.className = 'order-price';
+>>>>>>> ad17e659b8dca798d2f2ba7513de26d80c5567db
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
                     trElem.appendChild(tdThirdElem);
@@ -424,6 +430,7 @@
                     tdElem.innerHTML = askTable[i].quantity.toFixed(4);
                     tdSecElem= document.createElement("td");
                     tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
+                    tdSecElem.className = 'order-price';
                     tdThirdElem = document.createElement("td");
                     if (askTable[i].userAskId === userId) {                      
                         tdThirdElem.innerHTML = askTable[i].quantity.toFixed(2);
@@ -477,10 +484,26 @@
                     trElem.appendChild(tdSecElem);
                     trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
+
+                    
+                   
                 }
                 //Chart area
                 getChartLine(labels,data);
                 getChartBar(labels, colors, quantity);
+                
+                $lowestsell=parseFloat($('tbody#tbody tr:last').find('td.order-price').text());
+                $highestbid = parseFloat($('tbody#tbodybid tr:first').find('td.order-price').text());
+                $eurospread = ($lowestsell - $highestbid).toFixed(2);
+
+                if (!isNaN($eurospread)) {
+                    $('#eurospread').text($eurospread+' $');
+                }
+                else {
+                    $('#eurospread').text('-');
+
+                }
+                
             }
         }
 
@@ -623,9 +646,12 @@
             }
         }
 
-        function getChartLine(labels,data) {
+        function getChartLine(labels, data) {
             var ctx = document.getElementById("firstChart").getContext('2d');
-            var myChart = new Chart(ctx, {
+            if (myChart) {
+                myChart.destroy();
+            }
+             myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels.reverse(),
@@ -668,7 +694,10 @@
         function getChartBar(labels,colors,quantity) {
 
             var ctxx = document.getElementById("secondChart").getContext('2d');
-            var stackedBar = new Chart(ctxx, {
+            if (stackedBar) {
+                stackedBar.destroy();
+            }
+            stackedBar = new Chart(ctxx, {
                 type: 'bar',
                 data: {
                     labels: labels.reverse(),

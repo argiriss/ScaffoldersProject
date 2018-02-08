@@ -8,7 +8,7 @@ namespace ScaffoldersProject.Models
     public class CartOrder
     {
         [Key]
-        public int CartOrderId { get; set; }
+        public int CartOrderId { get; set; }    
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

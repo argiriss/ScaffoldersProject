@@ -25,11 +25,11 @@
         </div>
     </div>
     <div class="col col-md-9">
-        <div class="half-page">
+        <div class="half-page" style="background:#111; border-bottom:1px solid black">
             <canvas id="myChart"></canvas>
         </div>
-        <div class="half-page" style="background:purple;">
-
+        <div class="half-page" style="background:#111;">
+            <canvas id="secondChart"></canvas>
         </div>
     </div>
 </div>
@@ -41,6 +41,20 @@
     //    alert(message);
     //    document.getElementById('Buy').innerHTML += orderPrice;
     //})
+    function formatDate(date) {
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sept", "Oct",
+            "Nov", "Dec"
+        ];
+
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
 
 
     connection.on('NewOrder', function (depositHistoryTable) {
@@ -71,6 +85,19 @@
         return labels.reverse();
     }
 
+    function generateColorsFromTable() {
+        var colors = [];
+
+        var rows = jQuery("tr");
+        rows.each(function (index) {
+            if (index != 0)  // we dont need first row of table
+            {
+                colors.push('rgba(212,109,21,1)');
+            }
+        });
+
+        return colors;
+    }
 
     function generateLabelsFromTable() {
         var labels = [];
@@ -81,14 +108,21 @@
             {
                 var cols = $(this).find("td");
                 var lab = cols.last().text();
-                labels.push(lab);
+                var stringtoepoch = Date.parse(lab);
+                var epochtodate = new Date(0);
+                epochtodate.setUTCMilliseconds(stringtoepoch);                                            
+                labels.push(formatDate(epochtodate));                
             }
+            
         });
 
         var unique = $.uniqueSort(labels);
         unique.reverse();
+       
         return unique;
     }
+    
+
 
 
     var ctx = document.getElementById("myChart").getContext('2d');
@@ -99,30 +133,81 @@
             datasets: [{
                 label: 'Deposit history',
                 data: generateDataFromTable(),
-                borderWidth: 1
+                borderWidth: 2,
+                backgroundColor: ['rgba(212,109,21, 0.7)'],
+                borderColor: ['rgba(212,109,21,1)'],
             }]
         },
         options: {
+            legend: {
+                labels: {
+                    fontColor: "rgba(212,109,21, 1)",
+                    fontSize: 18
+                }
+            },
             scales: {
-                xAxes: [{
-                    time: {
-                        unit: 'day'
-                    }
-                }],
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        fontColor: "rgba(212,109,21, 1)",
+                        fontSize: 18,
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: "rgba(212,109,21, 1)",
+                        fontSize: 14,
+                        stepSize: 1,
+                        time: {
+                            unit: 'day'
+                        }
                     }
                 }]
             }
         }
     });
-    var i = myChart.data.datasets.length;
-    //setInterval(function () {
-    //    myChart.data.datasets[0].data[i] = Math.floor(Math.random()*10);
-    //    myChart.data.labels[i] = "test";
-    //    myChart.update();
-    //    i++;
-    //}, 1000);
+
+
+    var ctxx = document.getElementById("secondChart").getContext('2d');
+    var stackedBar = new Chart(ctxx, {
+        type: 'bar',
+        data: {
+            labels: generateLabelsFromTable(),
+            datasets: [{
+                label: 'Coin quantity',
+                data: generateDataFromTable(),
+                borderWidth: 2,
+                backgroundColor: generateColorsFromTable(),
+            }]
+        },
+        options: {
+            legend: {
+                labels: {
+                    fontColor: "rgba(212,109,21, 1)",
+                    fontSize: 18
+                }
+            },
+
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        fontColor: "rgba(212,109,21, 1)",
+                        fontSize: 18,
+                        stacked: true
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: "rgba(212,109,21, 1)",
+                        fontSize: 14,
+                        stepSize: 1,
+                        stacked: true
+                    }
+                }]
+            }
+        }
+    });
 
 </script>

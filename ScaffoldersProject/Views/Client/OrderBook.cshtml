@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th class="text-center" style="color:rgb(212, 109, 21)">Trade Size</th>
-                            <th class="text-center" style="color:rgb(212, 109, 21)">Price(Euro)</th>
+                            <th class="text-center" style="color:rgb(212, 109, 21)">Price (Euro)</th>
                             <th class="text-center" style="color:rgb(212, 109, 21)">Time</th>
                         </tr>
                     </thead>
@@ -44,7 +44,7 @@
                     </table>
                 </div>
             </div>
-            <div id="middle-layer" style="background:orangered;color:white;height: 5vh; margin-top: -2.5vh; padding:3%;">Eurospread <span style="float:right">ΕΔΩ</span></div>
+            <div id="middle-layer" style="background:orangered;color:white;height: 5vh; margin-top: -2.5vh; padding:3%;">Spread: <span id="eurospread" style="float:right; font-size:16px; font-weight:bold"></span></div>
             <div id="bidId" class="half-page" style="background:#111; color:green; padding-left: 10px;">
                 <div class="table-container" style="max-height: 50vh; overflow:hidden;">
                     <table class="table table-responsive" id="bidTable">
@@ -74,6 +74,9 @@
         $('.tradehistory').show();
         $('.orders').hide();
     });
+
+
+    
     //Recieve data from server
     connection.on('PlaceBid', function (offerTable, productId) {
         if (currentProductId == productId) {

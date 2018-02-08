@@ -674,6 +674,7 @@ table#askTable td, table#bidTable td, table#tradeTable td{
     min-height: 550px;
     padding: 20px;
     font-size: 13px;
+    background:#ddd;
     line-height: 20px;
     text-align: center;
 }
@@ -695,18 +696,74 @@ div#cryptosbtn {
 }
 
 
+div#usersOnlineId p{
+    padding-left: 10px;
+    font-weight:bold;
+}
 
+.message-user{
+    font-weight:bold;
+    padding-left:15px;
+    display:block;
+}
 
+.message-text {
+    width: 40%;
+    padding-left: 15px;
+    display: block;
+    position: relative;
+    padding: 15px 30px;
+    margin: 0;
+    color: #000;
+    background: #f3961c;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#f9d835), to(#f3961c));
+    background: -moz-linear-gradient(#f9d835, #f3961c);
+    background: -o-linear-gradient(#f9d835, #f3961c);
+    background: linear-gradient(#f9d835, #f3961c);
+    -webkit-border-top-left-radius: 25px 50px;
+    -webkit-border-top-right-radius: 25px 50px;
+    -webkit-border-bottom-right-radius: 25px 50px;
+    -webkit-border-bottom-left-radius: 25px 50px;
+    -moz-border-radius: 25px / 50px;
+    border-radius: 25px / 50px;
+    word-break: break-word;
+}
+
+.message-text:before {
+    content: "";
+    position: absolute;
+    bottom: -30px;
+    right: 50px;
+    border-width: 0 0 30px 25px;
+    border-style: solid;
+    border-color: transparent #f3961c;
+    display: block;
+    width: 0;
+}
+
+p.new-text {
+    margin-bottom: 90px;
+}
+
+.chat-col {
+    height: 100vh;
+    background: #111;
+    color: #d46d15;
+}
+
+tr.trade-row {
+    text-align: center;
+}
 
 @media screen and (max-width: 995px) {
     body {
         overflow-y: scroll !important;
     }
 
-    #news div{
+    #news div {
         min-height: initial;
     }
-    
+
     #myNavbar {
         display: none;
         background-color: #101010;
@@ -717,34 +774,33 @@ div#cryptosbtn {
     }
 
     .sidenav-col {
-        height:auto;
+        height: auto;
         position: static;
     }
 
-    .sidenav a{
-        display:block !important;
+    .chat-col{
+        height:auto;
     }
 
-}
-
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
-
-    
-}
-
-
-@media screen and (max-width: 480px) {
-    .full-screen {
-        background: url(~/images/background.png);
-        background-size: cover;
-        background-position: center center;
+    .sidenav a {
+        display: block !important;
     }
 }
+    /* Hide/rearrange for smaller screens */
+    @media screen and (max-width: 767px) {
+        /* Hide captions */
+        .carousel-caption {
+            display: none;
+        }
+    }
+
+
+    @media screen and (max-width: 480px) {
+        .full-screen {
+            background: url(~/images/background.png);
+            background-size: cover;
+            background-position: center center;
+        }
+    }
 
 

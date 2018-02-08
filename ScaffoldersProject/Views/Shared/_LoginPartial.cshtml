@@ -18,7 +18,7 @@
                 <span class="icon-bar"></span>
             </button>
             
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ScaffoldersProject</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Scaffolders</a>
         </div>
         @if (User.IsInRole("Client"))
         {
@@ -34,6 +34,9 @@
                         <a asp-area="" asp-controller="Client" asp-action="Index">@UserManager.GetUserName(User) Platform</a>
                     </li>
                     <li>
+                    <a asp-area="" asp-controller="Home" asp-action="Chat">Chat</a>
+                    </li>
+                    <li>
                         <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
                     </li>
                 </ul>
@@ -47,6 +50,9 @@
                         <a asp-area="" asp-controller="Admin" asp-action="Index">@UserManager.GetUserName(User) Platform</a>
                     </li>
                     <li>
+                        <a asp-area="" asp-controller="Home" asp-action="Chat">Chat</a>
+                    </li>
+                    <li>
                         <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
                     </li>
                 </ul>
@@ -58,6 +64,9 @@
                 <ul id="myNavbar" class="nav navbar-nav navbar-right">
                     <li>
                         <a asp-area="" asp-controller="Member" asp-action="Index">@UserManager.GetUserName(User) Platform</a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Home" asp-action="Chat">Chat</a>
                     </li>
                     <li>
                         <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
@@ -85,8 +94,7 @@ else
                     <li><a id="home-anchor" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a id="second-anchor" href="#perks">About</a></li>
                     <li><a id="third-anchor" href="#cryptosbtn">Overview</a></li>
-                    <li><a id="fourth-anchor" href="#news">News & Updates</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Chat">Chat</a></li>
+                    <li><a id="fourth-anchor" href="#news">News & Updates</a></li>                    
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a id="register-button" asp-area="" asp-controller="Account" asp-action="Register"><span class="glyphicon glyphicon-user"></span> Register</a></li>

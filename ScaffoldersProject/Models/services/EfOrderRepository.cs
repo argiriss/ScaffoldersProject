@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScaffoldersProject.Data;
+using Microsoft.EntityFrameworkCore;
 using ScaffoldersProject.Services;
 using System;
 using System.Collections.Generic;
@@ -179,7 +180,7 @@ namespace ScaffoldersProject.Models.services
         }
         public List<TradeHistory> GetTradeHistory(int productId)
         {
-            return db.TradeHistory.Where(x => x.ProductId == productId).OrderByDescending(x => x.DateofTransaction).ToList();
+            return db.TradeHistory.Where(x => x.ProductId == productId).OrderByDescending(x => x.DateofTransaction).Take(50).ToList();
         }
         public async Task SetCurrentPrice(int productId, decimal closedPrice)
         {
@@ -263,7 +264,7 @@ namespace ScaffoldersProject.Models.services
 
         public List<CartOrder> GetHistory(string UserId)
         {
-            List<CartOrder> Buys = db.CartOrder.Where(x => x.Order.UserOrderId == UserId).OrderByDescending(x => x.Order.OrderDay).ToList();
+            List<CartOrder> Buys = db.CartOrder.Include(x => x.Product).Include(x=>x.Order).Where(x => x.Order.UserOrderId == UserId).OrderByDescending(x => x.Order.OrderDay).ToList();
             return Buys;
         }
 
