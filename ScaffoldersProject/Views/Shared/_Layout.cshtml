@@ -334,6 +334,8 @@
     @RenderSection("Scripts", required: false)
 
     <script>
+        var myChart;
+        var stackedBar
         var currentCoinPrice;//from function setProductId()
         var currentProductId;//from function setProductId()
         var currentCoinShortName;//from function setProductId()
@@ -397,6 +399,7 @@
                     tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
                     tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
+                    tdSecElem.className = 'order-price';
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
                     parent.appendChild(trElem);
@@ -410,6 +413,7 @@
                     tdElem.innerHTML = askTable[i].quantity.toFixed(4);
                     tdSecElem= document.createElement("td");
                     tdSecElem.innerHTML = askTable[i].priceAsk.toFixed(2);
+                    tdSecElem.className = 'order-price';
                     tdThirdElem = document.createElement("td");
                     if (askTable[i].userAskId === userId) {                      
                         tdThirdElem.innerHTML = askTable[i].quantity.toFixed(2);
@@ -463,10 +467,26 @@
                     trElem.appendChild(tdSecElem);
                     trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
+
+                    
+                   
                 }
                 //Chart area
                 getChartLine(labels,data);
                 getChartBar(labels, colors, quantity);
+                
+                $lowestsell=parseFloat($('tbody#tbody tr:last').find('td.order-price').text());
+                $highestbid = parseFloat($('tbody#tbodybid tr:first').find('td.order-price').text());
+                $eurospread = ($lowestsell - $highestbid).toFixed(2);
+
+                if (!isNaN($eurospread)) {
+                    $('#eurospread').text($eurospread+' $');
+                }
+                else {
+                    $('#eurospread').text('-');
+
+                }
+                
             }
         }
 
@@ -603,9 +623,12 @@
             }
         }
 
-        function getChartLine(labels,data) {
+        function getChartLine(labels, data) {
             var ctx = document.getElementById("firstChart").getContext('2d');
-            var myChart = new Chart(ctx, {
+            if (myChart) {
+                myChart.destroy();
+            }
+             myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels.reverse(),
@@ -648,7 +671,10 @@
         function getChartBar(labels,colors,quantity) {
 
             var ctxx = document.getElementById("secondChart").getContext('2d');
-            var stackedBar = new Chart(ctxx, {
+            if (stackedBar) {
+                stackedBar.destroy();
+            }
+            stackedBar = new Chart(ctxx, {
                 type: 'bar',
                 data: {
                     labels: labels.reverse(),
