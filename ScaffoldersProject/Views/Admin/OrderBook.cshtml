@@ -41,6 +41,20 @@
     //    alert(message);
     //    document.getElementById('Buy').innerHTML += orderPrice;
     //})
+    function formatDate(date) {
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sept", "Oct",
+            "Nov", "Dec"
+        ];
+
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
 
 
     connection.on('NewOrder', function (depositHistoryTable) {
@@ -94,14 +108,21 @@
             {
                 var cols = $(this).find("td");
                 var lab = cols.last().text();
-                labels.push(lab);
+                var stringtoepoch = Date.parse(lab);
+                var epochtodate = new Date(0);
+                epochtodate.setUTCMilliseconds(stringtoepoch);                                            
+                labels.push(formatDate(epochtodate));                
             }
+            
         });
 
         var unique = $.uniqueSort(labels);
         unique.reverse();
+       
         return unique;
     }
+    
+
 
 
     var ctx = document.getElementById("myChart").getContext('2d');
