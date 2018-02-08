@@ -60,7 +60,7 @@ namespace ScaffoldersProject.Controllers
         public ViewResult Create()
         {
            
-            ViewBag.userId = "_userManager.GetUserId(User)";
+            ViewBag.userId = _userManager.GetUserId(User);
             return View(new ImageViewModel());
         }
 
@@ -107,6 +107,7 @@ namespace ScaffoldersProject.Controllers
             var imageView = new ImageViewModel
             {
                 ProductId = product.ProductId,
+                MemberProductId = product.MemberProductId,
                 Name = product.Name,
                 ShortName=product.ShortName,
                 Category = product.Category,
@@ -126,6 +127,7 @@ namespace ScaffoldersProject.Controllers
             {
                 var product = _repository.Products.FirstOrDefault(i => i.ProductId == imageView.ProductId);
                 product.ProductId = imageView.ProductId;
+                product.MemberProductId = imageView.MemberProductId;
                 product.Name = imageView.Name;
                 product.ShortName = imageView.ShortName;
                 product.Description = imageView.Description;
