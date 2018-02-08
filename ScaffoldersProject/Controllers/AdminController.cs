@@ -76,6 +76,7 @@ namespace ScaffoldersProject.Controllers
             return View(_userManager.Users);
         }
 
+        [HttpGet]
         public async Task<ViewResult> EditUser(string Id)
         {
             ApplicationUser users = await _userManager.FindByIdAsync(Id);
@@ -83,8 +84,10 @@ namespace ScaffoldersProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(ApplicationUser user)
+        public async Task<IActionResult> EditTheUser(string Id,string userName)
         {
+            var user = await _userManager.FindByIdAsync(Id);
+            user.UserName = userName;
             if (ModelState.IsValid)
             {
                 await _userManager.UpdateAsync(user);
