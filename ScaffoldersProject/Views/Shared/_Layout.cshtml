@@ -118,7 +118,7 @@
                             <div class="dropdown-container">
                                 <a asp-controller="Client" asp-action="Index">View Products</a>
                                 <a asp-area="" asp-controller="Client" asp-action="DepositHistory">Deposit History</a>
-                                <a asp-controller="Order" asp-action="">Buy History</a>
+                                <a asp-controller="Order" asp-action="BuyHistory">Buy History</a>
                             </div>
                             <a asp-area="" asp-controller="Client" asp-action="OrderBook">Order Book</a>
 
@@ -272,7 +272,7 @@
                             <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
                             <a href="/Client/Index">View Products</a>
                             <a asp-area="" asp-controller="member" asp-action="Create">Create Product</a>
-                            <a href="#clients">Buy History</a>
+                            <a >Buy History</a>
 
                             <div class="row" style="background-color:orangered">
                                 @*<div class="col-md-12" style="position:absolute;width: 100%;left: 0;right:0;background-color:orangered;">*@
