@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using ScaffoldersProject.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace ScaffoldersProject.Controllers
 {
@@ -16,26 +17,31 @@ namespace ScaffoldersProject.Controllers
     public class MemberController : Controller
     {
         private IProductRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
+
 
         //Dependency Injection
-        public MemberController(IProductRepository repository)
+        public MemberController(IProductRepository repository, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _repository = repository;
         }
 
         public IActionResult Index()
         {
-
+            var userid = _userManager.GetUserId(User);
+            var memberproductid = _repository.Products.Where(x => x.MemberProductId == userid).ToList();
+            
             var viewImageList = new List<ViewImageViewModel>();
             //convert the Products into readable type for the Model
-            foreach (var product in _repository.Products)
+            foreach (var product in memberproductid)
             {
                 var viewImage = new ViewImageViewModel
-                {
+                {                    
                     ProductId = product.ProductId,
                     Description = product.Description,
                     Name = product.Name,
-                    Price = product.Price,
+                    Price = product.Price,                   
                     ContentType = product.ContentType
                 };
 
@@ -53,6 +59,8 @@ namespace ScaffoldersProject.Controllers
 
         public ViewResult Create()
         {
+           
+            ViewBag.userId = "_userManager.GetUserId(User)";
             return View(new ImageViewModel());
         }
 
@@ -64,6 +72,7 @@ namespace ScaffoldersProject.Controllers
                 var product = new Products
                 {
                     ProductId = imageView.ProductId,
+                    MemberProductId = imageView.MemberProductId,
                     Name = imageView.Name,
                     ShortName=imageView.ShortName,
                     Description = imageView.Description,
