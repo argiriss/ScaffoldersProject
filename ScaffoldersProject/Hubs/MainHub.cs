@@ -104,7 +104,7 @@ namespace ScaffoldersProject.Hubs
             orderObject.OrderDay = DateTime.Now;
             //Add order to database and save it with this method from EfOrderRepository passing
             //the order Object with the above properties
-            await _orderRepository.AddNewOrder(orderObject);
+            await _orderRepository.Checkout(orderObject);
             var totalCost = 0;
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             await Clients.Client(Context.ConnectionId).InvokeAsync("BuyItem", "ok", totalCost.ToString("c"), totalAmount.ToString("c"));
@@ -131,7 +131,7 @@ namespace ScaffoldersProject.Hubs
             //Our total coins in Euro 
             var totalInEuro = totalFromThisProduct * currentProductPrice;
             await Clients.Client(Context.ConnectionId).InvokeAsync("InstantBuySell", totalAmount.ToString("C"), totalFromThisProduct, totalInEuro);
-            await SelectedCoin(productId);
+           await SelectedCoin(productId);
         }
 
         public async Task InstantSell(int productId, decimal coinSell)
@@ -204,10 +204,11 @@ namespace ScaffoldersProject.Hubs
             await Clients.Client(Context.ConnectionId).InvokeAsync("SelectedCoin", getAllApprovedProducts,totalFromThisProduct, totalInEuro);
         }
 
-        public async Task ResetWallet() {
+        public async Task ResetWallet(string sellerId) {
             var totalAmount = await _walletRepository.TotalInMyWallet(_userManager.GetUserId(Context.User));
             //list with all products for select products menu
             await Clients.Client(Context.ConnectionId).InvokeAsync("ResetWallet", totalAmount.ToString("C"));
+            await Clients.User("sellerId").InvokeAsync("ResetWallet" , totalAmount.ToString("C"));
         }
 
         public async Task<bool> CheckWallet(decimal euros)
@@ -223,5 +224,6 @@ namespace ScaffoldersProject.Hubs
                 return true;
             }
         }
+
     }
 }

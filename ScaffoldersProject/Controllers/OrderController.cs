@@ -31,5 +31,12 @@ namespace ScaffoldersProject.Controllers
             
             return View();
         }
+
+        public IActionResult BuyHistory()
+        {
+            var userId = _userManager.GetUserId(User);
+            var Buys = _orderRepository.GetHistory(userId);
+            return View(Buys);
+        }
     }
 }

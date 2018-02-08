@@ -1,0 +1,25 @@
+﻿@model List<CartOrder>
+
+@{
+    ViewData["Title"] = "DepositHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">@User.Identity.Name Deposit History</h2>
+
+<table class="table table-responsive table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Price</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Product.Name</td>
+            <td>@item.Quantity</td>
+            <td>@item.Order.OrderDay</td>
+        </tr>
+    }
+</table>
