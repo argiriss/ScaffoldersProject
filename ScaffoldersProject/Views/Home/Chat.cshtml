@@ -1,4 +1,5 @@
-﻿
+﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Chat";
 }
@@ -6,56 +7,18 @@
 <!--SignalR client-->
 <script src="~/signalr-client-1.0.0-alpha2-final.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let connection = new signalR.HubConnection('/chat');
 
-        //Receive Data from server
-        connection.on('send', function (data, data2) {
-            let child = document.createElement('li');
-            child.innerText = data;
-            document.getElementById('messages').appendChild(child);
-            document.getElementById('numberOfUsers').innerHTML = data2;
-        });
-
-        //Receive data only for signed user
-        connection.on('client', function (data) {
-            document.getElementById('extra').innerHTML = data;
-        })
-
-        //Receive list of online users
-        connection.on('OnlineUsers', function (data) {
-            for (var i = 0; i < data.length; i++) {
-                document.getElementById('chat-text').innerHTML += '<p>' +data[i]+'</p>';
-            }
-        })
-
-        //Sending data to server .......
-        document.getElementById('sendmessage').addEventListener('submit', event => {
-            let data = document.getElementById('data').value;
-            connection.invoke('send', data);
-            connection.invoke('sendClient', data);
-            event.preventDefault();
-        });
-
-        connection.start().then(function () {
-            console.log("Started....");
-        })
-            .catch(function (err) {
-                console.log("Error");
-            })
-    });
-</script>
 
 <div class="row chat" style="overflow:hidden">
     <div class="col-md-3" style="height:100vh; background:#111; color:#d46d15;">
-        <h5>Number Of Users Online:<span style="padding-left:15px;" id="numberOfUsers"></span></h5>
+        <h5 style="padding-left:10px;">Number Of Users Online:<span style="padding-left:15px;" id="numberOfUsers"></span></h5>
         <h3 class="text-center" style="text-decoration:underline;">EVENTS</h3>
+        <div id="usersOnlineId"></div>
 
     </div>
     <div class="col-md-9" style="background:#ddd; height:100vh;">
         <div class="col-md-12">
-            <h2 class="text-center" style="color:#d46d15;">Welcome to Scaffolders Chat</h2>
+            <h2 class="text-center" style="color:#d46d15;">Welcome to Scaffolders Chat!</h2>
         </div>
         <div class="col-md-12">
             <div id="chat-text" style="overflow-y:scroll; height: 75vh;border: 2px solid rgba(212,109,21, 0.7); outline:3px solid rgba(212,109,21, 1);">
@@ -69,12 +32,85 @@
                         <input type="image" src="~/images/send.png" alt="Submit" width="40" height="40" style="cursor:pointer">
                     </span>
                 </div>
-                
+
             </form>
 
         </div>
     </div>
 </div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+
+        var youInterval;
+
+        function startInterval() {
+
+            youInterval = setInterval(function () {
+                var elem = document.getElementById('chat-text');
+                elem.scrollTop = elem.scrollHeight;
+            }, 500);
+        }
+
+        //If user scrolls, stop interval
+        document.addEventListener('scroll', function (event) {
+            if (event.target.id === 'scrollBottom') { // or any other filtering condition
+
+                clearInterval(youInterval);
+            }
+        }, true /*Capture event*/);
+
+        //And start it whenever you need
+        startInterval();
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let connection = new signalR.HubConnection('/chat');
+
+        //Receive Data from server
+        connection.on('sendInfo', function (usersNameOnline, numberOfUsers) {
+            document.getElementById('numberOfUsers').innerHTML = numberOfUsers;
+            var parentUsers = document.getElementById('usersOnlineId');
+            var newUser = document.createElement('p');
+            newUser.innerHTML = usersNameOnline + ' Joined';
+            parentUsers.appendChild(newUser);
+        });
+
+        //Send message to All users
+        connection.on('SendMessage', function (message, user) {
+            var text = document.createElement('p');
+            text.innerHTML = '<p>' + '<span  style="text-align:right; padding-right:15px;" class="message-user">'+user + ':</span> <blockquote style="float:right" class="message-text">' + message + '</blockquote></p>';
+            text.className = 'new-text';
+            document.getElementById('chat-text').appendChild(text);
+
+        });
+
+        //Sending data to server .......
+        document.getElementById('sendmessage').addEventListener('submit', event => {
+            let input = document.getElementById('data');
+            let data = input.value;
+
+            var text = document.createElement('p');
+            text.innerHTML = '<p>' + '<span class="message-user">' + '@UserManager.GetUserName(User)' + ':</span> <blockquote class="message-text">' + data + '</blockquote></p>';
+            text.className = 'new-text';
+            document.getElementById('chat-text').appendChild(text);
+
+            connection.invoke('send', data);
+            connection.invoke('sendClient', data);
+            input.value = '';
+            event.preventDefault();
+        });
+
+        connection.start().then(function () {
+            console.log("Started....");
+        })
+            .catch(function (err) {
+                console.log("Error");
+            })
+    });
+</script>
 
 
 

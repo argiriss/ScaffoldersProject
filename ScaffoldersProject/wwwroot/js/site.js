@@ -7,6 +7,7 @@ $("#scroll").click(function () {
 });
 
 $(document).ready(function () {
+
     $('#list').click(function (event) {
         event.preventDefault();
         $('#products .item').addClass('list-group-item');
