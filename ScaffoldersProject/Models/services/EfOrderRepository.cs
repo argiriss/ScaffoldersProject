@@ -179,7 +179,7 @@ namespace ScaffoldersProject.Models.services
         }
         public List<TradeHistory> GetTradeHistory(int productId)
         {
-            return db.TradeHistory.Where(x => x.ProductId == productId).OrderByDescending(x => x.DateofTransaction).ToList();
+            return db.TradeHistory.Where(x => x.ProductId == productId).OrderByDescending(x => x.DateofTransaction).Take(50).ToList();
         }
         public async Task SetCurrentPrice(int productId, decimal closedPrice)
         {
