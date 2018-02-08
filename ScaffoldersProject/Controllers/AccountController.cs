@@ -93,39 +93,51 @@ namespace ScaffoldersProject.Controllers
                 //We getting the ApplicationUser object that represents the user, 
                 //which we do through the FindByEmailAsync method of the UserManager<ApplicationUser> 
                 //class.               
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    _logger.LogInformation("User logged in.");
-                    // Get the roles for the user
-                    var role = await _userManager.GetRolesAsync(user);
-                    if (role[0] == "Admin")
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                    if (result.Succeeded)
                     {
-                        return Redirect("/Admin/index");
+                        _logger.LogInformation("User logged in.");
+                        // Get the roles for the user
+                        var role = await _userManager.GetRolesAsync(user);
+                        if (role[0] == "Admin")
+                        {
+                            return Redirect("/Admin/index");
+                        }
+                        else if (role[0] == "Client")
+                        {
+                            return Redirect("/Client/index");
+                        }
+                        else
+                        {
+                            return Redirect("/Member/index");
+                        }
                     }
-                    else if (role[0] == "Client")
+                    if (result.RequiresTwoFactor)
                     {
-                        return Redirect("/Client/index");
+                        return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToAction(nameof(Lockout));
                     }
                     else
                     {
-                        return Redirect("/Member/index");
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return View(model);
                     }
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToAction(nameof(Lockout));
+
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ViewBag.InvalidUser = false;
                     return View(model);
+
                 }
+                
             }
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -295,12 +307,17 @@ namespace ScaffoldersProject.Controllers
                     //await _signInManager.SignInAsync(user, isPersistent: false); We commnent it out so the newly registered cannot Log in
                     _logger.LogInformation("User created a new account with password.");
                                
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(VerifyEmail));
                 }
                 AddErrors(result);
             }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        public ActionResult VerifyEmail ()
+        {
+            return View();
         }
 
         [HttpPost]
