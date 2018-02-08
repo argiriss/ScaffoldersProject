@@ -20,6 +20,9 @@ namespace ScaffoldersProject.Models.services
         Task SetCurrentPrice(int productId, decimal closedPrice);
         Task<decimal> RealTimePrice(int productId, decimal eurospend);
         Task<decimal> GetProductCuurentPrice(int productId);
+
+        List<CartOrder> GetHistory(string UserId);
+        Task Checkout(Order orderDetails);
         //methods for my order book 
 
 

@@ -47,7 +47,7 @@
         <div class="text-center">
             @if (Model != null)
             {
-                <a id="checkoutId" class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartId="@ViewBag.UserId)">Checkout</a>
+                <a id="checkoutId" class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartId="@ViewBag.UserId">Checkout</a>
             }
             <a id="continueId" class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
         </div>

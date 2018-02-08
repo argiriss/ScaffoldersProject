@@ -85,6 +85,15 @@ namespace ScaffoldersProject.Models.services
             await db.SaveChangesAsync();
         }
 
+        public async Task DecreaseWallet(decimal amount , string userId)
+        {
+            var clientUser = await _userManager.FindByIdAsync(userId);
+            clientUser.Wallet -= amount;
+            //Save the changes
+            await _userManager.UpdateAsync(clientUser);
+            await db.SaveChangesAsync();
+        }
+
 
     }
 }

@@ -94,7 +94,9 @@ namespace ScaffoldersProject.Models.services
                 //Save the changes
                 await _userManager.UpdateAsync(clientUser);
             }//End of foreach loop in cart table
+
         }
+
         public async Task InstantOrder(Order instantOrder, int productId, decimal euroSpend)
         {
             //Add the order to Order Table and save it
@@ -258,6 +260,74 @@ namespace ScaffoldersProject.Models.services
             }
             return quantityToBeOrdered;
         }
+
+        public List<CartOrder> GetHistory(string UserId)
+        {
+            List<CartOrder> Buys = db.CartOrder.Where(x => x.Order.UserOrderId == UserId).OrderByDescending(x => x.Order.OrderDay).ToList();
+            return Buys;
+        }
+
+        public async Task Checkout(Order orderDetails)
+        {
+            //Add the order to Order Table and save it
+            await OrderSave(orderDetails);
+            //Find the cart items List which exist in User's Cart
+            var CartItemsOrdered = db.Cart.Where(x => x.UserCartId == orderDetails.UserOrderId).ToList();
+            //for those Cart Items 
+            CartOrder cartOrderTable = new CartOrder();
+            foreach (var item in CartItemsOrdered)
+            {
+                //find Product price
+                var findProduct = await db.Products.FindAsync(item.ProductId);
+                //!!!!!!Inside foreach no Iquerable thats why i made CartItemsOrdered 
+                //To List!!!!!!!!.........Important...............
+                //Creation of cartOrder ID in CartOrder Table for transfer items from cart 
+                var quantityToOrder = await RealTimePrice(item.ProductId, item.Quantity);
+                //to cartOrder so as to clear cart table
+                cartOrderTable.OrderId = orderDetails.OrderID;
+                cartOrderTable.ProductId = item.ProductId;
+                cartOrderTable.Quantity = quantityToOrder;
+                await CartOrderSave(cartOrderTable);
+                
+                //Remove item from cart table so as to clear this table after order placed
+                db.Cart.Remove(item);
+                //for each item removing,  reduce its stock by the buying quantity
+                //Products productReduseStock = db.Products.FirstOrDefault(p => p.ProductId == item.ProductId);
+                //productReduseStock.Stock -= item.Quantity / findProduct.Price; //reduce the stock
+                //await ProductReduseStock(productReduseStock);
+                //if product not exist in portfolio insert it
+                var check = db.PortFolio.FirstOrDefault(x => x.ProductId == item.ProductId && x.UserPortofolioId == orderDetails.UserOrderId);
+                if (check != null)
+                {
+                    //if exists the raise its coin quantity
+                    check.CoinsQuantity += cartOrderTable.Quantity;
+                    db.PortFolio.Update(check); //update the table
+                    await db.SaveChangesAsync();
+                }
+                else
+                {
+                    //insert new product to portfolio
+                    Portfolio newproduct = new Portfolio
+                    {
+                        ProductId = item.ProductId,
+                        CoinsQuantity = cartOrderTable.Quantity,
+                        UserPortofolioId = orderDetails.UserOrderId
+                    };
+                    db.PortFolio.Add(newproduct);
+                    await db.SaveChangesAsync();
+                }
+                //Reduse the Wallet amount by quantity which is the euro spend ,in parameters
+                //Find Client Wallet and reduse it
+                var clientUser = await _userManager.FindByIdAsync(orderDetails.UserOrderId);
+                await _walletRepository.DecreaseWallet(item.Quantity, orderDetails.UserOrderId);
+                //Save the changes
+                await _userManager.UpdateAsync(clientUser);
+            }//End of foreach loop in cart table
+
+
+        }
+
+
 
     }
 }

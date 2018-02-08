@@ -12,13 +12,15 @@ namespace ScaffoldersProject.Models.services
         private MainDbContext db;
         private readonly UserManager<ApplicationUser> _userManager;
         public IQueryable<Sell> Sells => db.Sell;
+        public IWalletRepository _walletRepository;
 
 
         //Depedency injection implemented on constructor.Instatiate db object
-        public EfSellRepository(MainDbContext db, UserManager<ApplicationUser> userManager)
+        public EfSellRepository(MainDbContext db, UserManager<ApplicationUser> userManager, IWalletRepository walletRepository)
         {
             this.db = db;
             _userManager = userManager;
+            _walletRepository = walletRepository;
         }
 
         //Save to Order Table
@@ -111,6 +113,9 @@ namespace ScaffoldersProject.Models.services
                     //reduce the quantity of the bid in offer table
                     item.Quantity -= coinSell;
                     db.Offer.Update(item);
+                    //decrease the wallet of user who had placed the bod
+                    //await _walletRepository.DecreaseWallet(coinSell * item.PriceOffer, item.UserOfferId);
+                    await _walletRepository.DecreaseWallet(coinSell * item.PriceOffer, item.UserOfferId);
                     await db.SaveChangesAsync();
 
                     decimal closedPrice = item.PriceOffer; //the new current product price
@@ -139,6 +144,7 @@ namespace ScaffoldersProject.Models.services
 
                     //Find current product price
                     await SetCurrentPrice(productId, closedPrice);
+                    await _walletRepository.DecreaseWallet(coinSell * item.PriceOffer, item.UserOfferId);
 
                     TradeHistory trade = new TradeHistory //initiate a new trade
                     {
@@ -159,7 +165,7 @@ namespace ScaffoldersProject.Models.services
                     coinSell -= item.Quantity;
 
                     moneyEarn += item.Quantity * item.PriceOffer; //increase the quantity of user's order
-
+                    await _walletRepository.DecreaseWallet(item.Quantity * item.PriceOffer, item.UserOfferId);
                     TradeHistory trade = new TradeHistory //initiate a new trade
                     {
                         Quantity = item.Quantity,

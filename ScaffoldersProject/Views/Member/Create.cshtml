@@ -14,6 +14,7 @@
 
 <form enctype="multipart/form-data" asp-action="Create" asp-controller="Member" method="post">
     <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" value="@ViewBag.userId" asp-for="MemberProductId" />
     <div class="form-group">
         <label asp-for="Name"></label>
         <div><span asp-validation-for="Name" class="text-danger"></span></div>
