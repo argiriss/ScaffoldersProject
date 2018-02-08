@@ -35,9 +35,10 @@ namespace ScaffoldersProject.Hubs
             //list of online users
             var onUsers=OnlineUser.Keys;
             //Return user name and total login users
-            await Clients.All.InvokeAsync("Send", $"{_userManager.GetUserName(Context.User)} joined",NumberOfUsers);
+            await Clients.All.InvokeAsync("SendInfo", $"{_userManager.GetUserName(Context.User)}",NumberOfUsers);
+         
             //return name of online users
-            await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers",onUsers);
+           // await Clients.Client(Context.ConnectionId).InvokeAsync("OnlineUsers",onUsers);
         }
 
         //When the client disconnect
@@ -49,8 +50,9 @@ namespace ScaffoldersProject.Hubs
 
         //When we invoke from client with Send value end send back message from parameter
         public async Task Send(string message)
-        {    
-            await Clients.All.InvokeAsync("Send", message, NumberOfUsers);  
+        {
+            List<string> listExclude = new List<string>() { Context.ConnectionId };
+            await Clients.AllExcept(listExclude).InvokeAsync("SendMessage", message, _userManager.GetUserName(Context.User));  
         }
 
         //When we invoke from client with SendClient value
