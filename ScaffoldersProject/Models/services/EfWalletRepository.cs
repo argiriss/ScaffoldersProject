@@ -31,8 +31,10 @@ namespace ScaffoldersProject.Models.services
         //Deposit to my wallet via Paypal
         public async Task Deposit(decimal amount , string userId)
         {
-            decimal fee = 0.05M;
-            decimal amountWithFee = amount-fee*amount;
+            var fee = db.Settings.ToList();
+            var adminFee = fee[0].AdminFee;
+            var memberFee = fee[0].MemberFee;
+            decimal amountWithFee = amount-(adminFee*amount+memberFee*amount);
             //Create new deposit 
             Deposit depForSave = new Deposit();
             depForSave.DepositAmount= amountWithFee;
@@ -49,10 +51,22 @@ namespace ScaffoldersProject.Models.services
 
             //Find user Admin to change his wallet with the fee from transaction
             var userToChange=await _userManager.FindByNameAsync("Admin");
-            userToChange.Wallet += fee*amount;
+            userToChange.Wallet += adminFee * amount;
             // Save the changes
             await _userManager.UpdateAsync(userToChange);
-            
+
+            //Fee for members
+            var usersList = await _userManager.GetUsersInRoleAsync("Member");
+            var membersCount = usersList.Count;
+
+            foreach (var item in usersList)
+            {
+                item.Wallet += memberFee * amount / membersCount;
+                await _userManager.UpdateAsync(item);
+            }
+
+            //var tasks = _userManager.Users.ToList().Select(i => i.Id==));
+            //var results = await Task.WhenAll(tasks);
         }
 
         public async Task<decimal> TotalInMyWallet(string userId)

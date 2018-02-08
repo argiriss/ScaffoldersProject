@@ -4,21 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Set Fee</h2>
+<h2 class="text-center">Set Fee</h2>
 
-<form enctype="multipart/form-data" asp-action="SetFee" method="post">
-    <div class="form-group">
-        <label asp-for="AdminFee"></label>
-        <div><span asp-validation-for="AdminFee" class="text-danger"></span></div>
-        <input asp-for="AdminFee" class="form-control" />
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" asp-action="SetFee" method="post">
+            <input type="hidden" asp-for="SettingsId" />
+            <div class="form-group">
+                <label asp-for="AdminFee"></label>
+                <div><span asp-validation-for="AdminFee" class="text-danger"></span></div>
+                <input asp-for="AdminFee" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="MemberFee"></label>
+                <div><span asp-validation-for="MemberFee" class="text-danger"></span></div>
+                <input asp-for="MemberFee" class="form-control" />
+            </div>
+            <div class="text-center col-sm-12">
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="MemberFee"></label>
-        <div><span asp-validation-for="MemberFee" class="text-danger"></span></div>
-        <input asp-for="MemberFee" class="form-control"/>
-    </div>
-    <div class="text-center col-sm-12">
-        <button class="btn btn-primary" type="submit">Save</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
+    <div class="col-md-4"></div>
+</div>
