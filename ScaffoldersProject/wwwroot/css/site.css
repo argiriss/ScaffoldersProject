@@ -24,6 +24,14 @@
     }
 }
 
+div#perks{
+    margin-top: 8%;
+}
+
+div#perks, div#news, h1#cryptosbtn {
+    margin-top: 5%;
+}
+
 body {
     padding-top: 50px;
     padding-bottom: 20px;
