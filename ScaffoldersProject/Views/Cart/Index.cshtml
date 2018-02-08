@@ -38,19 +38,22 @@
                     </tr>
                 </tfoot>
             </table>
-                        }
-                        else
-                        {
-                            <h3 class="text-center">Your cart is empty!</h3>
-                        }
 
-        <div class="text-center">
-            @if (Model != null)
-            {
-                <a id="checkoutId" class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartId="@ViewBag.UserId">Checkout</a>
-            }
-            <a id="continueId" class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
-        </div>
+            <div id="Actions" class="text-center">
+                @if (Model != null)
+                {
+                    <button id="checkoutId" class="btn btn-success" onclick="btnSubmit()">Buy Now</button>
+                    @*<a id="checkoutId" class="btn btn-success" asp-controller="Order" asp-action="OrderForm" asp-route-CartId="@ViewBag.UserId">Checkout</a>*@
+                }
+                <a id="continueId" class="btn btn-primary" asp-controller="Client" asp-action="Index">Continue shopping</a>
+            </div>
+         }
+         else
+         {
+            <h3 class="text-center">Your cart is empty!</h3>
+         }
+
+  
     </div>
 
     <div id="RemovedModal" class="modal fade" role="dialog">
@@ -86,6 +89,18 @@
             document.getElementById('cartId').innerHTML = ' ('+totalCost+')';
         });
 
+        connection.on('BuyItem', function (message, totalCost, totalAmount) {
+            document.getElementById('cartId').innerHTML = '(' + totalCost + ')';
+            document.getElementById('walletId').innerHTML = totalAmount;
+            alert(message);
+            connection.invoke('ClearCart');
+            document.getElementById('tableItemId').style.display = "none";
+            document.getElementById('checkoutId').style.display = "none";
+            document.getElementById('tableItemId').style.display = "none";
+            document.getElementById('Actions').style.display = "none";
+            document.getElementById('emptyId').style.display = "block";
+        });
+
         function clearCart() {
             connection.invoke('ClearCart');
             document.getElementById('tableItemId').style.display = "none";
@@ -102,5 +117,15 @@
             row.style.display = "none";
             //element.parentNode.removeChild(element);
         };
+
+        
+        function btnSubmit() {
+            //create an empty object
+            //pass it to server
+            connection.invoke('Buy', 'ok');
+           
+        };
+
+
     </script>
 </div>
