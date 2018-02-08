@@ -10,7 +10,7 @@
 
 
 <div class="row chat" style="overflow:hidden">
-    <div class="col-md-3" style="height:100vh; background:#111; color:#d46d15;">
+    <div class="col-md-3 chat-col">
         <h5 style="padding-left:10px;">Number Of Users Online:<span style="padding-left:15px;" id="numberOfUsers"></span></h5>
         <h3 class="text-center" style="text-decoration:underline;">EVENTS</h3>
         <div id="usersOnlineId"></div>
@@ -81,7 +81,7 @@
         //Send message to All users
         connection.on('SendMessage', function (message, user) {
             var text = document.createElement('p');
-            text.innerHTML = '<p>' + '<span  style="text-align:right; padding-right:15px;" class="message-user">'+user + ':</span> <blockquote style="float:right" class="message-text">' + message + '</blockquote></p>';
+            text.innerHTML = '<p>' + '<span  style="text-align:right; padding-right:15px; " class="message-user">'+user + ':</span> <blockquote style="float:right" class="message-text">' + message + '</blockquote></p>';
             text.className = 'new-text';
             document.getElementById('chat-text').appendChild(text);
 

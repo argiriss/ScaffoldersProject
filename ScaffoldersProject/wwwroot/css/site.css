@@ -708,7 +708,7 @@ div#usersOnlineId p{
 }
 
 .message-text {
-    max-width: 40%;
+    width: 40%;
     padding-left: 15px;
     display: block;
     position: relative;
@@ -742,36 +742,50 @@ div#usersOnlineId p{
 }
 
 p.new-text {
-    margin-bottom: 25px;
+    margin-bottom: 90px;
 }
 
-    @media screen and (max-width: 995px) {
-        body {
-            overflow-y: scroll !important;
-        }
+.chat-col {
+    height: 100vh;
+    background: #111;
+    color: #d46d15;
+}
 
-        #news div {
-            min-height: initial;
-        }
+tr.trade-row {
+    text-align: center;
+}
 
-        #myNavbar {
-            display: none;
-            background-color: #101010;
-        }
-
-        .navbar-nav {
-            margin: -1px -15px;
-        }
-
-        .sidenav-col {
-            height: auto;
-            position: static;
-        }
-
-        .sidenav a {
-            display: block !important;
-        }
+@media screen and (max-width: 995px) {
+    body {
+        overflow-y: scroll !important;
     }
+
+    #news div {
+        min-height: initial;
+    }
+
+    #myNavbar {
+        display: none;
+        background-color: #101010;
+    }
+
+    .navbar-nav {
+        margin: -1px -15px;
+    }
+
+    .sidenav-col {
+        height: auto;
+        position: static;
+    }
+
+    .chat-col{
+        height:auto;
+    }
+
+    .sidenav a {
+        display: block !important;
+    }
+}
     /* Hide/rearrange for smaller screens */
     @media screen and (max-width: 767px) {
         /* Hide captions */
