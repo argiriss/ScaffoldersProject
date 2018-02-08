@@ -65,13 +65,10 @@ namespace ScaffoldersProject.Models.services
                 await _userManager.UpdateAsync(item);
             }
 
-
-            //await usersList.ForEachAsync(async i => {
-            //    await GetAdminsFromGroup(i.Gid);
-            //});
-
             //var tasks = _userManager.Users.ToList().Select(i => i.Id==));
             //var results = await Task.WhenAll(tasks);
+
+
         }
 
         public async Task<decimal> TotalInMyWallet(string userId)
