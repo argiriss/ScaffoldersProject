@@ -19,5 +19,7 @@ namespace ScaffoldersProject.Models.services
         List<Deposit> GetDepositHistory(string userId);
 
         Task IncreaseWallet(decimal amount, string userId);
+
+        Task DecreaseWallet(decimal amount, string userId);
     }
 }
