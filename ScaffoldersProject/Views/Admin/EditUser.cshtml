@@ -6,9 +6,8 @@
 
 <h2>Edit User</h2>
 
-<form asp-action="EditUser" method="post">
+<form asp-action="EditTheUser" method="post">
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="SecurityStamp" />
     <div class="form-group">
         <label asp-for="UserName"></label>
         <div><span asp-validation-for="UserName" class="text-danger"></span></div>

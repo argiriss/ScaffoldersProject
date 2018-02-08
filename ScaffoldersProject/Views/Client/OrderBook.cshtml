@@ -25,7 +25,7 @@
                 </table>
             </div>
 
-            
+
         </div>
 
         <div class="col col-md-3 orders" style="border-right:1px solid black;">
@@ -58,7 +58,7 @@
                 <div id="selectprompt">PLEASE SELECT A COIN TO VIEW CHARTS AND PRICE VARIATIONS</div>
                 <canvas id="firstChart"></canvas>
             </div>
-            <div class="half-page"  style="background:#111;">
+            <div class="half-page" style="background:#111;">
                 <canvas id="secondChart"></canvas>
             </div>
         </div>
@@ -75,28 +75,39 @@
         $('.orders').hide();
     });
     //Recieve data from server
-    connection.on('PlaceBid', function (offerTable) {
-        var parent = document.getElementById("tbodybid");
-        var trElem;
-        var tdElem;
-        var tdSecElem;
-        parent.innerHTML = "";
-        for (var i = 0; i < offerTable.length; i++) {
-            trElem = document.createElement("tr");
-            tdElem = document.createElement("td");
-            tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
-            tdSecElem = document.createElement("td");
-            tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
-            trElem.appendChild(tdElem);
-            trElem.appendChild(tdSecElem);
-            parent.appendChild(trElem);
+    connection.on('PlaceBid', function (offerTable, productId) {
+        if (currentProductId == productId) {
+            var parent = document.getElementById("tbodybid");
+            var trElem;
+            var tdElem;
+            var tdSecElem;
+            var tdThirdElem;
+            parent.innerHTML = "";
+            for (var i = 0; i < offerTable.length; i++) {
+                trElem = document.createElement("tr");
+                tdElem = document.createElement("td");
+                tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
+                tdSecElem = document.createElement("td");
+                tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
+                tdThirdElem = document.createElement("td");
+                if (offerTable[i].userOfferId === '@UserManager.GetUserId(User)') {
+                    tdThirdElem.innerHTML = offerTable[i].quantity.toFixed(2);
+                }
+                trElem.appendChild(tdElem);
+                trElem.appendChild(tdSecElem);
+                trElem.appendChild(tdThirdElem);
+                parent.appendChild(trElem);
+            }
         }
-    })
-    connection.on('PlaceAsk', function (askTable) {
-        var parent = document.getElementById("tbody");
+    });
+
+    connection.on('PlaceAsk', function (askTable, productId) {
+        if (currentProductId == productId) {
+             var parent = document.getElementById("tbody");
         var trElem;
         var tdElem;
         var tdSecElem;
+        var tdThirdElem;
         parent.innerHTML = "";
         for (var i = 0; i < askTable.length; i++) {
             trElem = document.createElement("tr");
@@ -114,28 +125,6 @@
             parent.appendChild(trElem);
             $("#tbody").scrollTop($("#tbody")[0].scrollHeight);
         }
-    })
-
-
-    connection.on('DisplayHistory', function (tradeHistoryTable) {
-        var parent = document.getElementById("tradeHistory");
-        var trElem;
-        var tdElem;
-        var tdSecElem;
-        var tdThrElem;
-        parent.innerHTML = "";
-        for (var i = 0; i < tradeHistoryTable.length; i++) {
-            trElem = document.createElement("tr");
-            tdElem = document.createElement("td");
-            tdElem.innerHTML = tradeHistoryTable[i].quantity;
-            tdSecElem = document.createElement("td");
-            tdSecElem.innerHTML = tradeHistoryTable[i].price;
-            tdThrElem = document.createElement("td");
-            tdTrdElem.innerHTML = tradeHistoryTable[i].dateOfTransaction;
-            trElem.appendChild(tdElem);
-            trElem.appendChild(tdSecElem);
-            trElem.appendChild(tdThrElem);
-            parent.appendChild(trElem);
         }
     })
 

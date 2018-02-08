@@ -342,7 +342,14 @@
         connection.on('Wallet', function (walletTotal, getAllApprovedProducts) {
             document.getElementById("loader").style.display = "none";
             document.getElementById('walletId').innerHTML = walletTotal;
-            dropClientsItems(getAllApprovedProducts);
+            let currentUrl = window.location.href;
+            if (currentUrl.includes('Admin')){
+                    
+            }
+            else {
+                dropClientsItems(getAllApprovedProducts);
+            }
+            
         })
 
         connection.on('ResetWallet', function (newWallet) {
@@ -386,10 +393,12 @@
             var currentUrl = window.location.href;
             if (currentUrl.includes('OrderBook')) {
                 //orderbook
+                //BidTable
                 var parent = document.getElementById("tbodybid");
                 var trElem;
                 var tdElem;
                 var tdSecElem;
+                var tdThirdElem;
                 parent.innerHTML = "";
                 for (var i = 0; i < offerTable.length; i++) {
                     trElem = document.createElement("tr");
@@ -397,8 +406,13 @@
                     tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
                     tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
+                    tdThirdElem = document.createElement("td");
+                    if (offerTable[i].userOfferId === userId) {
+                        tdThirdElem.innerHTML = offerTable[i].quantity.toFixed(2);
+                    }
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
+                    trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
                 }
                 //ask table
@@ -480,6 +494,7 @@
                 var trElem;
                 var tdElem;
                 var tdSecElem;
+                var tdThirdElem;
                 parent.innerHTML = "";
                 for (var i = 0; i < offerTable.length; i++) {
                     trElem = document.createElement("tr");
@@ -487,8 +502,13 @@
                     tdElem.innerHTML = offerTable[i].quantity.toFixed(4);
                     tdSecElem = document.createElement("td");
                     tdSecElem.innerHTML = offerTable[i].priceOffer.toFixed(2);
+                    tdThirdElem = document.createElement("td");
+                    if (offerTable[i].userOfferId === userId) {
+                        tdThirdElem.innerHTML = offerTable[i].quantity.toFixed(2);
+                    }
                     trElem.appendChild(tdElem);
                     trElem.appendChild(tdSecElem);
+                    trElem.appendChild(tdThirdElem);
                     parent.appendChild(trElem);
                 }
                 //ask table

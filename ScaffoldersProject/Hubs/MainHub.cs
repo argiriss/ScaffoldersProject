@@ -155,7 +155,7 @@ namespace ScaffoldersProject.Hubs
             //take the list of bids from Offer table
             var tempbidTable = _offerRepository.Offers.Where(x => x.ProductId == productId).ToList();
             var bidTable = tempbidTable.GroupBy(x => x.PriceOffer).Select(y => new { PriceOffer = y.First().PriceOffer, Quantity = y.Sum(s => s.Quantity), UserOfferId = y.First().UserOfferId }).OrderByDescending(t => t.PriceOffer);
-            await Clients.All.InvokeAsync("PlaceBid", bidTable);
+            await Clients.All.InvokeAsync("PlaceBid", bidTable,productId);
             await SideNav(productId);
         }
 
@@ -166,7 +166,7 @@ namespace ScaffoldersProject.Hubs
             //take the list of asks from ask table
             var tempAsk = _askRepository.Asks.Where(x => x.ProductId == productId).ToList();
             var askTable = tempAsk.GroupBy(x => x.PriceAsk).Select(y => new { PriceAsk = y.First().PriceAsk, Quantity = y.Sum(s => s.Quantity), UserAskId = y.First().UserAskId }).OrderByDescending(t => t.PriceAsk);
-            await Clients.All.InvokeAsync("PlaceAsk", askTable);
+            await Clients.All.InvokeAsync("PlaceAsk",askTable,productId);
             await SideNav(productId);
         }
 
